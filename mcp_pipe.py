@@ -28,6 +28,8 @@ import os
 import signal
 import sys
 import json
+import shutil
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 
 # Auto-load environment variables from a .env file if present
@@ -43,6 +45,33 @@ logger = logging.getLogger('MCP_PIPE')
 # Reconnection settings
 INITIAL_BACKOFF = 1  # Initial wait time in seconds
 MAX_BACKOFF = 600  # Maximum wait time in seconds
+
+
+def validate_endpoint_url(endpoint_url):
+    """Validate MCP endpoint URL and return (is_valid, message)."""
+    if not endpoint_url:
+        return False, "Please set the `MCP_ENDPOINT` environment variable"
+
+    parsed = urlparse(endpoint_url.strip())
+    if parsed.scheme not in {"ws", "wss"}:
+        return False, "`MCP_ENDPOINT` must start with ws:// or wss://"
+
+    hostname = (parsed.hostname or "").strip().lower()
+    if not hostname:
+        return False, "`MCP_ENDPOINT` is missing a valid hostname"
+
+    placeholder_hosts = {
+        "your-mcp-endpoint",
+        "example.com",
+        "api.example.com",
+    }
+    if hostname in placeholder_hosts:
+        return (
+            False,
+            f"`MCP_ENDPOINT` points to a placeholder host ('{hostname}'). Configure a real WebSocket endpoint URL.",
+        )
+
+    return True, ""
 
 async def connect_with_retry(uri, target):
     """Connect to WebSocket server with retry mechanism for a given server target."""
@@ -215,7 +244,16 @@ def build_server_command(target=None):
             args = entry.get("args") or []
             if not command:
                 raise RuntimeError(f"Server '{target}' is missing 'command'")
-            return [command, *args], child_env
+
+            resolved_command = str(command)
+            if resolved_command.lower() in {"python", "python3", "py"}:
+                resolved_command = sys.executable
+            elif not os.path.isabs(resolved_command):
+                found = shutil.which(resolved_command)
+                if found:
+                    resolved_command = found
+
+            return [resolved_command, *args], child_env
 
         if typ in ("sse", "http", "streamablehttp"):
             url = entry.get("url")
@@ -247,9 +285,10 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
 
     # Get token from environment variable or command line arguments
-    endpoint_url = os.environ.get('MCP_ENDPOINT')
-    if not endpoint_url:
-        logger.error("Please set the `MCP_ENDPOINT` environment variable")
+    endpoint_url = os.environ.get('MCP_ENDPOINT', '').strip()
+    endpoint_ok, endpoint_error = validate_endpoint_url(endpoint_url)
+    if not endpoint_ok:
+        logger.error(endpoint_error)
         sys.exit(1)
 
     # Determine target: default to all if no arg; single target otherwise

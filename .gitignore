@@ -3,3 +3,9 @@ __pycache__/
 node_modules/
 
 .env
+
+# Knowledge
+docs/processed/
+
+# Test reports
+reports/

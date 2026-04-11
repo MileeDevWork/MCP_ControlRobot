@@ -1,144 +1,232 @@
-# MCP Sample Project | MCP 示例项目
+# MCP Control Robot
 
-A powerful interface for extending AI capabilities through remote control, calculations, email operations, knowledge search, and more.
+MCP Control Robot is a local MCP bridge and tool server collection. It connects MCP stdio servers to a WebSocket endpoint and supports both local and remote MCP transports.
 
-一个强大的接口，用于通过远程控制、计算、邮件操作、知识搜索等方式扩展AI能力。
+## Overview
 
-## Overview | 概述
+This repository provides:
 
-MCP (Model Context Protocol) is a protocol that allows servers to expose tools that can be invoked by language models. Tools enable models to interact with external systems, such as querying databases, calling APIs, or performing computations. Each tool is uniquely identified by a name and includes metadata describing its schema.
+- A WebSocket-to-stdio bridge (`mcp_pipe.py`) with automatic reconnect.
+- Config-driven multi-server startup (`mcp_config.json`).
+- Example local MCP tools (`calculator.py`, `robot_control.py`).
+- A standalone legal QA server (`legal_answer_server.py`) using a hybrid retrieval pipeline (Milvus + Neo4j + LLM).
 
-MCP（模型上下文协议）是一个允许服务器向语言模型暴露可调用工具的协议。这些工具使模型能够与外部系统交互，例如查询数据库、调用API或执行计算。每个工具都由一个唯一的名称标识，并包含描述其模式的元数据。
+## Features
 
-## Features | 特性
+- Bidirectional communication between MCP servers and a remote endpoint.
+- Exponential-backoff reconnection for long-running sessions.
+- Configurable server startup for `stdio`, `sse`, and `http` targets.
+- Standalone legal answer workflow with retrieval, graph expansion, and grounded generation.
 
-- 🔌 Bidirectional communication between AI and external tools | AI与外部工具之间的双向通信
-- 🔄 Automatic reconnection with exponential backoff | 具有指数退避的自动重连机制
-- 📊 Real-time data streaming | 实时数据流传输
-- 🛠️ Easy-to-use tool creation interface | 简单易用的工具创建接口
-- 🔒 Secure WebSocket communication | 安全的WebSocket通信
-- ⚙️ Multiple transport types support (stdio/sse/http) | 支持多种传输类型（stdio/sse/http）
+## Requirements
 
-## Quick Start | 快速开始
+- Python 3.7+
+- Dependencies in `requirements.txt`
 
-1. Install dependencies | 安装依赖:
+Install:
+
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Set up environment variables | 设置环境变量:
-```bash
-export MCP_ENDPOINT=<your_mcp_endpoint>
-```
+## Environment Configuration
 
-3. Run the calculator example | 运行计算器示例:
-```bash
-python mcp_pipe.py calculator.py
-```
+Copy `.env.example` to `.env` and fill required values.
 
-Or run all configured servers | 或运行所有配置的服务:
-```bash
-python mcp_pipe.py
-```
+Required for bridge:
 
-*Requires `mcp_config.json` configuration file with server definitions (supports stdio/sse/http transport types)*
+- `MCP_ENDPOINT`
 
-*需要 `mcp_config.json` 配置文件定义服务器（支持 stdio/sse/http 传输类型）*
+Required for legal-answer pipeline:
 
-## Project Structure | 项目结构
+- At least one generation key (priority: OpenAI -> Claude -> Gemini -> TogetherAI):
+	- `MCP_OPENAI_API_KEY`
+	- `MCP_CLAUDE_API_KEY` (or `MCP_ANTHROPIC_API_KEY`)
+	- `MCP_GEMINI_API_KEY`
+	- `MCP_TOGETHER_API_KEY`
+- At least one embedding-capable key:
+	- `MCP_OPENAI_API_KEY` or `MCP_GEMINI_API_KEY` or `MCP_TOGETHER_API_KEY`
+- `MCP_MILVUS_ENDPOINT` (or `MCP_MILVUS_URI` for local Milvus)
+- `MCP_MILVUS_TOKEN` (required when using online/Zilliz endpoint)
+- `MCP_MILVUS_COLLECTION`
+- `MCP_NEO4J_URI`
+- `MCP_NEO4J_USER`
+- `MCP_NEO4J_PASSWORD`
 
-- `mcp_pipe.py`: Main communication pipe that handles WebSocket connections and process management | 处理WebSocket连接和进程管理的主通信管道
-- `calculator.py`: Example MCP tool implementation for mathematical calculations | 用于数学计算的MCP工具示例实现
-- `requirements.txt`: Project dependencies | 项目依赖
-
-## Config-driven Servers | 通过配置驱动的服务
-
-编辑 `mcp_config.json` 文件来配置服务器列表（也可设置 `MCP_CONFIG` 环境变量指向其他配置文件）。
-
-配置说明：
-- 无参数时启动所有配置的服务（自动跳过 `disabled: true` 的条目）
-- 有参数时运行单个本地脚本文件
-- `type=stdio` 直接启动；`type=sse/http` 通过 `python -m mcp_proxy` 代理
-
-## Creating Your Own MCP Tools | 创建自己的MCP工具
-
-Here's a simple example of creating an MCP tool | 以下是一个创建MCP工具的简单示例:
-
-```python
-from mcp.server.fastmcp import FastMCP
-
-mcp = FastMCP("YourToolName")
-
-@mcp.tool()
-def your_tool(parameter: str) -> dict:
-    """Tool description here"""
-    # Your implementation
-    return {"success": True, "result": result}
-
-if __name__ == "__main__":
-    mcp.run(transport="stdio")
-```
-
-## Use Cases | 使用场景
-
-- Mathematical calculations | 数学计算
-- Email operations | 邮件操作
-- Knowledge base search | 知识库搜索
-- Remote device control | 远程设备控制
-- Data processing | 数据处理
-- Custom tool integration | 自定义工具集成
-- Standalone legal QA (hybrid vector + graph + LLM) | 独立法律问答（向量+图谱+LLM）
-
-## Legal Answer Workflow | 法律问答流程
-
-`legal-answer` is included in `mcp_config.json` and runs fully inside `MCP_ControlRobot`.
-
-`legal-answer` 已加入 `mcp_config.json`，并且完全在 `MCP_ControlRobot` 内部运行。
-
-Pipeline stages:
-
-1. Normalize question
-2. Retrieve top-k evidence from Milvus
-3. Expand related context from Neo4j
-4. Build a bounded context window
-5. Generate grounded answer with citations
-
-Required environment variables (set in `MCP_ControlRobot/.env` or current shell):
-
-- `MCP_OPENAI_API_KEY` (must be dedicated for MCP repo)
-- `MCP_NEO4J_URI`, `MCP_NEO4J_USER`, `MCP_NEO4J_PASSWORD`
-- `MCP_MILVUS_URI`, `MCP_MILVUS_COLLECTION`
-
-Optional performance variables:
+Optional tuning:
 
 - `MCP_TOP_K` (default `4`)
 - `MCP_MAX_TOP_K` (default `8`)
 - `MCP_CACHE_TTL_SECONDS` (default `300`)
+- `MCP_CONTEXT_CHAR_BUDGET` (default `2800`)
+- `MCP_MAX_CONTEXT_ITEMS` (default `8`)
+- `MCP_MAX_ITEM_CHARS` (default `700`)
+- `MCP_MILVUS_DATABASE` (default empty)
+- `MCP_MILVUS_VECTOR_FIELD` (default `dense_vector`)
+- `MCP_NEO4J_DATABASE` (default empty)
+- `MCP_EMBEDDING_DIMENSIONS` (default empty, model default)
 - `MCP_LLM_MODEL` (default `gpt-4o-mini`)
 - `MCP_EMBEDDING_MODEL` (default `text-embedding-3-small`)
+- `MCP_OPENAI_LLM_MODEL`, `MCP_OPENAI_EMBEDDING_MODEL`
+- `MCP_CLAUDE_LLM_MODEL`
+- `MCP_GEMINI_LLM_MODEL`, `MCP_GEMINI_EMBEDDING_MODEL`, `MCP_GEMINI_BASE_URL`
+- `MCP_TOGETHER_LLM_MODEL`, `MCP_TOGETHER_EMBEDDING_MODEL`, `MCP_TOGETHER_BASE_URL`
 
-## Requirements | 环境要求
+## Run
 
-- Python 3.7+
-- websockets>=11.0.3
-- python-dotenv>=1.0.0
-- mcp>=1.8.1
-- pydantic>=2.11.4
-- mcp-proxy>=0.8.2
+Run a single local script (backward compatible mode):
 
-## Contributing | 贡献指南
+```bash
+python mcp_pipe.py calculator.py
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Run all enabled servers from `mcp_config.json`:
 
-欢迎贡献代码！请随时提交Pull Request。
+```bash
+python mcp_pipe.py
+```
 
-## License | 许可证
+Run a single configured server by name:
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+```bash
+python mcp_pipe.py legal-answer
+```
 
-本项目采用MIT许可证 - 详情请查看LICENSE文件。
+## Data Ingestion Pipeline
 
-## Acknowledgments | 致谢
+Use the ingestion pipeline to process raw files under `docs/`, write normalized chunks into `docs/processed/`, and import them into Milvus + Neo4j.
 
-- Thanks to all contributors who have helped shape this project | 感谢所有帮助塑造这个项目的贡献者
-- Inspired by the need for extensible AI capabilities | 灵感来源于对可扩展AI能力的需求
+Process docs only:
+
+```bash
+python scripts/kb_pipeline.py process --enable-ocr
+```
+
+Import processed chunks only:
+
+```bash
+python scripts/kb_pipeline.py import
+```
+
+Process + import in one command:
+
+```bash
+python scripts/kb_pipeline.py run --enable-ocr
+```
+
+Start legal-answer server, then run process + import pipeline:
+
+```bash
+python scripts/kb_pipeline.py server-run --enable-ocr
+```
+
+### Processing Outputs
+
+- `docs/processed/text/`: normalized extracted text per source document
+- `docs/processed/chunks/`: chunked JSONL per document
+- `docs/processed/chunks/all_chunks.jsonl`: combined chunk stream
+- `docs/processed/ingestion_state.json`: state tracking for processed/imported hashes and status
+
+## Test Runner
+
+Run test suite and produce machine-readable + human-readable reports:
+
+```bash
+python scripts/run_test_suite.py --scenario test/scenario.json --output-dir test/reports --include-graph
+```
+
+Dry-run (validate dataset and report structure without model calls):
+
+```bash
+python scripts/run_test_suite.py --scenario test/scenario.json --output-dir test/reports --dry-run
+```
+
+Reports are written to `test/reports/` as:
+
+- `test-report-<timestamp>.json`
+- `test-report-<timestamp>.md`
+
+## Config-Driven Servers
+
+`mcp_pipe.py` loads config from:
+
+1. `MCP_CONFIG` environment variable
+2. `./mcp_config.json`
+
+Supported server entry types:
+
+- `type: "stdio"` with `command` and optional `args`
+- `type: "sse"` or `type: "http"` with `url` (proxied via `python -m mcp_proxy`)
+
+When no CLI argument is provided, all enabled servers are started (`disabled: true` entries are skipped).
+
+## Legal Answer Pipeline Review
+
+The legal-answer server exposes two MCP tools:
+
+- `answer_service_healthcheck`
+- `answer_legal_question(question, top_k=4, include_graph=True, use_cache=True)`
+
+Pipeline in `legal_answer_server.py`:
+
+1. Normalize user query text.
+2. Embed query using provider fallback (OpenAI -> Claude -> Gemini -> TogetherAI; embeddings use providers that support embeddings).
+3. Search Milvus collection by `dense_vector` similarity.
+4. Expand related nodes from Neo4j using IDs from retrieved Milvus hits.
+5. Build a bounded context window.
+6. Generate a grounded legal answer with provider fallback and source tags.
+
+## Knowledge Base Contract (What Data Is Required)
+
+To produce grounded answers, the pipeline expects the following data shape.
+
+Milvus collection (`MCP_MILVUS_COLLECTION`) must contain:
+
+- `dense_vector`: embedding vector used for ANN search.
+- `text`: chunk content (required; empty text is discarded).
+- `article_id`: stable identifier for citation/linking.
+- `doc_id`: parent document identifier (used for grouping and KG linking).
+- `title`: optional but strongly recommended.
+- `doc_type`: optional metadata.
+
+Neo4j graph should contain nodes with at least one join key:
+
+- `id` or `doc_id` or `article_id` or `clause_id`
+
+And recommended descriptive fields:
+
+- `title` or `name`
+- `text` or `raw_text`
+
+Relationships can be any type; the pipeline traverses `(n)-[r]-(m)` around seed nodes.
+
+## What Is Missing Today To Reliably Answer
+
+The runtime code is present, but the repository does not include the data build pipeline. To get reliable answers, these pieces are still needed in your knowledge base workflow:
+
+- Milvus ingestion job that chunks legal documents, computes embeddings, and writes required fields.
+- Neo4j ingestion job that mirrors document/article IDs from Milvus and creates meaningful relations.
+- Schema/bootstrap scripts (or docs) for Milvus collection and Neo4j constraints/indexes.
+- Data quality checks for non-empty `text`, stable `article_id` and `doc_id`, and one-to-one joinability between Milvus rows and Neo4j nodes.
+- Coverage policy for legal corpus (jurisdiction, effective dates, updates, repealed rules).
+- Evaluation set for citation accuracy and answer correctness.
+
+Without these, the system may return "No relevant evidence found" or generate answers with weak grounding.
+
+## Project Structure
+
+- `mcp_pipe.py`: WebSocket bridge and process manager
+- `mcp_config.json`: server definitions
+- `calculator.py`: sample MCP calculator server
+- `robot_control.py`: robot control MCP server
+- `legal_answer_server.py`: hybrid legal QA server
+- `.env.example`: required environment variables
+- `requirements.txt`: Python dependencies
+
+## Contributing
+
+Contributions are welcome. Open a pull request with a clear description of changes and testing notes.
+
+## License
+
+This project is licensed under the MIT License.

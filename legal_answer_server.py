@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from dotenv import load_dotenv
 from fastmcp import FastMCP
+from provider_fallback import ProviderClientFallback
 
 try:
     from openai import OpenAI
@@ -47,6 +48,7 @@ CACHE_TTL_SECONDS = max(0, int(os.getenv("MCP_CACHE_TTL_SECONDS", "300")))
 CONTEXT_CHAR_BUDGET = max(1000, int(os.getenv("MCP_CONTEXT_CHAR_BUDGET", "2800")))
 MAX_CONTEXT_ITEMS = max(1, int(os.getenv("MCP_MAX_CONTEXT_ITEMS", "8")))
 MAX_ITEM_CHARS = max(120, int(os.getenv("MCP_MAX_ITEM_CHARS", "700")))
+API_KEY_RE = re.compile(r"sk-[^\s'\"}]+")
 
 
 def _truncate(text: str, max_chars: int) -> str:
@@ -61,19 +63,46 @@ def _normalize_query(query: str) -> str:
     return compact
 
 
+def _sanitize_error_text(error: Any) -> str:
+    return API_KEY_RE.sub("sk-***", str(error))
+
+
+def _coerce_vector_dimension(vector: List[float], target_dim: Optional[int]) -> List[float]:
+    if target_dim is None:
+        return vector
+    if len(vector) == target_dim:
+        return vector
+    if len(vector) > target_dim:
+        return vector[:target_dim]
+    return vector + [0.0] * (target_dim - len(vector))
+
+
 class HybridAnswerRuntime:
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._ready = False
 
-        self._openai_client = None
         self._milvus_client = None
         self._neo4j_driver = None
+        self._provider_fallback = ProviderClientFallback()
+        self._active_generation_provider: Optional[str] = None
+        self._active_embedding_provider: Optional[str] = None
 
         self._llm_model = os.getenv("MCP_LLM_MODEL", "gpt-4o-mini")
         self._embedding_model = os.getenv("MCP_EMBEDDING_MODEL", "text-embedding-3-small")
-        self._milvus_uri = os.getenv("MCP_MILVUS_URI", "http://localhost:19530")
+        raw_embedding_dims = os.getenv("MCP_EMBEDDING_DIMENSIONS", "").strip()
+        self._embedding_dimensions = int(raw_embedding_dims) if raw_embedding_dims.isdigit() else None
+        self._milvus_endpoint = os.getenv("MCP_MILVUS_ENDPOINT", "").strip()
+        self._milvus_uri = (self._milvus_endpoint or os.getenv("MCP_MILVUS_URI", "http://localhost:19530")).strip()
+        self._milvus_token = os.getenv("MCP_MILVUS_TOKEN", "").strip()
+        self._milvus_database = os.getenv("MCP_MILVUS_DATABASE", "").strip()
         self._milvus_collection = os.getenv("MCP_MILVUS_COLLECTION", "legal_articles")
+        self._milvus_vector_field = os.getenv("MCP_MILVUS_VECTOR_FIELD", "dense_vector").strip() or "dense_vector"
+
+        self._neo4j_uri = os.getenv("MCP_NEO4J_URI", "").strip()
+        self._neo4j_user = os.getenv("MCP_NEO4J_USER", "").strip()
+        self._neo4j_password = os.getenv("MCP_NEO4J_PASSWORD", "").strip()
+        self._neo4j_database = os.getenv("MCP_NEO4J_DATABASE", "").strip()
 
         self._answer_cache: Dict[str, Tuple[float, Dict[str, Any]]] = {}
 
@@ -97,6 +126,99 @@ class HybridAnswerRuntime:
             return
         self._answer_cache[key] = (time.time(), value)
 
+    def _is_online_milvus_config(self) -> bool:
+        uri = self._milvus_uri.lower()
+        return bool(self._milvus_endpoint) or uri.startswith("https://") or "zilliz" in uri
+
+    def _milvus_client_kwargs(self) -> Dict[str, Any]:
+        kwargs: Dict[str, Any] = {"uri": self._milvus_uri}
+        if self._milvus_token:
+            kwargs["token"] = self._milvus_token
+        if self._milvus_database:
+            kwargs["db_name"] = self._milvus_database
+        return kwargs
+
+    def _neo4j_session_kwargs(self) -> Dict[str, Any]:
+        kwargs: Dict[str, Any] = {}
+        if self._neo4j_database:
+            kwargs["database"] = self._neo4j_database
+        return kwargs
+
+    def _detect_milvus_vector_dimension(self) -> Optional[int]:
+        if self._milvus_client is None:
+            return None
+
+        try:
+            info = self._milvus_client.describe_collection(collection_name=self._milvus_collection)
+            fields = list(info.get("fields") or [])
+            for field in fields:
+                if int(field.get("type", -1)) != 101:
+                    continue
+                dim_raw = (field.get("params") or {}).get("dim")
+                if dim_raw is not None:
+                    return int(dim_raw)
+        except Exception as exc:
+            logger.warning("Could not detect Milvus vector dimension: %s", _sanitize_error_text(exc))
+
+        return None
+
+    def _check_milvus_health(self) -> Dict[str, Any]:
+        result: Dict[str, Any] = {
+            "configured": bool(self._milvus_uri),
+            "uri": self._milvus_uri,
+            "collection": self._milvus_collection,
+            "database": self._milvus_database or None,
+            "token_configured": bool(self._milvus_token),
+            "reachable": False,
+            "collection_exists": False,
+            "error": None,
+        }
+
+        if self._milvus_client is None:
+            result["error"] = "Milvus client is not initialized."
+            return result
+
+        try:
+            collections = self._milvus_client.list_collections()
+            collections = list(collections or [])
+            result["reachable"] = True
+            result["collection_exists"] = self._milvus_collection in collections
+            result["collections_count"] = len(collections)
+            if not result["collection_exists"]:
+                result["error"] = f"Collection '{self._milvus_collection}' not found."
+        except Exception as exc:
+            result["error"] = _sanitize_error_text(exc)
+
+        return result
+
+    def _check_neo4j_health(self) -> Dict[str, Any]:
+        configured = bool(self._neo4j_uri and self._neo4j_user and self._neo4j_password)
+        result: Dict[str, Any] = {
+            "configured": configured,
+            "uri": self._neo4j_uri,
+            "database": self._neo4j_database or None,
+            "reachable": False,
+            "error": None,
+        }
+
+        if not configured:
+            result["error"] = "Neo4j env is incomplete."
+            return result
+
+        if self._neo4j_driver is None:
+            result["error"] = "Neo4j driver is not initialized."
+            return result
+
+        try:
+            self._neo4j_driver.verify_connectivity()
+            with self._neo4j_driver.session(**self._neo4j_session_kwargs()) as session:
+                session.run("RETURN 1 AS ok").single()
+            result["reachable"] = True
+        except Exception as exc:
+            result["error"] = _sanitize_error_text(exc)
+
+        return result
+
     def ensure_ready(self) -> None:
         if self._ready:
             return
@@ -105,61 +227,96 @@ class HybridAnswerRuntime:
             if self._ready:
                 return
 
-            api_key = os.getenv("MCP_OPENAI_API_KEY")
-            if not api_key:
-                raise RuntimeError("Missing MCP_OPENAI_API_KEY. Use a dedicated key for MCP repo.")
-            if OpenAI is None:
-                raise RuntimeError("openai package is not installed.")
-
-            self._openai_client = OpenAI(api_key=api_key)
+            self._provider_fallback = ProviderClientFallback(
+                llm_model=self._llm_model,
+                embedding_model=self._embedding_model,
+            )
+            self._provider_fallback.validate(require_generation=True, require_embeddings=True)
 
             if PyMilvusClient is not None:
-                self._milvus_client = PyMilvusClient(uri=self._milvus_uri)
+                if self._is_online_milvus_config() and not self._milvus_token:
+                    raise RuntimeError("Missing MCP_MILVUS_TOKEN for online Milvus endpoint.")
+                self._milvus_client = PyMilvusClient(**self._milvus_client_kwargs())
+                if self._embedding_dimensions is None:
+                    detected_dim = self._detect_milvus_vector_dimension()
+                    if detected_dim is not None:
+                        self._embedding_dimensions = detected_dim
             else:
                 logger.warning("pymilvus not installed, vector retrieval disabled")
 
-            neo4j_uri = os.getenv("MCP_NEO4J_URI")
-            neo4j_user = os.getenv("MCP_NEO4J_USER")
-            neo4j_password = os.getenv("MCP_NEO4J_PASSWORD")
-            if neo4j_uri and neo4j_user and neo4j_password:
+            if self._neo4j_uri and self._neo4j_user and self._neo4j_password:
                 if GraphDatabase is None:
                     logger.warning("neo4j package not installed, graph retrieval disabled")
                 else:
-                    self._neo4j_driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+                    self._neo4j_driver = GraphDatabase.driver(
+                        self._neo4j_uri,
+                        auth=(self._neo4j_user, self._neo4j_password),
+                    )
 
             self._ready = True
             logger.info("Legal answer runtime initialized")
 
     def health(self) -> Dict[str, Any]:
-        missing = []
-        if not os.getenv("MCP_OPENAI_API_KEY"):
-            missing.append("MCP_OPENAI_API_KEY")
+        self._provider_fallback = ProviderClientFallback(
+            llm_model=self._llm_model,
+            embedding_model=self._embedding_model,
+        )
+        provider_status = self._provider_fallback.status()
+
+        missing: List[str] = []
+        if not provider_status.get("available_generation_providers"):
+            missing.append("one_of:MCP_OPENAI_API_KEY|MCP_CLAUDE_API_KEY|MCP_GEMINI_API_KEY|MCP_TOGETHER_API_KEY")
+        if not provider_status.get("available_embedding_providers"):
+            missing.append("one_of:MCP_OPENAI_API_KEY|MCP_GEMINI_API_KEY|MCP_TOGETHER_API_KEY")
+        if self._is_online_milvus_config() and not self._milvus_token:
+            missing.append("MCP_MILVUS_TOKEN")
+
+        init_error = None
+        try:
+            self.ensure_ready()
+        except Exception as exc:
+            init_error = _sanitize_error_text(exc)
+
+        milvus_health = self._check_milvus_health()
+        neo4j_health = self._check_neo4j_health()
+        neo4j_required = neo4j_health.get("configured", False)
+
+        success = (
+            len(missing) == 0
+            and init_error is None
+            and bool(milvus_health.get("reachable"))
+            and bool(milvus_health.get("collection_exists"))
+            and (not neo4j_required or bool(neo4j_health.get("reachable")))
+        )
 
         return {
-            "success": len(missing) == 0,
+            "success": success,
             "missing_env": missing,
+            "init_error": init_error,
             "dependencies": {
-                "openai": OpenAI is not None,
+                "openai_sdk": OpenAI is not None,
                 "pymilvus": PyMilvusClient is not None,
                 "neo4j": GraphDatabase is not None,
             },
             "models": {
                 "llm": self._llm_model,
                 "embedding": self._embedding_model,
+                "embedding_dimensions": self._embedding_dimensions,
             },
-            "milvus": {
-                "uri": self._milvus_uri,
-                "collection": self._milvus_collection,
-            },
-            "graph_enabled": bool(os.getenv("MCP_NEO4J_URI")),
+            "providers": provider_status,
+            "milvus": milvus_health,
+            "milvus_vector_field": self._milvus_vector_field,
+            "neo4j": neo4j_health,
+            "graph_enabled": bool(self._neo4j_uri),
         }
 
     def _embed_query(self, query: str) -> List[float]:
-        response = self._openai_client.embeddings.create(  # type: ignore[union-attr]
-            model=self._embedding_model,
-            input=query,
+        vector, provider = self._provider_fallback.embed_query(
+            query,
+            dimensions=self._embedding_dimensions,
         )
-        return list(response.data[0].embedding)
+        self._active_embedding_provider = provider
+        return _coerce_vector_dimension(vector, self._embedding_dimensions)
 
     def _search_kb(self, query: str, top_k: int) -> List[Dict[str, Any]]:
         if self._milvus_client is None:
@@ -170,13 +327,13 @@ class HybridAnswerRuntime:
             search_results = self._milvus_client.search(
                 collection_name=self._milvus_collection,
                 data=[vector],
-                anns_field="dense_vector",
+                anns_field=self._milvus_vector_field,
                 search_params={"metric_type": "COSINE", "params": {"ef": 128}},
                 limit=max(1, top_k),
                 output_fields=["article_id", "doc_id", "text", "title", "doc_type"],
             )
         except Exception as exc:
-            logger.warning("Milvus search failed: %s", exc)
+            logger.warning("Milvus search failed: %s", _sanitize_error_text(exc))
             return []
 
         hits = search_results[0] if search_results else []
@@ -236,19 +393,17 @@ class HybridAnswerRuntime:
 
         query = """
         UNWIND $seed_ids AS sid
-        CALL {
-            WITH sid
+        CALL (sid) {
             MATCH (n)
-            WHERE n.id = sid OR n.doc_id = sid OR n.article_id = sid OR n.clause_id = sid
+            WHERE n.doc_id = sid OR n.article_id = sid
             MATCH (n)-[r]-(m)
-            RETURN sid,
-                   type(r) AS relation_type,
+            RETURN type(r) AS relation_type,
                    labels(m) AS labels,
                    m.doc_id AS doc_id,
                    m.article_id AS article_id,
-                   m.clause_id AS clause_id,
-                   coalesce(m.title, m.name, '') AS title,
-                   coalesce(m.text, m.raw_text, '') AS text
+                   null AS clause_id,
+                   coalesce(m.title, '') AS title,
+                   coalesce(m.text, '') AS text
             LIMIT $limit_per_seed
         }
         RETURN sid, relation_type, labels, doc_id, article_id, clause_id, title, text
@@ -257,7 +412,7 @@ class HybridAnswerRuntime:
         output: List[Dict[str, Any]] = []
         dedup = set()
         try:
-            with self._neo4j_driver.session() as session:
+            with self._neo4j_driver.session(**self._neo4j_session_kwargs()) as session:
                 records = session.run(
                     query,
                     {
@@ -286,7 +441,7 @@ class HybridAnswerRuntime:
                         }
                     )
         except Exception as exc:
-            logger.warning("Neo4j expansion failed: %s", exc)
+            logger.warning("Neo4j expansion failed: %s", _sanitize_error_text(exc))
 
         return output
 
@@ -339,15 +494,13 @@ class HybridAnswerRuntime:
             "3) Keep citations next to each key statement."
         )
 
-        response = self._openai_client.chat.completions.create(  # type: ignore[union-attr]
-            model=self._llm_model,
-            messages=[
-                {"role": "system", "content": "You provide grounded Vietnamese legal answers."},
-                {"role": "user", "content": prompt},
-            ],
+        answer_text, provider = self._provider_fallback.generate_text(
+            prompt=prompt,
+            system="You provide grounded Vietnamese legal answers.",
             temperature=0.2,
         )
-        return response.choices[0].message.content or ""
+        self._active_generation_provider = provider
+        return answer_text
 
     def answer(self, question: str, top_k: int = DEFAULT_TOP_K, include_graph: bool = True, use_cache: bool = True) -> Dict[str, Any]:
         if not question or not question.strip():
@@ -421,6 +574,10 @@ class HybridAnswerRuntime:
             "query": normalized_query,
             "answer": answer_text,
             "retrieved": {"kb": len(kb_hits), "kg": len(kg_hits)},
+            "providers": {
+                "generation": self._active_generation_provider,
+                "embedding": self._active_embedding_provider,
+            },
             "sources": sources,
             "latency_ms": {
                 "retrieve": round(retrieve_ms, 2),
@@ -468,10 +625,11 @@ def answer_legal_question(
             use_cache=use_cache,
         )
     except Exception as exc:
-        logger.exception("answer_legal_question failed")
+        safe_error = _sanitize_error_text(exc)
+        logger.error("answer_legal_question failed: %s", safe_error)
         return {
             "success": False,
-            "error": str(exc),
+            "error": safe_error,
         }
 
 
