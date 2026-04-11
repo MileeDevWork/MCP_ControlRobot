@@ -3,12 +3,26 @@
     "local-stdio-calculator": {
       "type": "stdio",
       "command": "python",
-      "args": ["-m", "calculator"]
+      "args": [
+        "-u",
+        "calculator.py"
+      ]
     },
     "robot-control": {
       "type": "stdio",
       "command": "python",
-      "args": ["robot_control.py"]
+      "args": [
+        "-u",
+        "robot_control.py"
+      ]
+    },
+    "legal-answer": {
+      "type": "stdio",
+      "command": "python",
+      "args": [
+        "-u",
+        "legal_answer_server.py"
+      ]
     },
     "remote-sse-server": {
       "type": "sse",

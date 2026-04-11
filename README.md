@@ -87,6 +87,35 @@ if __name__ == "__main__":
 - Remote device control | 远程设备控制
 - Data processing | 数据处理
 - Custom tool integration | 自定义工具集成
+- Standalone legal QA (hybrid vector + graph + LLM) | 独立法律问答（向量+图谱+LLM）
+
+## Legal Answer Workflow | 法律问答流程
+
+`legal-answer` is included in `mcp_config.json` and runs fully inside `MCP_ControlRobot`.
+
+`legal-answer` 已加入 `mcp_config.json`，并且完全在 `MCP_ControlRobot` 内部运行。
+
+Pipeline stages:
+
+1. Normalize question
+2. Retrieve top-k evidence from Milvus
+3. Expand related context from Neo4j
+4. Build a bounded context window
+5. Generate grounded answer with citations
+
+Required environment variables (set in `MCP_ControlRobot/.env` or current shell):
+
+- `MCP_OPENAI_API_KEY` (must be dedicated for MCP repo)
+- `MCP_NEO4J_URI`, `MCP_NEO4J_USER`, `MCP_NEO4J_PASSWORD`
+- `MCP_MILVUS_URI`, `MCP_MILVUS_COLLECTION`
+
+Optional performance variables:
+
+- `MCP_TOP_K` (default `4`)
+- `MCP_MAX_TOP_K` (default `8`)
+- `MCP_CACHE_TTL_SECONDS` (default `300`)
+- `MCP_LLM_MODEL` (default `gpt-4o-mini`)
+- `MCP_EMBEDDING_MODEL` (default `text-embedding-3-small`)
 
 ## Requirements | 环境要求
 

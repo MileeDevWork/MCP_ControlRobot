@@ -56,6 +56,9 @@ async def connect_with_retry(uri, target):
 
             # Attempt to connect
             await connect_to_server(uri, target)
+            # Reset retry counters after a successful session.
+            reconnect_attempt = 0
+            backoff = INITIAL_BACKOFF
 
         except Exception as e:
             reconnect_attempt += 1
@@ -268,10 +271,12 @@ if __name__ == "__main__":
             # Run all forever; if any crashes it will auto-retry inside
             await asyncio.gather(*tasks)
         else:
-            if os.path.exists(target_arg):
+            cfg = load_config()
+            servers_cfg = (cfg.get("mcpServers") or {}) if isinstance(cfg, dict) else {}
+            if os.path.exists(target_arg) or target_arg in servers_cfg:
                 await connect_with_retry(endpoint_url, target_arg)
             else:
-                logger.error("Argument must be a local Python script path. To run configured servers, run without arguments.")
+                logger.error("Argument must be a configured server name or local Python script path.")
                 sys.exit(1)
 
     try:
