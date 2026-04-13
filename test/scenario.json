@@ -1,0 +1,3506 @@
+{
+  "dataset_name": "Nghị quyết 57 - Baseline Evaluation",
+  "description": "Bộ dữ liệu kiểm tra khả năng NLU, RAG và xử lý hội thoại của hệ thống đối với các truy vấn về văn bản pháp luật.",
+  "test_cases": [
+  {
+    "id":  "TW-1",
+    "input_query":"Nghị quyết số 57-NQ/TW do ai ký ban hành?",
+    "success_criteria": "Tổng Bí thư Tô Lâm.",
+    "test_category": "Trích xuất thực thể (Entity Extraction)",
+    "description": "Kiểm tra khả năng trích xuất thông tin người ký ban hành nghị quyết."
+  },
+  {
+    "id":  "TW-2",
+    "input_query":"Nghị quyết số 57-NQ/TW được ban hành vào ngày tháng năm nào?",
+    "success_criteria": "Ngày 22/12/2024.",
+    "test_category": "Trích xuất thời gian (Temporal Extraction)",
+    "description": "Kiểm tra khả năng nhận diện thời gian ban hành văn bản."
+  },
+  {
+    "id":  "TW-3",
+    "input_query":"Cơ quan nào ban hành Nghị quyết số 57-NQ/TW?",
+    "success_criteria": "Bộ Chính trị.",
+    "test_category": "Trích xuất cơ quan (Organization Extraction)",
+    "description": "Kiểm tra khả năng trích xuất tên cơ quan ban hành."
+  },
+  {
+    "id":  "TW-4",
+    "input_query":"Chủ đề chính của Nghị quyết 57-NQ/TW là gì?",
+    "success_criteria": "Về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia.",
+    "test_category": "Hiểu ý chính (Main Idea Reading)",
+    "description": "Kiểm tra khả năng tóm lược chủ đề tổng quát của văn bản."
+  },
+  {
+    "id":  "TW-5",
+    "input_query":"Yếu tố nào đang được coi là quyết định phát triển của các quốc gia trong kỷ nguyên mới?",
+    "success_criteria": "Phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số.",
+    "test_category": "Hỏi đáp sự kiện (Fact QA)",
+    "description": "Kiểm tra khả năng tìm kiếm nhận định chung về bối cảnh toàn cầu."
+  },
+  {
+    "id":  "TW-6",
+    "input_query":"Theo đánh giá chung, tốc độ và sự bứt phá về phát triển KHCN, ĐMST và CĐS quốc gia thời gian qua như thế nào?",
+    "success_criteria": "Còn chậm.",
+    "test_category": "Đọc hiểu đánh giá (Sentiment/Evaluation QA)",
+    "description": "Kiểm tra khả năng tìm nhận xét, đánh giá thực trạng của văn bản."
+  },
+  {
+    "id":  "TW-7",
+    "input_query":"Quy mô, tiềm lực, trình độ khoa học, công nghệ và đổi mới sáng tạo quốc gia hiện nay ra sao so với các nước phát triển?",
+    "success_criteria": "Còn khoảng cách xa so với nhóm các nước phát triển.",
+    "test_category": "So sánh đối chiếu (Comparison QA)",
+    "description": "Kiểm tra thông tin đánh giá tương quan với quốc tế."
+  },
+  {
+    "id":  "TW-8",
+    "input_query":"Mục tiêu tổng quát đến năm 2030 của Việt Nam là gì?",
+    "success_criteria": "Trở thành nước đang phát triển, có công nghiệp hiện đại, thu nhập trung bình cao.",
+    "test_category": "Trích xuất mục tiêu (Goal Extraction)",
+    "description": "Kiểm tra khả năng trích xuất tầm nhìn chiến lược 2030."
+  },
+  {
+    "id":  "TW-9",
+    "input_query":"Mục tiêu tổng quát đến năm 2045 của Việt Nam là gì?",
+    "success_criteria": "Trở thành nước phát triển, thu nhập cao.",
+    "test_category": "Trích xuất mục tiêu (Goal Extraction)",
+    "description": "Kiểm tra khả năng trích xuất tầm nhìn chiến lược 2045."
+  },
+  {
+    "id":  "TW-10",
+    "input_query":"Quan điểm chỉ đạo xác định yếu tố nào là đột phá quan trọng hàng đầu, động lực chính để phát triển nhanh lực lượng sản xuất hiện đại?",
+    "success_criteria": "Phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia.",
+    "test_category": "Hỏi đáp lý luận (Theory QA)",
+    "description": "Kiểm tra việc nhận diện quan điểm cốt lõi của Đảng."
+  },
+  {
+    "id":  "TW-11",
+    "input_query":"Quan điểm chỉ đạo yêu cầu tăng cường sự lãnh đạo toàn diện của ai?",
+    "success_criteria": "Của Đảng.",
+    "test_category": "Trích xuất chủ thể (Subject Extraction)",
+    "description": "Kiểm tra khả năng tìm chủ thể lãnh đạo được nêu trong văn bản."
+  },
+  {
+    "id":  "TW-12",
+    "input_query":"Trong công cuộc phát triển KHCN, ĐMST và CĐS, ai được xác định là trung tâm, chủ thể, nguồn lực, động lực chính?",
+    "success_criteria": "Người dân và doanh nghiệp.",
+    "test_category": "Định danh đối tượng (Target Identification)",
+    "description": "Kiểm tra khả năng phân định vai trò của các tầng lớp xã hội."
+  },
+  {
+    "id":  "TW-13",
+    "input_query":"Trong công cuộc phát triển KHCN, ĐMST và CĐS, ai là nhân tố then chốt?",
+    "success_criteria": "Nhà khoa học.",
+    "test_category": "Định danh đối tượng (Target Identification)",
+    "description": "Kiểm tra nhận diện vai trò then chốt chuyên biệt."
+  },
+  {
+    "id":  "TW-14",
+    "input_query":"Vai trò của Nhà nước trong phát triển KHCN, ĐMST và CĐS là gì?",
+    "success_criteria": "Giữ vai trò dẫn dắt, thúc đẩy, tạo điều kiện thuận lợi nhất.",
+    "test_category": "Phân tích chức năng (Function Analysis)",
+    "description": "Kiểm tra khả năng xác định nhiệm vụ của bộ máy nhà nước."
+  },
+  {
+    "id":  "TW-15",
+    "input_query":"Năm nội dung trọng tâm, cốt lõi được nhấn mạnh trong quan điểm thứ 3 là gì?",
+    "success_criteria": "Thể chế, nhân lực, hạ tầng, dữ liệu và công nghệ chiến lược.",
+    "test_category": "Liệt kê thông tin (Listing QA)",
+    "description": "Kiểm tra khả năng trích xuất danh sách các yếu tố trọng tâm."
+  },
+  {
+    "id":  "TW-16",
+    "input_query":"Trong các nội dung trọng tâm, yếu tố nào là điều kiện tiên quyết, cần hoàn thiện và đi trước một bước?",
+    "success_criteria": "Thể chế.",
+    "test_category": "Lọc thông tin ưu tiên (Priority Filtering)",
+    "description": "Kiểm tra khả năng nhận diện yếu tố quan trọng nhất."
+  },
+  {
+    "id":  "TW-17",
+    "input_query":"Tư duy nào cần được loại bỏ trong việc xây dựng pháp luật theo Nghị quyết?",
+    "success_criteria": "Tư duy 'không quản được thì cấm'.",
+    "test_category": "Trích dẫn nguyên văn (Quote Extraction)",
+    "description": "Kiểm tra khả năng bắt cụm từ đặc biệt trong ngoặc kép."
+  },
+  {
+    "id":  "TW-18",
+    "input_query":"Nguyên tắc phát triển hạ tầng số, công nghệ số là gì?",
+    "success_criteria": "Hiện đại, đồng bộ, an ninh, an toàn, hiệu quả, tránh lãng phí.",
+    "test_category": "Liệt kê tiêu chí (Criteria Listing)",
+    "description": "Kiểm tra khả năng tìm kiếm nguyên tắc phát triển."
+  },
+  {
+    "id":  "TW-19",
+    "input_query":"Nghị quyết định hướng đưa dữ liệu thành yếu tố gì trong sản xuất?",
+    "success_criteria": "Tư liệu sản xuất chính.",
+    "test_category": "Hỏi đáp khái niệm (Concept QA)",
+    "description": "Kiểm tra sự thay đổi trong định nghĩa kinh tế chính trị."
+  },
+  {
+    "id":  "TW-20",
+    "input_query":"Yêu cầu xuyên suốt, không thể tách rời trong quá trình phát triển KHCN, ĐMST và CĐS là gì?",
+    "success_criteria": "Bảo đảm chủ quyền quốc gia trên không gian mạng; an ninh mạng, an ninh dữ liệu, an toàn thông tin.",
+    "test_category": "Hỏi đáp nguyên tắc (Principle QA)",
+    "description": "Kiểm tra yêu cầu bắt buộc trong chiến lược phát triển."
+  },
+  {
+    "id":  "TW-21",
+    "input_query":"Đến năm 2030, Việt Nam đặt mục tiêu thuộc nhóm bao nhiêu nước dẫn đầu Đông Nam Á về năng lực cạnh tranh số?",
+    "success_criteria": "Nhóm 3 nước dẫn đầu Đông Nam Á.",
+    "test_category": "Trích xuất chỉ số (Metric Extraction)",
+    "description": "Kiểm tra chỉ tiêu định lượng khu vực."
+  },
+  {
+    "id":  "TW-22",
+    "input_query":"Đến năm 2030, Việt Nam phấn đấu thuộc nhóm bao nhiêu nước đứng đầu thế giới về năng lực cạnh tranh số và Chính phủ điện tử?",
+    "success_criteria": "Nhóm 50 nước đứng đầu thế giới.",
+    "test_category": "Trích xuất chỉ số (Metric Extraction)",
+    "description": "Kiểm tra chỉ tiêu định lượng toàn cầu."
+  },
+  {
+    "id":  "TW-23",
+    "input_query":"Mục tiêu về vị trí của Việt Nam tại Đông Nam Á trong nghiên cứu và phát triển trí tuệ nhân tạo (AI) năm 2030 là gì?",
+    "success_criteria": "Nhóm 3 nước dẫn đầu.",
+    "test_category": "Trích xuất chỉ số (Metric Extraction)",
+    "description": "Kiểm tra chỉ tiêu chuyên ngành AI."
+  },
+  {
+    "id":  "TW-24",
+    "input_query":"Đến năm 2030, Việt Nam phấn đấu có tối thiểu bao nhiêu doanh nghiệp công nghệ số ngang tầm các nước tiên tiến?",
+    "success_criteria": "Tối thiểu 5 doanh nghiệp.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu số lượng doanh nghiệp kỳ vọng."
+  },
+  {
+    "id":  "TW-25",
+    "input_query":"Mục tiêu đóng góp của năng suất nhân tố tổng hợp (TFP) vào tăng trưởng kinh tế năm 2030 là bao nhiêu?",
+    "success_criteria": "Mức trên 55%.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu kinh tế vĩ mô."
+  },
+  {
+    "id":  "TW-26",
+    "input_query":"Đến 2030, tỉ trọng xuất khẩu sản phẩm công nghệ cao trên tổng giá trị hàng hoá xuất khẩu đạt bao nhiêu?",
+    "success_criteria": "Tối thiểu 50%.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu thương mại xuất khẩu."
+  },
+  {
+    "id":  "TW-27",
+    "input_query":"Đến năm 2030, quy mô kinh tế số đạt tối thiểu bao nhiêu phần trăm GDP?",
+    "success_criteria": "Tối thiểu 30% GDP.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu kinh tế số."
+  },
+  {
+    "id":  "TW-28",
+    "input_query":"Mục tiêu tỉ lệ sử dụng dịch vụ công trực tuyến của người dân và doanh nghiệp năm 2030 là bao nhiêu?",
+    "success_criteria": "Trên 80%.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu Chính phủ điện tử."
+  },
+  {
+    "id":  "TW-29",
+    "input_query":"Mục tiêu tỉ lệ giao dịch không dùng tiền mặt năm 2030 đạt bao nhiêu?",
+    "success_criteria": "80%.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu thanh toán điện tử."
+  },
+  {
+    "id":  "TW-30",
+    "input_query":"Đến 2030, tỉ lệ doanh nghiệp có hoạt động đổi mới sáng tạo đạt trên mức nào?",
+    "success_criteria": "Trên 40% trong tổng số doanh nghiệp.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu đổi mới ở khối doanh nghiệp."
+  },
+  {
+    "id":  "TW-31",
+    "input_query":"Mục tiêu chỉ số phát triển con người (HDI) duy trì trên mức nào đến năm 2030?",
+    "success_criteria": "Trên 0,7.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu phát triển xã hội HDI."
+  },
+  {
+    "id":  "TW-32",
+    "input_query":"Đến 2030, kinh phí chi cho nghiên cứu phát triển (R&D) đặt mục tiêu đạt bao nhiêu phần trăm GDP?",
+    "success_criteria": "2% GDP.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu đầu tư R&D."
+  },
+  {
+    "id":  "TW-33",
+    "input_query":"Trong 2% GDP chi cho R&D năm 2030, kinh phí từ xã hội chiếm hơn bao nhiêu phần trăm?",
+    "success_criteria": "Hơn 60%.",
+    "test_category": "Phân tích số liệu (Numeric Analysis)",
+    "description": "Kiểm tra phân cấu trúc nguồn vốn R&D."
+  },
+  {
+    "id":  "TW-34",
+    "input_query":"Nhà nước dự kiến bố trí ít nhất bao nhiêu phần trăm tổng chi ngân sách hằng năm cho phát triển KHCN, ĐMST và CĐS?",
+    "success_criteria": "Ít nhất 3%.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu ngân sách nhà nước."
+  },
+  {
+    "id":  "TW-35",
+    "input_query":"Đến năm 2030, nguồn nhân lực nghiên cứu khoa học, phát triển công nghệ đạt tỉ lệ bao nhiêu người trên một vạn dân?",
+    "success_criteria": "12 người trên một vạn dân.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu nhân lực chất lượng cao."
+  },
+  {
+    "id":  "TW-36",
+    "input_query":"Mục tiêu số lượng tổ chức khoa học và công nghệ được xếp hạng khu vực và thế giới đến năm 2030 là bao nhiêu?",
+    "success_criteria": "Từ 40 - 50 tổ chức.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu xếp hạng tổ chức."
+  },
+  {
+    "id":  "TW-37",
+    "input_query":"Đến năm 2030, số lượng công bố khoa học quốc tế tăng trung bình bao nhiêu mỗi năm?",
+    "success_criteria": "10%/năm.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra tốc độ tăng trưởng công bố khoa học."
+  },
+  {
+    "id":  "TW-38",
+    "input_query":"Số lượng đơn đăng ký sáng chế, văn bằng bảo hộ sáng chế phấn đấu tăng trung bình bao nhiêu %/năm đến 2030?",
+    "success_criteria": "16 - 18%/năm.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra tốc độ tăng trưởng sở hữu trí tuệ."
+  },
+  {
+    "id":  "TW-39",
+    "input_query":"Tỉ lệ khai thác thương mại đối với sáng chế đạt mức nào vào năm 2030?",
+    "success_criteria": "8 - 10%.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra tỉ lệ thương mại hóa sáng chế."
+  },
+  {
+    "id":  "TW-40",
+    "input_query":"Vào năm 2030, công nghệ thông tin di động nào sẽ được phủ sóng toàn quốc?",
+    "success_criteria": "Thông tin di động 5G.",
+    "test_category": "Hỏi đáp công nghệ (Tech QA)",
+    "description": "Kiểm tra mục tiêu phủ sóng viễn thông."
+  },
+  {
+    "id":  "TW-41",
+    "input_query":"Đến năm 2030, hoàn thành xây dựng đô thị thông minh đối với những địa phương nào?",
+    "success_criteria": "Các thành phố trực thuộc Trung ương và một số tỉnh, thành phố có đủ điều kiện.",
+    "test_category": "Trích xuất địa điểm (Location Extraction)",
+    "description": "Kiểm tra vùng mục tiêu quy hoạch đô thị."
+  },
+  {
+    "id":  "TW-42",
+    "input_query":"Mục tiêu thu hút thêm ít nhất bao nhiêu tổ chức, doanh nghiệp công nghệ hàng đầu thế giới đặt trụ sở tại Việt Nam đến năm 2030?",
+    "success_criteria": "Ít nhất 3 tổ chức, doanh nghiệp.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra mục tiêu thu hút FDI công nghệ cao."
+  },
+  {
+    "id":  "TW-43",
+    "input_query":"Môi trường quản lý nhà nước từ Trung ương đến địa phương đến năm 2030 sẽ diễn ra ở đâu?",
+    "success_criteria": "Trên môi trường số.",
+    "test_category": "Hỏi đáp định hướng (Direction QA)",
+    "description": "Kiểm tra định hướng số hóa chính quyền."
+  },
+  {
+    "id":  "TW-44",
+    "input_query":"Đến năm 2045, quy mô kinh tế số phấn đấu đạt tối thiểu bao nhiêu phần trăm GDP?",
+    "success_criteria": "Tối thiểu 50% GDP.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu kinh tế số dài hạn."
+  },
+  {
+    "id":  "TW-45",
+    "input_query":"Đến 2045, Việt Nam đặt mục tiêu thuộc nhóm bao nhiêu nước dẫn đầu thế giới về đổi mới sáng tạo, chuyển đổi số?",
+    "success_criteria": "Nhóm 30 nước.",
+    "test_category": "Trích xuất chỉ số (Metric Extraction)",
+    "description": "Kiểm tra xếp hạng toàn cầu dài hạn."
+  },
+  {
+    "id":  "TW-46",
+    "input_query":"Đến năm 2045, tối thiểu có bao nhiêu doanh nghiệp công nghệ số ngang tầm các nước tiên tiến?",
+    "success_criteria": "Tối thiểu 10 doanh nghiệp.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra quy mô doanh nghiệp dài hạn."
+  },
+  {
+    "id":  "TW-47",
+    "input_query":"Tầm nhìn 2045 phấn đấu thu hút thêm ít nhất bao nhiêu doanh nghiệp công nghệ hàng đầu thế giới đầu tư nghiên cứu tại Việt Nam?",
+    "success_criteria": "Ít nhất 5 tổ chức, doanh nghiệp.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra thu hút tổ chức quốc tế dài hạn."
+  },
+  {
+    "id":  "TW-48",
+    "input_query":"Trong các nhiệm vụ giải pháp, ai phải trực tiếp phụ trách, chỉ đạo công cuộc phát triển KHCN, ĐMST và CĐS ở các cơ quan?",
+    "success_criteria": "Người đứng đầu.",
+    "test_category": "Xác định trách nhiệm (Responsibility QA)",
+    "description": "Kiểm tra quy định về phân công trách nhiệm lãnh đạo."
+  },
+  {
+    "id":  "TW-49",
+    "input_query":"Nhiệm vụ chuyển đổi số, phát triển KHCN được dùng làm tiêu chí để đánh giá điều gì hằng năm?",
+    "success_criteria": "Hiệu quả thực hiện nhiệm vụ, đánh giá thi đua, khen thưởng hằng năm.",
+    "test_category": "Hỏi đáp quy định (Regulation QA)",
+    "description": "Kiểm tra quy định thi đua khen thưởng liên quan."
+  },
+  {
+    "id":  "TW-50",
+    "input_query":"Phong trào gì cần được triển khai sâu rộng để nâng cao kiến thức số trong nhân dân?",
+    "success_criteria": "Phong trào 'học tập số'.",
+    "test_category": "Trích xuất phong trào (Campaign QA)",
+    "description": "Kiểm tra tên gọi phong trào xã hội đặc thù."
+  },
+  {
+    "id":  "TW-51",
+    "input_query":"Nghị quyết yêu cầu xoá bỏ mọi rào cản cản trở sự phát triển, đưa yếu tố nào thành một lợi thế cạnh tranh?",
+    "success_criteria": "Thể chế.",
+    "test_category": "Hỏi đáp giải pháp (Solution QA)",
+    "description": "Kiểm tra định hướng cải cách vĩ mô."
+  },
+  {
+    "id":  "TW-52",
+    "input_query":"Để tháo gỡ điểm nghẽn, cần khẩn trương sửa đổi, bổ sung đồng bộ các quy định pháp luật về những lĩnh vực nào?",
+    "success_criteria": "Khoa học, công nghệ, đầu tư, đầu tư công, mua sắm công, ngân sách nhà nước, tài sản công, sở hữu trí tuệ, thuế…",
+    "test_category": "Liệt kê lĩnh vực (Domain Listing)",
+    "description": "Kiểm tra danh mục cần cải cách pháp luật."
+  },
+  {
+    "id":  "TW-53",
+    "input_query":"Nghị quyết khuyến khích cách tiếp cận gì đối với những vấn đề thực tiễn mới đặt ra?",
+    "success_criteria": "Cách tiếp cận mở, vận dụng sáng tạo, cho phép thí điểm.",
+    "test_category": "Đọc hiểu thái độ (Attitude QA)",
+    "description": "Kiểm tra phương pháp luận đối mặt vấn đề mới."
+  },
+  {
+    "id":  "TW-54",
+    "input_query":"Thái độ đối với rủi ro trong nghiên cứu khoa học, phát triển công nghệ theo Nghị quyết là gì?",
+    "success_criteria": "Chấp nhận rủi ro, đầu tư mạo hiểm và độ trễ.",
+    "test_category": "Đọc hiểu thái độ (Attitude QA)",
+    "description": "Kiểm tra quan điểm nhà nước với tính rủi ro R&D."
+  },
+  {
+    "id":  "TW-55",
+    "input_query":"Chính sách nào được áp dụng đối với doanh nghiệp thử nghiệm công nghệ mới mà có thiệt hại kinh tế do nguyên nhân khách quan?",
+    "success_criteria": "Chính sách miễn trừ trách nhiệm.",
+    "test_category": "Hỏi đáp chính sách (Policy QA)",
+    "description": "Kiểm tra chính sách bảo vệ doanh nghiệp sandbox."
+  },
+  {
+    "id":  "TW-56",
+    "input_query":"Các quỹ nào cần được hình thành để hỗ trợ khởi nghiệp sáng tạo và ươm tạo công nghệ?",
+    "success_criteria": "Các quỹ đầu tư mạo hiểm.",
+    "test_category": "Trích xuất thuật ngữ (Term QA)",
+    "description": "Kiểm tra mô hình hỗ trợ tài chính khởi nghiệp."
+  },
+  {
+    "id":  "TW-57",
+    "input_query":"Các viện nghiên cứu, trường đại học cần được phát triển để trở thành gì?",
+    "success_criteria": "Các chủ thể nghiên cứu mạnh, kết hợp chặt chẽ giữa nghiên cứu, ứng dụng và đào tạo.",
+    "test_category": "Hỏi đáp mục tiêu (Goal QA)",
+    "description": "Kiểm tra định hướng phát triển đơn vị học thuật."
+  },
+  {
+    "id":  "TW-58",
+    "input_query":"Hai Viện Hàn lâm nào được nhấn mạnh cần đầu tư, nâng cấp?",
+    "success_criteria": "Viện Hàn lâm Khoa học và Công nghệ Việt Nam, Viện Hàn lâm Khoa học xã hội Việt Nam.",
+    "test_category": "Trích xuất tổ chức (Organization Extraction)",
+    "description": "Kiểm tra tên cơ quan trọng điểm cấp nhà nước."
+  },
+  {
+    "id":  "TW-59",
+    "input_query":"Chủ trương xử lý đối với các tổ chức khoa học và công nghệ hoạt động không hiệu quả là gì?",
+    "success_criteria": "Sáp nhập, giải thể.",
+    "test_category": "Giải quyết vấn đề (Resolution QA)",
+    "description": "Kiểm tra hướng xử lý đơn vị kém hiệu quả."
+  },
+  {
+    "id":  "TW-60",
+    "input_query":"Ngân sách chi cho nghiên cứu, phát triển khoa học, công nghệ được ưu tiên thực hiện theo cơ chế nào?",
+    "success_criteria": "Cơ chế quỹ, thông qua các quỹ phát triển khoa học và công nghệ.",
+    "test_category": "Hỏi đáp cơ chế (Mechanism QA)",
+    "description": "Kiểm tra phương thức cấp vốn nghiên cứu."
+  },
+  {
+    "id":  "TW-61",
+    "input_query":"Nhà nước có cơ chế khuyến khích gì đối với các sản phẩm, hàng hoá là kết quả nghiên cứu khoa học do doanh nghiệp trong nước tạo ra?",
+    "success_criteria": "Cơ chế khuyến khích mua sắm công.",
+    "test_category": "Hỏi đáp chính sách (Policy QA)",
+    "description": "Kiểm tra biện pháp kích cầu sản phẩm R&D nội địa."
+  },
+  {
+    "id":  "TW-62",
+    "input_query":"Nghị quyết yêu cầu ban hành Chương trình gì liên quan đến công nghệ chiến lược?",
+    "success_criteria": "Chương trình phát triển công nghệ và công nghiệp chiến lược.",
+    "test_category": "Trích xuất văn bản (Document Name QA)",
+    "description": "Kiểm tra tên chương trình hành động cần ban hành."
+  },
+  {
+    "id":  "TW-63",
+    "input_query":"Ngân sách nhà nước chi sự nghiệp khoa học cần bố trí ít nhất bao nhiêu % để phục vụ nghiên cứu công nghệ chiến lược?",
+    "success_criteria": "Ít nhất 15%.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra hạn mức ngân sách phân bổ theo lĩnh vực."
+  },
+  {
+    "id":  "TW-64",
+    "input_query":"Các không gian nào cần ban hành chiến lược nghiên cứu, ứng dụng khoa học, công nghệ để khai thác và phát triển?",
+    "success_criteria": "Không gian biển, không gian ngầm, không gian vũ trụ.",
+    "test_category": "Liệt kê môi trường (Environment Listing)",
+    "description": "Kiểm tra phạm vi không gian ưu tiên phát triển."
+  },
+  {
+    "id":  "TW-65",
+    "input_query":"Nguồn tài nguyên khoáng sản nào được nhắc đến cụ thể cần quản lý chặt chẽ để phát triển khoa học công nghệ?",
+    "success_criteria": "Đất hiếm.",
+    "test_category": "Trích xuất sự vật (Object Extraction)",
+    "description": "Kiểm tra tài nguyên trọng yếu được nêu đích danh."
+  },
+  {
+    "id":  "TW-66",
+    "input_query":"Việc phát triển hạ tầng số hiện đại chủ yếu dựa vào nguồn lực nào?",
+    "success_criteria": "Nguồn lực nhà nước là chủ yếu (thông qua hợp tác công tư).",
+    "test_category": "Phân tích nguồn lực (Resource Analysis)",
+    "description": "Kiểm tra chủ thể cung cấp vốn chính cho hạ tầng số."
+  },
+  {
+    "id":  "TW-67",
+    "input_query":"Nghị quyết khuyến khích hình thành hạ tầng lưu trữ, tính toán đạt tiêu chuẩn gì?",
+    "success_criteria": "Tiêu chuẩn quốc tế, tiêu chuẩn xanh.",
+    "test_category": "Trích xuất tiêu chuẩn (Standard Extraction)",
+    "description": "Kiểm tra yêu cầu chất lượng đối với data center."
+  },
+  {
+    "id":  "TW-68",
+    "input_query":"Ngành công nghiệp nào liên quan đến dữ liệu được định hướng hình thành tại Việt Nam?",
+    "success_criteria": "Ngành công nghiệp dữ liệu lớn.",
+    "test_category": "Hỏi đáp chuyên ngành (Industry QA)",
+    "description": "Kiểm tra mục tiêu phát triển ngành công nghiệp mới."
+  },
+  {
+    "id":  "TW-69",
+    "input_query":"Cơ chế, chính sách nào hấp dẫn được đề xuất để thu hút học sinh giỏi theo học các lĩnh vực STEM then chốt?",
+    "success_criteria": "Tín dụng, học bổng và học phí.",
+    "test_category": "Hỏi đáp chính sách (Policy QA)",
+    "description": "Kiểm tra biện pháp khuyến học chuyên ngành."
+  },
+  {
+    "id":  "TW-70",
+    "input_query":"Cơ chế đặc biệt nào được đề xuất để thu hút chuyên gia, 'tổng công trình sư' quốc tế?",
+    "success_criteria": "Cơ chế đặc biệt về nhập quốc tịch, sở hữu nhà, đất, thu nhập, môi trường làm việc.",
+    "test_category": "Đãi ngộ nhân tài (Talent Retention QA)",
+    "description": "Kiểm tra quyền lợi vĩ mô thu hút nhân sự cấp cao."
+  },
+  {
+    "id":  "TW-71",
+    "input_query":"Lĩnh vực chuyên sâu nào cần xây dựng một số trường, trung tâm đào tạo tiên tiến?",
+    "success_criteria": "Trí tuệ nhân tạo (AI).",
+    "test_category": "Trích xuất lĩnh vực (Field Extraction)",
+    "description": "Kiểm tra lĩnh vực giáo dục ưu tiên chuyên biệt."
+  },
+  {
+    "id":  "TW-72",
+    "input_query":"Việc đổi mới toàn diện giải quyết thủ tục hành chính hướng tới cung cấp dịch vụ công trực tuyến ở mức độ nào?",
+    "success_criteria": "Toàn trình, cá nhân hoá và dựa trên dữ liệu.",
+    "test_category": "Hỏi đáp mức độ (Level/Standard QA)",
+    "description": "Kiểm tra yêu cầu nâng cấp dịch vụ hành chính."
+  },
+  {
+    "id":  "TW-73",
+    "input_query":"Nghị quyết đề cập đến việc xây dựng mạng xã hội của quốc gia nào?",
+    "success_criteria": "Phát triển một số mạng xã hội Việt Nam.",
+    "test_category": "Hỏi đáp sản phẩm số (Digital Product QA)",
+    "description": "Kiểm tra định hướng phát triển mạng lưới xã hội nội địa."
+  },
+  {
+    "id":  "TW-74",
+    "input_query":"Việc ứng dụng công nghệ số trong quân sự nhằm hiện đại hóa yếu tố nào?",
+    "success_criteria": "Vũ khí, trang bị kỹ thuật quân sự, an ninh; chỉ huy, điều hành tác chiến.",
+    "test_category": "Ứng dụng quân sự (Military Application QA)",
+    "description": "Kiểm tra mục tiêu chuyển đổi số bộ máy quốc phòng."
+  },
+  {
+    "id":  "TW-75",
+    "input_query":"Lực lượng nào đóng vai trò đẩy mạnh chuyển giao tri thức, đào tạo nhân lực KHCN thông qua đầu tư tại Việt Nam?",
+    "success_criteria": "Doanh nghiệp có vốn đầu tư trực tiếp nước ngoài (FDI).",
+    "test_category": "Xác định vai trò (Role Identification)",
+    "description": "Kiểm tra nhiệm vụ của khối doanh nghiệp FDI."
+  },
+  {
+    "id":  "TW-76",
+    "input_query":"Kinh tế số trong các ngành, lĩnh vực cần chiếm tối thiểu bao nhiêu % trong tiêu dùng sản phẩm, dịch vụ trên môi trường số?",
+    "success_criteria": "Tối thiểu 70%.",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra chỉ tiêu số hóa tiêu dùng."
+  },
+  {
+    "id":  "TW-77",
+    "input_query":"Ban Chỉ đạo Trung ương về phát triển KHCN, ĐMST và CĐS do ai làm Trưởng Ban?",
+    "success_criteria": "Đồng chí Tổng Bí thư Ban Chấp hành Trung ương Đảng.",
+    "test_category": "Trích xuất nhân sự (Personnel QA)",
+    "description": "Kiểm tra cơ cấu nhân sự chỉ đạo cấp cao nhất."
+  },
+  {
+    "id":  "TW-78",
+    "input_query":"Hội đồng nào được thành lập để hỗ trợ Ban Chỉ đạo Trung ương với sự tham gia của chuyên gia trong và ngoài nước?",
+    "success_criteria": "Hội đồng Tư vấn quốc gia về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số.",
+    "test_category": "Trích xuất tổ chức (Organization QA)",
+    "description": "Kiểm tra cơ quan tham mưu mới thành lập."
+  },
+  {
+    "id":  "TW-79",
+    "input_query":"Cơ quan nào có trách nhiệm rà soát, hoàn thiện pháp luật về phát triển KHCN, ĐMST và CĐS?",
+    "success_criteria": "Đảng đoàn Quốc hội.",
+    "test_category": "Phân công nhiệm vụ (Task Assignment)",
+    "description": "Kiểm tra trách nhiệm khối cơ quan lập pháp."
+  },
+  {
+    "id":  "TW-80",
+    "input_query":"Ban cán sự đảng Chính phủ cần cơ bản hoàn thành việc thể chế hoá các chủ trương trong Nghị quyết vào năm nào?",
+    "success_criteria": "Năm 2025.",
+    "test_category": "Trích xuất thời hạn (Deadline QA)",
+    "description": "Kiểm tra mốc thời gian hoàn thành thể chế."
+  },
+  {
+    "id":  "TW-81",
+    "input_query":"Cơ quan nào chịu trách nhiệm hướng dẫn việc quán triệt và tăng cường tuyên truyền Nghị quyết?",
+    "success_criteria": "Ban Tuyên giáo Trung ương.",
+    "test_category": "Phân công nhiệm vụ (Task Assignment)",
+    "description": "Kiểm tra trách nhiệm cơ quan truyền thông."
+  },
+  {
+    "id":  "TW-82",
+    "input_query":"Cơ quan nào định kỳ 6 tháng báo cáo kết quả thực hiện Nghị quyết với Ban Chỉ đạo Trung ương và Bộ Chính trị?",
+    "success_criteria": "Văn phòng Trung ương Đảng phối hợp với Ban Kinh tế Trung ương.",
+    "test_category": "Phân công nhiệm vụ (Task Assignment)",
+    "description": "Kiểm tra cơ quan đầu mối giám sát tiến độ."
+  },
+  {
+    "id":  "TW-83",
+    "input_query":"Nghị quyết 57-NQ/TW được yêu cầu phổ biến đến cấp nào?",
+    "success_criteria": "Đến chi bộ.",
+    "test_category": "Phạm vi phổ biến (Scope QA)",
+    "description": "Kiểm tra mức độ triển khai văn bản Đảng."
+  },
+  {
+    "id":  "TW-84",
+    "input_query":"Kỷ nguyên phát triển mới của dân tộc theo lời văn của Nghị quyết được gọi là gì?",
+    "success_criteria": "Kỷ nguyên vươn mình của Dân tộc.",
+    "test_category": "Trích xuất thuật ngữ (Terminology QA)",
+    "description": "Kiểm tra cụm từ mang tính khẩu hiệu cốt lõi."
+  },
+  {
+    "id":  "TW-85",
+    "input_query":"Ngoài nhận thức của các cấp, ngành, cán bộ, ai còn bị đánh giá là có nhận thức về chuyển đổi số chưa đầy đủ và sâu sắc?",
+    "success_criteria": "Nhân dân.",
+    "test_category": "Xác định đối tượng (Target Entity QA)",
+    "description": "Kiểm tra đánh giá thực trạng xã hội."
+  },
+  {
+    "id":  "TW-86",
+    "input_query":"Các công nghệ cốt lõi nào mà Việt Nam chưa làm chủ được theo đánh giá của Nghị quyết?",
+    "success_criteria": "Công nghệ chiến lược, công nghệ cốt lõi.",
+    "test_category": "Đánh giá hạn chế (Limitation QA)",
+    "description": "Kiểm tra điểm yếu công nghệ quốc gia."
+  },
+  {
+    "id":  "TW-87",
+    "input_query":"Tình trạng nguồn nhân lực chất lượng cao hiện nay ở nước ta được đánh giá thế nào?",
+    "success_criteria": "Còn thiếu.",
+    "test_category": "Đánh giá thực trạng (Status Evaluation)",
+    "description": "Kiểm tra cái nhìn về vấn đề lao động cao cấp."
+  },
+  {
+    "id":  "TW-88",
+    "input_query":"Thách thức lớn về mặt thông tin, dữ liệu hiện nay là gì?",
+    "success_criteria": "An ninh, an toàn thông tin, bảo vệ dữ liệu còn nhiều thách thức.",
+    "test_category": "Xác định rủi ro (Risk Identification)",
+    "description": "Kiểm tra nhận diện nguy cơ an ninh mạng."
+  },
+  {
+    "id":  "TW-89",
+    "input_query":"Phát triển KHCN, ĐMST, CĐS giúp hoàn thiện điều gì trong quan hệ kinh tế?",
+    "success_criteria": "Hoàn thiện quan hệ sản xuất.",
+    "test_category": "Lý luận chính trị (Political Theory QA)",
+    "description": "Kiểm tra tính tác động lên mô hình kinh tế."
+  },
+  {
+    "id":  "TW-90",
+    "input_query":"Công cuộc phát triển KHCN, ĐMST và CĐS cần sự tham gia tích cực của lực lượng nào ngoài hệ thống chính trị?",
+    "success_criteria": "Doanh nhân, doanh nghiệp và Nhân dân.",
+    "test_category": "Huy động xã hội (Social Mobilization)",
+    "description": "Kiểm tra thành phần tham gia từ khu vực tư nhân."
+  },
+  {
+    "id":  "TW-91",
+    "input_query":"Tính chất của cuộc cách mạng phát triển KHCN, ĐMST và CĐS được xác định là gì?",
+    "success_criteria": "Sâu sắc, toàn diện trên tất cả các lĩnh vực.",
+    "test_category": "Phân tích tính chất (Characteristic QA)",
+    "description": "Kiểm tra độ phủ và ảnh hưởng chiến lược."
+  },
+  {
+    "id":  "TW-92",
+    "input_query":"Nghị quyết định hướng phát triển tối đa tiềm năng, trí tuệ Việt Nam gắn với việc gì?",
+    "success_criteria": "Nhanh chóng tiếp thu, hấp thụ, làm chủ và ứng dụng thành tựu khoa học, công nghệ tiên tiến của thế giới.",
+    "test_category": "Hỏi đáp định hướng (Direction QA)",
+    "description": "Kiểm tra chiến lược tiếp biến công nghệ ngoại."
+  },
+  {
+    "id":  "TW-93",
+    "input_query":"Trong nghiên cứu, cần đẩy mạnh nghiên cứu ứng dụng và chú trọng loại hình nghiên cứu nào?",
+    "success_criteria": "Nghiên cứu cơ bản.",
+    "test_category": "Phân loại nghiên cứu (Research Type QA)",
+    "description": "Kiểm tra sự ưu tiên các hướng R&D."
+  },
+  {
+    "id":  "TW-94",
+    "input_query":"Khoa học, công nghệ và đổi mới sáng tạo góp phần quan trọng xây dựng phát triển hệ giá trị nào?",
+    "success_criteria": "Giá trị văn hoá, xã hội, con người Việt Nam.",
+    "test_category": "Tác động xã hội (Social Impact QA)",
+    "description": "Kiểm tra giá trị nhân văn từ phát triển công nghệ."
+  },
+  {
+    "id":  "TW-95",
+    "input_query":"Đến năm 2030, hệ thống tổ chức khoa học, công nghệ, đổi mới sáng tạo được sắp xếp lại nhằm đảm bảo sự gắn kết giữa các khâu nào?",
+    "success_criteria": "Nghiên cứu - ứng dụng - đào tạo.",
+    "test_category": "Liên kết hệ thống (System Linkage QA)",
+    "description": "Kiểm tra chuỗi giá trị đổi mới sáng tạo."
+  },
+  {
+    "id":  "TW-96",
+    "input_query":"Đến năm 2030, dung lượng và băng thông của hạ tầng công nghệ số phải đạt mức nào?",
+    "success_criteria": "Dung lượng siêu lớn, băng thông siêu rộng ngang tầm các nước tiên tiến.",
+    "test_category": "Yêu cầu kỹ thuật (Technical Spec QA)",
+    "description": "Kiểm tra tiêu chuẩn hạ tầng đường truyền."
+  },
+  {
+    "id":  "TW-97",
+    "input_query":"Công nghệ vệ tinh, thông tin di động 6G được xếp vào nhóm công nghệ nào cần làm chủ đến năm 2030?",
+    "success_criteria": "Công nghệ chiến lược, công nghệ số.",
+    "test_category": "Phân loại công nghệ (Tech Classification)",
+    "description": "Kiểm tra định nghĩa nhóm công nghệ cao."
+  },
+  {
+    "id":  "TW-98",
+    "input_query":"Mục tiêu xây dựng cơ sở dữ liệu quốc gia và các ngành là phải đảm bảo tính chất gì?",
+    "success_criteria": "Đồng bộ, kết nối, chia sẻ.",
+    "test_category": "Nguyên tắc dữ liệu (Data Principle QA)",
+    "description": "Kiểm tra yêu cầu kỹ thuật liên thông dữ liệu."
+  },
+  {
+    "id":  "TW-99",
+    "input_query":"Đến năm 2030, công nghiệp văn hoá số phấn đấu đạt mức nào trên thế giới?",
+    "success_criteria": "Mức cao của thế giới.",
+    "test_category": "Mục tiêu ngành (Industry Goal QA)",
+    "description": "Kiểm tra mục tiêu phát triển mảng văn hóa."
+  },
+  {
+    "id":  "TW-100",
+    "input_query":"Tỉ lệ doanh nghiệp công nghệ số của Việt Nam năm 2045 đặt mục tiêu thế nào so với các nước phát triển?",
+    "success_criteria": "Tương đương các nước phát triển.",
+    "test_category": "So sánh dài hạn (Long-term Comparison)",
+    "description": "Kiểm tra tham vọng vĩ mô khu vực doanh nghiệp tư."
+  },
+  {
+    "id":  "TW-101",
+    "input_query":"Tổ chức đảng cần bố trí số lượng cán bộ phù hợp có trình độ gì trong cấp uỷ các cấp?",
+    "success_criteria": "Trình độ chuyên môn khoa học kỹ thuật.",
+    "test_category": "Tiêu chuẩn nhân sự (Personnel Standard QA)",
+    "description": "Kiểm tra yêu cầu đầu vào với cán bộ Đảng."
+  },
+  {
+    "id":  "TW-102",
+    "input_query":"Tinh thần nào của cán bộ, đảng viên cần được phát huy trong phát triển KHCN, ĐMST?",
+    "success_criteria": "Tinh thần sáng tạo, dám nghĩ, dám làm, dám chịu trách nhiệm.",
+    "test_category": "Hỏi đáp thái độ làm việc (Work Ethic QA)",
+    "description": "Kiểm tra tiêu chuẩn đạo đức công vụ cải cách."
+  },
+  {
+    "id":  "TW-103",
+    "input_query":"Cần trân trọng những đóng góp nhỏ nhất ở khía cạnh nào để biểu dương khen thưởng?",
+    "success_criteria": "Từng phát minh, sáng chế, cải tiến kỹ thuật, sáng kiến nâng cao hiệu quả công tác, hiệu suất công việc.",
+    "test_category": "Tiêu chí khen thưởng (Reward Criteria QA)",
+    "description": "Kiểm tra chủ trương khích lệ sáng kiến vi mô."
+  },
+  {
+    "id":  "TW-104",
+    "input_query":"Nghị quyết chỉ đạo cải cách phương thức quản lý, triển khai nhiệm vụ khoa học công nghệ sao cho phù hợp với yếu tố nào?",
+    "success_criteria": "Phù hợp với từng loại hình nghiên cứu.",
+    "test_category": "Cải cách quản lý (Management Reform QA)",
+    "description": "Kiểm tra hướng thay đổi quy trình hành chính R&D."
+  },
+  {
+    "id":  "TW-105",
+    "input_query":"Nhà nước giao quyền gì cho các tổ chức sử dụng kinh phí nghiên cứu khoa học?",
+    "success_criteria": "Giao quyền tự chủ.",
+    "test_category": "Cơ chế tài chính (Finance Mechanism QA)",
+    "description": "Kiểm tra mức độ phân cấp tài chính."
+  },
+  {
+    "id":  "TW-106",
+    "input_query":"Nhà nước có cơ chế gì để các nhà khoa học thành lập doanh nghiệp?",
+    "success_criteria": "Cơ chế cho phép và khuyến khích các tổ chức nghiên cứu, nhà khoa học thành lập và tham gia điều hành doanh nghiệp dựa trên kết quả nghiên cứu.",
+    "test_category": "Chính sách thương mại hóa (Commercialization Policy)",
+    "description": "Kiểm tra chủ trương lập doanh nghiệp spin-off."
+  },
+  {
+    "id":  "TW-107",
+    "input_query":"Các quỹ phát triển khoa học và công nghệ là công cụ để thực hiện điều gì?",
+    "success_criteria": "Ngân sách chi cho nghiên cứu, phát triển khoa học, công nghệ (cơ chế quỹ).",
+    "test_category": "Hỏi đáp công cụ tài chính (Financial Tool QA)",
+    "description": "Kiểm tra phương thức giải ngân tiền nhà nước."
+  },
+  {
+    "id":  "TW-108",
+    "input_query":"Nguồn ngân sách chi sự nghiệp khoa học cần được cơ cấu lại với nguyên tắc nào?",
+    "success_criteria": "Tập trung, có trọng tâm, trọng điểm, không dàn trải.",
+    "test_category": "Nguyên tắc chi tiêu (Spending Principle QA)",
+    "description": "Kiểm tra quy định chống lãng phí đầu tư R&D."
+  },
+  {
+    "id":  "TW-109",
+    "input_query":"Đối với công nghệ tiên tiến của nước ngoài, Nhà nước có cơ chế đặc biệt nào?",
+    "success_criteria": "Trong nghiên cứu, tiếp cận, mua các bí mật công nghệ, học hỏi, sao chép.",
+    "test_category": "Chiến lược tiếp thu công nghệ (Tech Adoption Strategy)",
+    "description": "Kiểm tra chính sách mua bán/thâu tóm công nghệ ngoại."
+  },
+  {
+    "id":  "TW-110",
+    "input_query":"Quỹ nào ưu tiên các lĩnh vực quốc phòng, không gian, năng lượng, trí tuệ nhân tạo, bán dẫn...?",
+    "success_criteria": "Quỹ đầu tư phát triển công nghiệp chiến lược.",
+    "test_category": "Định danh quỹ (Fund ID QA)",
+    "description": "Kiểm tra tên gọi quỹ tài chính đặc thù."
+  },
+  {
+    "id":  "TW-111",
+    "input_query":"Hạ tầng tiện ích số và hạ tầng vật lý số cần được tích hợp yếu tố gì?",
+    "success_criteria": "Tích hợp cảm biến, ứng dụng công nghệ số.",
+    "test_category": "Kỹ thuật hạ tầng (Infra Tech QA)",
+    "description": "Kiểm tra định hướng xây dựng IoT vật lý."
+  },
+  {
+    "id":  "TW-112",
+    "input_query":"Cụm công nghiệp nào liên quan đến thiết bị di động được định hướng xây dựng?",
+    "success_criteria": "Cụm công nghiệp IoT di động.",
+    "test_category": "Quy hoạch công nghiệp (Industry Zoning QA)",
+    "description": "Kiểm tra kế hoạch phân bổ cụm nhà máy IoT."
+  },
+  {
+    "id":  "TW-113",
+    "input_query":"Nghị quyết yêu cầu sớm hoàn thành và phát huy hiệu quả trung tâm nào về dữ liệu?",
+    "success_criteria": "Trung tâm dữ liệu quốc gia.",
+    "test_category": "Dự án trọng điểm (Key Project QA)",
+    "description": "Kiểm tra tên công trình cơ sở hạ tầng số quan trọng."
+  },
+  {
+    "id":  "TW-114",
+    "input_query":"Thị trường dữ liệu và các sàn giao dịch dữ liệu cần được xác lập quyền gì?",
+    "success_criteria": "Quyền sở hữu, kinh doanh dữ liệu và phân phối giá trị tạo ra từ dữ liệu.",
+    "test_category": "Luật học dữ liệu (Data Legal QA)",
+    "description": "Kiểm tra quan điểm pháp lý đối với Data Market."
+  },
+  {
+    "id":  "TW-115",
+    "input_query":"Việt Nam cần xây dựng các cơ sở dữ liệu lớn với điều kiện gì?",
+    "success_criteria": "Có chủ quyền của Việt Nam.",
+    "test_category": "An ninh mạng (Cybersecurity QA)",
+    "description": "Kiểm tra yêu cầu bảo vệ độc lập số."
+  },
+  {
+    "id":  "TW-116",
+    "input_query":"Đối tượng nào được hưởng cơ chế đặc thù để trở về Việt Nam làm việc, sinh sống?",
+    "success_criteria": "Người Việt Nam ở nước ngoài và người nước ngoài có trình độ cao.",
+    "test_category": "Chính sách kiều bào (Diaspora Policy QA)",
+    "description": "Kiểm tra định hướng thu hút chuyên gia ngoại."
+  },
+  {
+    "id":  "TW-117",
+    "input_query":"Cơ chế nào được áp dụng trong đào tạo nhân lực công nghệ số?",
+    "success_criteria": "Cơ chế đặc thù về hợp tác công tư.",
+    "test_category": "Mô hình đào tạo (Education Model QA)",
+    "description": "Kiểm tra phương thức phối hợp nguồn lực giáo dục."
+  },
+  {
+    "id":  "TW-118",
+    "input_query":"Nền tảng giáo dục nào được ưu tiên xây dựng để nâng cao năng lực số?",
+    "success_criteria": "Nền tảng giáo dục, đào tạo trực tuyến, mô hình giáo dục đại học số.",
+    "test_category": "Sản phẩm EdTech (EdTech Product QA)",
+    "description": "Kiểm tra định hướng phát triển trường học số."
+  },
+  {
+    "id":  "TW-119",
+    "input_query":"Việc đổi mới chương trình đào tạo đội ngũ giảng viên, nhà khoa học cần theo chuẩn nào?",
+    "success_criteria": "Chuẩn quốc tế.",
+    "test_category": "Tiêu chuẩn đánh giá (Eval Standard QA)",
+    "description": "Kiểm tra yêu cầu nâng cấp năng lực học thuật."
+  },
+  {
+    "id":  "TW-120",
+    "input_query":"Tính chất của hoạt động các cơ quan hệ thống chính trị khi lên môi trường số là gì?",
+    "success_criteria": "Liên thông, đồng bộ, bí mật nhà nước.",
+    "test_category": "Yêu cầu hành chính số (Digital Admin Requirement)",
+    "description": "Kiểm tra các quy chuẩn e-Government."
+  },
+  {
+    "id":  "TW-121",
+    "input_query":"Dịch vụ công không được phụ thuộc vào yếu tố nào?",
+    "success_criteria": "Địa giới hành chính.",
+    "test_category": "Cải cách thủ tục (Procedure Reform QA)",
+    "description": "Kiểm tra mục tiêu xóa bỏ cản trở không gian."
+  },
+  {
+    "id":  "TW-122",
+    "input_query":"Văn hóa số cần được phát triển đảm bảo yếu tố nào?",
+    "success_criteria": "Giữ gìn bản sắc dân tộc.",
+    "test_category": "Văn hóa xã hội (Socio-cultural QA)",
+    "description": "Kiểm tra yêu cầu bảo vệ truyền thống khi số hóa."
+  },
+  {
+    "id":  "TW-123",
+    "input_query":"Công nghệ nào cần được ứng dụng để giám sát, thu thập dữ liệu lĩnh vực tài nguyên, môi trường?",
+    "success_criteria": "Nền tảng số.",
+    "test_category": "Ứng dụng ngành (Sector Application QA)",
+    "description": "Kiểm tra số hóa ngành quản lý môi trường."
+  },
+  {
+    "id":  "TW-124",
+    "input_query":"Lực lượng nào cần ứng dụng công nghệ số trong chỉ huy, điều hành tác chiến?",
+    "success_criteria": "Lực lượng vũ trang.",
+    "test_category": "Quốc phòng an ninh (Defense & Security QA)",
+    "description": "Kiểm tra mục tiêu hiện đại hóa tác chiến."
+  },
+  {
+    "id":  "TW-125",
+    "input_query":"Hoạt động bảo vệ Tổ quốc trên không gian mạng dựa vào thế trận nào?",
+    "success_criteria": "Thế trận chiến tranh nhân dân, thế trận lòng dân trên không gian mạng.",
+    "test_category": "Học thuyết quốc phòng (Defense Doctrine QA)",
+    "description": "Kiểm tra lý luận chiến tranh mạng."
+  },
+  {
+    "id":  "TW-126",
+    "input_query":"Nhóm doanh nghiệp nào được nhấn mạnh cần khuyến khích đầu tư cho chuyển đổi số?",
+    "success_criteria": "Doanh nghiệp vừa và nhỏ.",
+    "test_category": "Đối tượng ưu tiên (Priority Target QA)",
+    "description": "Kiểm tra phân khúc doanh nghiệp được chú trọng."
+  },
+  {
+    "id":  "TW-127",
+    "input_query":"Doanh nghiệp công nghệ số chiến lược trong nước cần có quy mô như thế nào?",
+    "success_criteria": "Quy mô lớn.",
+    "test_category": "Tiêu chuẩn doanh nghiệp (Enterprise Standard)",
+    "description": "Kiểm tra định hướng phát triển tập đoàn lõi."
+  },
+  {
+    "id":  "TW-128",
+    "input_query":"Các khu vực nào sẽ được phát triển dành riêng cho công nghiệp công nghệ số?",
+    "success_criteria": "Một số khu công nghiệp công nghệ số.",
+    "test_category": "Quy hoạch vùng (Zone Planning QA)",
+    "description": "Kiểm tra định hướng xây khu CNTT tập trung."
+  },
+  {
+    "id":  "TW-129",
+    "input_query":"Các lĩnh vực nào được đẩy mạnh sản xuất thông minh theo Nghị quyết?",
+    "success_criteria": "Nông nghiệp, thương mại, tài chính, giáo dục, y tế, giao thông, logistics.",
+    "test_category": "Liệt kê ngành nghề (Sector Listing QA)",
+    "description": "Kiểm tra các ngành kinh tế số mũi nhọn."
+  },
+  {
+    "id":  "TW-130",
+    "input_query":"Việt Nam cần đẩy mạnh hợp tác nghiên cứu phát triển công nghệ với đối tượng nào?",
+    "success_criteria": "Các quốc gia có trình độ khoa học và công nghệ, chuyển đổi số phát triển.",
+    "test_category": "Hợp tác quốc tế (International Co-op QA)",
+    "description": "Kiểm tra định hướng chọn đối tác ngoại giao số."
+  },
+  {
+    "id":  "TW-131",
+    "input_query":"Đối với các quy tắc, tiêu chuẩn quốc tế về công nghệ mới, Việt Nam có chủ trương gì?",
+    "success_criteria": "Chủ động, tích cực tham gia xây dựng.",
+    "test_category": "Quan điểm ngoại giao (Diplomatic Stance QA)",
+    "description": "Kiểm tra tư thế của quốc gia trên trường quốc tế."
+  },
+  {
+    "id":  "TW-132",
+    "input_query":"Việt Nam thúc đẩy chuyển giao công nghệ qua các thỏa thuận nào?",
+    "success_criteria": "Các thoả thuận quốc tế, điều ước quốc tế mà Việt Nam là thành viên tham gia.",
+    "test_category": "Công cụ ngoại giao (Diplomatic Tool QA)",
+    "description": "Kiểm tra hành lang pháp lý tiếp nhận công nghệ."
+  },
+  {
+    "id":  "TW-133",
+    "input_query":"Tổ chức nào có vai trò phản biện xã hội về phát triển KHCN, ĐMST và CĐS?",
+    "success_criteria": "Mặt trận Tổ quốc Việt Nam và các tổ chức chính trị - xã hội.",
+    "test_category": "Xác định vai trò (Role ID QA)",
+    "description": "Kiểm tra chức năng của khối chính trị - đoàn thể."
+  },
+  {
+    "id":  "TW-134",
+    "input_query":"Nghị quyết 57-NQ/TW do cơ quan thông tấn nào (được nhắc đến trong văn bản) giới thiệu toàn văn?",
+    "success_criteria": "Cổng TTĐT Chính phủ.",
+    "test_category": "Trích xuất thực thể (Entity Extraction)",
+    "description": "Kiểm tra thông tin nguồn phát hành bài viết."
+  },
+  {
+    "id":  "TW-135",
+    "input_query":"Số hiệu của Nghị quyết về đột phá phát triển khoa học, công nghệ là gì?",
+    "success_criteria": "Nghị quyết số 57-NQ/TW.",
+    "test_category": "Trích xuất số hiệu (Document ID QA)",
+    "description": "Kiểm tra khả năng bắt chính xác ký hiệu văn bản pháp quy."
+  },
+  {
+    "id": "TW-136",
+    "input_query":"Nhận thức về chuyển đổi số của bộ phận nào được Nghị quyết đánh giá là chưa đầy đủ và sâu sắc?",
+    "success_criteria": "Nhiều cấp, nhiều ngành, cán bộ, công chức và Nhân dân.",
+    "test_category": "Đánh giá thực trạng (Status Evaluation)",
+    "description": "Kiểm tra khả năng trích xuất đối tượng bị đánh giá hạn chế về nhận thức."
+  },
+  {
+    "id": "TW-137",
+    "input_query":"Nghị quyết nhận định tình trạng của hệ thống thể chế pháp luật, cơ chế, chính sách hiện nay như thế nào?",
+    "success_criteria": "Chưa đáp ứng yêu cầu.",
+    "test_category": "Đánh giá pháp lý (Legal Evaluation QA)",
+    "description": "Kiểm tra nhận định vĩ mô về sự bất cập của hành lang pháp lý."
+  },
+  {
+    "id": "TW-138",
+    "input_query":"Kỷ nguyên mới, kỷ nguyên vươn mình của Dân tộc hướng tới mục tiêu xây dựng đất nước như thế nào?",
+    "success_criteria": "Giàu mạnh, hùng cường.",
+    "test_category": "Hỏi đáp khái niệm (Concept QA)",
+    "description": "Kiểm tra cụm từ mô tả tính chất của kỷ nguyên mới."
+  },
+  {
+    "id": "TW-139",
+    "input_query":"Theo đánh giá, trình độ khoa học công nghệ quốc gia so với nhóm các nước phát triển đang ở mức nào?",
+    "success_criteria": "Còn khoảng cách xa.",
+    "test_category": "So sánh đối chiếu (Comparison QA)",
+    "description": "Kiểm tra nhận định về năng lực quốc gia so với quốc tế."
+  },
+  {
+    "id": "TW-140",
+    "input_query":"Phát triển KHCN, ĐMST và CĐS quốc gia được coi là động lực chính để phát triển nhanh yếu tố kinh tế nào?",
+    "success_criteria": "Lực lượng sản xuất hiện đại.",
+    "test_category": "Lý luận kinh tế (Economic Theory QA)",
+    "description": "Kiểm tra mối quan hệ giữa công nghệ và yếu tố kinh tế chính trị."
+  },
+  {
+    "id": "TW-141",
+    "input_query":"Việc thực hiện cuộc cách mạng về KHCN và CĐS cần được triển khai quyết liệt với những giải pháp mang tính chất gì?",
+    "success_criteria": "Đột phá, mang tính cách mạng.",
+    "test_category": "Phân tích tính chất (Characteristic QA)",
+    "description": "Kiểm tra tính chất của các giải pháp cần thực hiện."
+  },
+  {
+    "id": "TW-142",
+    "input_query":"Trong các nội dung trọng tâm, cơ sở dữ liệu lớn và kinh tế dữ liệu cần được thúc đẩy phát triển với tốc độ nào?",
+    "success_criteria": "Nhanh.",
+    "test_category": "Định hướng phát triển (Development Direction QA)",
+    "description": "Kiểm tra tốc độ định hướng đối với ngành công nghiệp dữ liệu."
+  },
+  {
+    "id": "TW-143",
+    "input_query":"Việt Nam định hướng tiến tới tự chủ và cạnh tranh công nghệ ở những lĩnh vực nào?",
+    "success_criteria": "Một số lĩnh vực Việt Nam có nhu cầu, tiềm năng, lợi thế.",
+    "test_category": "Chiến lược ngành (Sector Strategy QA)",
+    "description": "Kiểm tra tiêu chí lựa chọn lĩnh vực công nghệ ưu tiên."
+  },
+  {
+    "id": "TW-144",
+    "input_query":"Mục tiêu đến năm 2030, trình độ năng lực công nghệ, đổi mới sáng tạo của doanh nghiệp đạt mức nào?",
+    "success_criteria": "Đạt mức trên trung bình của thế giới.",
+    "test_category": "Trích xuất chỉ số (Metric Extraction)",
+    "description": "Kiểm tra mục tiêu đánh giá năng lực khối doanh nghiệp tư."
+  },
+  {
+    "id": "TW-145",
+    "input_query":"Khoa học, công nghệ và đổi mới sáng tạo góp phần duy trì chỉ số phát triển con người (HDI) trên mức 0,7 vào năm nào?",
+    "success_criteria": "Năm 2030.",
+    "test_category": "Trích xuất thời hạn (Timeline Extraction)",
+    "description": "Kiểm tra mốc thời gian cho chỉ tiêu phát triển xã hội."
+  },
+  {
+    "id": "TW-146",
+    "input_query":"Công nghệ lượng tử, nano, và thông tin di động được xếp vào nhóm công nghệ gì?",
+    "success_criteria": "Công nghệ chiến lược, công nghệ số (và một số công nghệ mới nổi).",
+    "test_category": "Phân loại công nghệ (Tech Classification)",
+    "description": "Kiểm tra định danh của các công nghệ cốt lõi."
+  },
+  {
+    "id": "TW-147",
+    "input_query":"Năm 2030, ngoài các thành phố trực thuộc Trung ương, đô thị thông minh còn hoàn thành xây dựng ở đâu?",
+    "success_criteria": "Một số tỉnh, thành phố có đủ điều kiện.",
+    "test_category": "Trích xuất địa bàn (Location Extraction)",
+    "description": "Kiểm tra phạm vi áp dụng quy hoạch đô thị thông minh."
+  },
+  {
+    "id": "TW-148",
+    "input_query":"Quản lý nhà nước trên môi trường số cần kết nối và vận hành như thế nào giữa các cơ quan trong hệ thống chính trị?",
+    "success_criteria": "Thông suốt.",
+    "test_category": "Yêu cầu vận hành (Operation Requirement QA)",
+    "description": "Kiểm tra tiêu chuẩn kỹ thuật trong vận hành chính phủ điện tử."
+  },
+  {
+    "id": "TW-149",
+    "input_query":"Tầm nhìn đến năm 2045, tỷ lệ doanh nghiệp công nghệ số của Việt Nam tương đương với nhóm nước nào?",
+    "success_criteria": "Các nước phát triển.",
+    "test_category": "So sánh dài hạn (Long-term Comparison)",
+    "description": "Kiểm tra mục tiêu vĩ mô tương quan với thế giới năm 2045."
+  },
+  {
+    "id": "TW-150",
+    "input_query":"Để tạo xung lực mới, đội ngũ cán bộ đảng viên cần phát huy tinh thần dám nghĩ, dám làm và gì nữa?",
+    "success_criteria": "Dám chịu trách nhiệm.",
+    "test_category": "Phẩm chất cán bộ (Cadre Quality QA)",
+    "description": "Kiểm tra tinh thần làm việc được khuyến khích trong Đảng."
+  },
+  {
+    "id": "TW-151",
+    "input_query":"Theo Nghị quyết, các phong trào cải tiến tại nơi làm việc nhằm mục đích nâng cao yếu tố nào?",
+    "success_criteria": "Hiệu quả công việc, năng suất lao động.",
+    "test_category": "Mục tiêu phong trào (Campaign Goal QA)",
+    "description": "Kiểm tra mục đích của các phong trào thi đua cơ sở."
+  },
+  {
+    "id": "TW-152",
+    "input_query":"Việc biểu dương, khen thưởng các nhà khoa học, nhà sáng chế phải được thực hiện với thái độ như thế nào?",
+    "success_criteria": "Kịp thời, xứng đáng.",
+    "test_category": "Nguyên tắc khen thưởng (Reward Principle QA)",
+    "description": "Kiểm tra yêu cầu trong công tác thi đua khen thưởng."
+  },
+  {
+    "id": "TW-153",
+    "input_query":"Nghị quyết yêu cầu xoá bỏ mọi tư tưởng, quan niệm đang cản trở sự phát triển nhằm biến thể chế thành gì?",
+    "success_criteria": "Một lợi thế cạnh tranh.",
+    "test_category": "Hỏi đáp chiến lược (Strategy QA)",
+    "description": "Kiểm tra mục đích sâu xa của việc cải cách thể chế."
+  },
+  {
+    "id": "TW-154",
+    "input_query":"Cải cách cơ chế quản lý tài chính trong nghiên cứu khoa học cần hướng tới việc thực hiện tối đa điều gì về mặt thủ tục hành chính?",
+    "success_criteria": "Đơn giản hoá tối đa.",
+    "test_category": "Cải cách hành chính (Admin Reform QA)",
+    "description": "Kiểm tra định hướng giảm bớt rườm rà trong giải ngân nghiên cứu."
+  },
+  {
+    "id": "TW-155",
+    "input_query":"Tổ chức nghiên cứu KHCN công lập được sử dụng ngân sách nhà nước để thuê đối tượng nào?",
+    "success_criteria": "Thuê chuyên gia.",
+    "test_category": "Cơ chế tài chính (Finance Mechanism QA)",
+    "description": "Kiểm tra quyền tự chủ chi tiêu tài chính mới."
+  },
+  {
+    "id": "TW-156",
+    "input_query":"Tài sản hữu hình và trí tuệ của tổ chức nghiên cứu được phép sử dụng vào mục đích gì đối với các doanh nghiệp?",
+    "success_criteria": "Liên kết, hợp tác khoa học và công nghệ.",
+    "test_category": "Hợp tác công tư (Public-Private Co-op QA)",
+    "description": "Kiểm tra định hướng thương mại hóa tài sản công."
+  },
+  {
+    "id": "TW-157",
+    "input_query":"Việc cơ cấu lại nguồn ngân sách chi sự nghiệp khoa học cần bảo đảm tính chất gì để tránh lãng phí?",
+    "success_criteria": "Tập trung, có trọng tâm, trọng điểm, không dàn trải.",
+    "test_category": "Nguyên tắc chi tiêu (Spending Principle QA)",
+    "description": "Kiểm tra phương châm phân bổ ngân sách nhà nước."
+  },
+  {
+    "id": "TW-158",
+    "input_query":"Nghị quyết cho phép áp dụng cơ chế đặc biệt để học hỏi, sao chép đối với loại công nghệ nào?",
+    "success_criteria": "Bí mật công nghệ, các công nghệ tiên tiến của nước ngoài.",
+    "test_category": "Chiến lược tiếp biến (Tech Adoption Strategy)",
+    "description": "Kiểm tra phương thức linh hoạt trong làm chủ công nghệ ngoại."
+  },
+  {
+    "id": "TW-159",
+    "input_query":"Chính sách miễn trừ trách nhiệm được áp dụng khi doanh nghiệp thử nghiệm công nghệ mới mà bị thiệt hại kinh tế do nguyên nhân nào?",
+    "success_criteria": "Nguyên nhân khách quan.",
+    "test_category": "Pháp lý thử nghiệm (Sandbox Legal QA)",
+    "description": "Kiểm tra điều kiện để được bảo vệ trong mô hình sandbox."
+  },
+  {
+    "id": "TW-160",
+    "input_query":"Quyền tự chủ của tổ chức nghiên cứu khoa học công lập được mở rộng trên những mặt nào?",
+    "success_criteria": "Tổ chức, cán bộ, tài chính, chuyên môn.",
+    "test_category": "Phân cấp quản lý (Management Decentralization QA)",
+    "description": "Kiểm tra 4 lĩnh vực được trao quyền tự chủ."
+  },
+  {
+    "id": "TW-161",
+    "input_query":"Quỹ đầu tư phát triển công nghiệp chiến lược ưu tiên lĩnh vực y sinh nào?",
+    "success_criteria": "Công nghệ sinh học.",
+    "test_category": "Định danh lĩnh vực (Field ID QA)",
+    "description": "Kiểm tra ngành học chuyên sâu được cấp vốn ưu tiên."
+  },
+  {
+    "id": "TW-162",
+    "input_query":"Trong lĩnh vực vật liệu, Quỹ đầu tư phát triển công nghiệp chiến lược ưu tiên nhóm hình thái nào?",
+    "success_criteria": "Vật liệu tiên tiến.",
+    "test_category": "Định danh lĩnh vực (Field ID QA)",
+    "description": "Kiểm tra phân nhánh ngành vật liệu học được ưu tiên."
+  },
+  {
+    "id": "TW-163",
+    "input_query":"Mức ngân sách nhà nước chi sự nghiệp khoa học tối thiểu 15% được dùng để nghiên cứu lĩnh vực gì?",
+    "success_criteria": "Nghiên cứu công nghệ chiến lược.",
+    "test_category": "Phân bổ ngân sách (Budget Allocation QA)",
+    "description": "Kiểm tra định mức ngân sách cứng cho R&D chiến lược."
+  },
+  {
+    "id": "TW-164",
+    "input_query":"Phòng thí nghiệm nào cần được tập trung phát triển phục vụ cho công nghệ chiến lược?",
+    "success_criteria": "Phòng thí nghiệm trọng điểm quốc gia.",
+    "test_category": "Cơ sở hạ tầng (Infrastructure QA)",
+    "description": "Kiểm tra tên gọi cấp bậc của cơ sở nghiên cứu đầu ngành."
+  },
+  {
+    "id": "TW-165",
+    "input_query":"Hạ tầng viễn thông, Internet cần được phát triển để đáp ứng yêu cầu gì về mặt vận hành và an ninh?",
+    "success_criteria": "Dự phòng, kết nối, an toàn, bền vững.",
+    "test_category": "Tiêu chuẩn kỹ thuật (Technical Spec QA)",
+    "description": "Kiểm tra 4 tiêu chí cốt lõi của mạng lưới viễn thông."
+  },
+  {
+    "id": "TW-166",
+    "input_query":"Nghị quyết có chính sách hỗ trợ doanh nghiệp trong nước đầu tư xây dựng các hệ thống lưu trữ nào?",
+    "success_criteria": "Trung tâm dữ liệu, điện toán đám mây.",
+    "test_category": "Định danh hệ thống (System ID QA)",
+    "description": "Kiểm tra các hạng mục hạ tầng số trọng điểm của doanh nghiệp."
+  },
+  {
+    "id": "TW-167",
+    "input_query":"Cơ chế chính sách ưu đãi về tín dụng, học bổng nhằm thu hút học sinh, sinh viên giỏi theo học ở trình độ nào là chủ yếu?",
+    "success_criteria": "Nhất là ở các trình độ sau đại học.",
+    "test_category": "Cấp bậc giáo dục (Education Level QA)",
+    "description": "Kiểm tra bậc đào tạo được ưu tiên cấp học bổng STEM."
+  },
+  {
+    "id": "TW-168",
+    "input_query":"Nhóm ngành khoa học cơ bản nào được liệt kê cụ thể để thu hút học sinh, sinh viên giỏi?",
+    "success_criteria": "Toán học, vật lý, sinh học, hoá học.",
+    "test_category": "Liệt kê ngành học (Subject Listing QA)",
+    "description": "Kiểm tra 4 bộ môn khoa học cơ bản nền tảng."
+  },
+  {
+    "id": "TW-169",
+    "input_query":"Các chuyên gia, 'tổng công trình sư' trong và ngoài nước cần có khả năng thực hiện vai trò gì đối với nhiệm vụ trọng điểm?",
+    "success_criteria": "Tổ chức, điều hành, chỉ huy, triển khai.",
+    "test_category": "Yêu cầu năng lực (Capacity Requirement QA)",
+    "description": "Kiểm tra 4 năng lực cốt lõi yêu cầu ở chuyên gia cấp cao."
+  },
+  {
+    "id": "TW-170",
+    "input_query":"Cơ chế đặc biệt để thu hút nhân tài quốc tế bao gồm ưu đãi sở hữu loại tài sản nào?",
+    "success_criteria": "Sở hữu nhà, đất.",
+    "test_category": "Chính sách đãi ngộ (Benefit Policy QA)",
+    "description": "Kiểm tra chính sách về quyền tài sản cho người nước ngoài/kiều bào."
+  },
+  {
+    "id": "TW-171",
+    "input_query":"Mạng lưới kết nối trí thức nào cần được xây dựng theo chỉ đạo của Nghị quyết?",
+    "success_criteria": "Mạng lưới chuyên gia, nhà khoa học trong nước và quốc tế.",
+    "test_category": "Phát triển mạng lưới (Network Development QA)",
+    "description": "Kiểm tra mục tiêu xây dựng cộng đồng học thuật không biên giới."
+  },
+  {
+    "id": "TW-172",
+    "input_query":"Đội ngũ giảng viên cần được phát triển để giảng dạy chuyên sâu lĩnh vực phần cứng công nghệ cao nào?",
+    "success_criteria": "Công nghệ chip bán dẫn, vi mạch.",
+    "test_category": "Chuyên ngành ưu tiên (Priority Major QA)",
+    "description": "Kiểm tra ngành công nghiệp phần cứng lõi cần đào tạo."
+  },
+  {
+    "id": "TW-173",
+    "input_query":"Mô hình giáo dục nào sẽ được hình thành khi kết hợp nền tảng trực tuyến vào hệ thống đại học?",
+    "success_criteria": "Mô hình giáo dục đại học số.",
+    "test_category": "Định danh mô hình (Model ID QA)",
+    "description": "Kiểm tra khái niệm mới về chuyển đổi số giáo dục bậc cao."
+  },
+  {
+    "id": "TW-174",
+    "input_query":"Công nghiệp nào liên quan đến bảo vệ hệ thống mạng cần được chính sách đặc biệt thu hút đầu tư?",
+    "success_criteria": "Công nghiệp an ninh mạng.",
+    "test_category": "Ngành công nghiệp số (Digital Industry QA)",
+    "description": "Kiểm tra ngành dịch vụ bảo mật được định hướng trở thành công nghiệp."
+  },
+  {
+    "id": "TW-175",
+    "input_query":"Hạ tầng lưu trữ, tính toán ngoài việc đạt tiêu chuẩn quốc tế còn phải đáp ứng tiêu chuẩn gì về môi trường?",
+    "success_criteria": "Tiêu chuẩn xanh.",
+    "test_category": "Tiêu chuẩn môi trường (Environmental Standard QA)",
+    "description": "Kiểm tra yêu cầu phát triển bền vững đối với trung tâm dữ liệu."
+  },
+  {
+    "id": "TW-176",
+    "input_query":"Nghị quyết yêu cầu cung cấp dịch vụ công không được phụ thuộc vào giới hạn không gian nào?",
+    "success_criteria": "Địa giới hành chính.",
+    "test_category": "Cải cách hành chính (Admin Reform QA)",
+    "description": "Kiểm tra mục tiêu xóa bỏ khoảng cách không gian trong dịch vụ công."
+  },
+  {
+    "id": "TW-177",
+    "input_query":"Chất lượng dịch vụ công trực tuyến hướng tới tính chất cá nhân hoá và phải dựa trên yếu tố cốt lõi nào?",
+    "success_criteria": "Dựa trên dữ liệu.",
+    "test_category": "Nguyên lý phục vụ (Service Principle QA)",
+    "description": "Kiểm tra định hướng Data-driven trong vận hành chính phủ."
+  },
+  {
+    "id": "TW-178",
+    "input_query":"Hệ thống nào cần được phát triển dựa trên nền tảng số quốc gia để tăng cường quản lý công?",
+    "success_criteria": "Hệ thống giám sát, điều hành thông minh.",
+    "test_category": "Công cụ quản lý (Management Tool QA)",
+    "description": "Kiểm tra tên gọi hệ thống điều hành số của chính quyền."
+  },
+  {
+    "id": "TW-179",
+    "input_query":"Môi trường xã hội số cần được xây dựng bảo đảm hai yếu tố cốt lõi nào về tính chất cộng đồng?",
+    "success_criteria": "An toàn, lành mạnh.",
+    "test_category": "Tiêu chuẩn xã hội (Social Standard QA)",
+    "description": "Kiểm tra định hướng tính chất của không gian mạng xã hội."
+  },
+  {
+    "id": "TW-180",
+    "input_query":"Trong chuyển đổi số, loại tội phạm nào được nhấn mạnh cần phải ngăn chặn hiệu quả?",
+    "success_criteria": "Tội phạm lĩnh vực chuyển đổi số, chống lừa đảo trực tuyến.",
+    "test_category": "An ninh mạng (Cyber Security QA)",
+    "description": "Kiểm tra vấn nạn tội phạm công nghệ cao trọng điểm."
+  },
+  {
+    "id": "TW-181",
+    "input_query":"Nhóm doanh nghiệp có vốn đầu tư nước ngoài (FDI) có trách nhiệm gì trong việc phát triển nhân lực nội địa?",
+    "success_criteria": "Chuyển giao tri thức, đào tạo nhân lực khoa học, công nghệ, đổi mới sáng tạo.",
+    "test_category": "Nghĩa vụ doanh nghiệp (Enterprise Duty QA)",
+    "description": "Kiểm tra yêu cầu lan tỏa kiến thức từ khối ngoại FDI."
+  },
+  {
+    "id": "TW-182",
+    "input_query":"Tinh thần gì cần được chính sách khuyến khích mạnh mẽ trong lĩnh vực KHCN và CĐS ở doanh nghiệp?",
+    "success_criteria": "Tinh thần khởi nghiệp.",
+    "test_category": "Động lực kinh doanh (Business Motivation QA)",
+    "description": "Kiểm tra việc thúc đẩy phong trào Startup công nghệ."
+  },
+  {
+    "id": "TW-183",
+    "input_query":"Nhà nước hỗ trợ doanh nghiệp công nghệ số chiến lược trong nước bằng cơ chế giao việc gì?",
+    "success_criteria": "Cơ chế đặt hàng, giao nhiệm vụ.",
+    "test_category": "Cơ chế hỗ trợ (Support Mechanism QA)",
+    "description": "Kiểm tra cách thức Nhà nước tạo thị trường cho doanh nghiệp nội."
+  },
+  {
+    "id": "TW-184",
+    "input_query":"Các doanh nghiệp công nghệ số được hưởng ưu đãi về những mặt tài nguyên và tài chính nào trong sản xuất thử nghiệm?",
+    "success_criteria": "Ưu đãi về đất đai, tín dụng, thuế.",
+    "test_category": "Chính sách ưu đãi (Incentive Policy QA)",
+    "description": "Kiểm tra 3 công cụ vĩ mô hỗ trợ doanh nghiệp IT."
+  },
+  {
+    "id": "TW-185",
+    "input_query":"Hợp tác quốc tế trong chuyển đổi số đặc biệt chú trọng năng lượng cấp cao nào?",
+    "success_criteria": "Năng lượng nguyên tử.",
+    "test_category": "Hợp tác công nghệ (Tech Co-op QA)",
+    "description": "Kiểm tra ngành năng lượng đặc thù trong hợp tác ngoại giao."
+  },
+  {
+    "id": "TW-186",
+    "input_query":"Hội đồng Tư vấn quốc gia về phát triển KHCN, ĐMST và CĐS có sự tham gia của đối tượng trí thức nào?",
+    "success_criteria": "Các chuyên gia trong và ngoài nước.",
+    "test_category": "Cơ cấu nhân sự (Personnel Structure QA)",
+    "description": "Kiểm tra thành phần tham gia cơ quan tư vấn cấp cao."
+  },
+  {
+    "id": "TW-187",
+    "input_query":"Quốc hội tham gia vào quá trình thực hiện Nghị quyết thông qua việc tăng cường hoạt động gì?",
+    "success_criteria": "Tăng cường giám sát thực hiện theo quy định.",
+    "test_category": "Chức năng lập pháp (Legislative Function QA)",
+    "description": "Kiểm tra vai trò theo dõi tiến độ của Quốc hội."
+  },
+  {
+    "id": "TW-188",
+    "input_query":"Ban cán sự đảng Chính phủ cần chỉ đạo xây dựng văn bản nào để thực hiện Nghị quyết?",
+    "success_criteria": "Chương trình hành động triển khai thực hiện Nghị quyết.",
+    "test_category": "Văn bản thi hành (Implementation Doc QA)",
+    "description": "Kiểm tra sản phẩm đầu ra của khối hành pháp."
+  },
+  {
+    "id": "TW-189",
+    "input_query":"Tổ chức nào có trách nhiệm hướng dẫn, vận động Nhân dân thực hiện Nghị quyết?",
+    "success_criteria": "Mặt trận Tổ quốc Việt Nam và các tổ chức chính trị - xã hội.",
+    "test_category": "Phân công nhiệm vụ (Task Assignment QA)",
+    "description": "Kiểm tra vai trò của khối đoàn thể quần chúng."
+  },
+  {
+    "id": "TW-190",
+    "input_query":"Ban Kinh tế Trung ương đóng vai trò gì trong việc báo cáo định kỳ kết quả thực hiện Nghị quyết?",
+    "success_criteria": "Phối hợp với Văn phòng Trung ương Đảng theo dõi, kiểm tra, đánh giá kết quả.",
+    "test_category": "Giám sát thực thi (Execution Monitoring QA)",
+    "description": "Kiểm tra vai trò của cơ quan tham mưu kinh tế Đảng."
+  },
+  {
+    "id": "TW-191",
+    "input_query":"Văn bản Nghị quyết 57 nhấn mạnh việc bảo đảm an toàn, an ninh không gian mạng là yêu cầu như thế nào đối với quá trình phát triển?",
+    "success_criteria": "Yêu cầu xuyên suốt, không thể tách rời.",
+    "test_category": "Đánh giá tầm quan trọng (Importance Rating QA)",
+    "description": "Kiểm tra mức độ bắt buộc của yếu tố an ninh mạng."
+  },
+  {
+    "id": "TW-192",
+    "input_query":"Theo mục tiêu 2030, giao dịch không dùng tiền mặt và sử dụng dịch vụ công trực tuyến đều phấn đấu đạt con số bao nhiêu?",
+    "success_criteria": "Đạt trên 80% (Dịch vụ công trực tuyến) và đạt 80% (Giao dịch không dùng tiền mặt).",
+    "test_category": "Trích xuất số liệu (Numeric QA)",
+    "description": "Kiểm tra sự trùng khớp về chỉ tiêu phần trăm của 2 lĩnh vực số hóa."
+  },
+  {
+    "id": "TW-193",
+    "input_query":"Việc sắp xếp lại hệ thống tổ chức khoa học công nghệ vào năm 2030 nhằm bảo đảm mục đích gì?",
+    "success_criteria": "Bảo đảm hiệu lực, hiệu quả.",
+    "test_category": "Mục tiêu cải cách (Reform Goal QA)",
+    "description": "Kiểm tra yêu cầu đầu ra của việc tái cơ cấu bộ máy nghiên cứu."
+  },
+  {
+    "id": "TW-194",
+    "input_query":"Công nghệ nào liên quan đến chuỗi dữ liệu phân tán được liệt kê trong danh sách công nghệ số cần làm chủ?",
+    "success_criteria": "Chuỗi khối (Blockchain).",
+    "test_category": "Định danh công nghệ (Tech ID QA)",
+    "description": "Kiểm tra việc trích xuất thuật ngữ công nghệ mới nổi."
+  },
+  {
+    "id": "TW-195",
+    "input_query":"Theo Nghị quyết, việc phát triển Chính phủ điện tử tiến tới mô hình gì ở mức cao của thế giới?",
+    "success_criteria": "Phát triển Chính phủ số.",
+    "test_category": "Tiến trình phát triển (Development Process QA)",
+    "description": "Kiểm tra bước tiến hóa từ E-Gov lên Digital Gov."
+  },
+  {
+    "id": "TW-196",
+    "input_query":"Nghị quyết đề cập đến việc xây dựng bộ quy tắc gì trên không gian mạng để phát triển văn hóa số?",
+    "success_criteria": "Xây dựng bộ quy tắc ứng xử trên không gian mạng.",
+    "test_category": "Quy chế văn hóa (Cultural Regulation QA)",
+    "description": "Kiểm tra công cụ quản lý hành vi xã hội trên môi trường mạng."
+  },
+  {
+    "id": "TW-197",
+    "input_query":"Tác động tiêu cực của công nghệ số đối với xã hội cần được xử lý như thế nào?",
+    "success_criteria": "Giảm thiểu tác động tiêu cực.",
+    "test_category": "Xử lý rủi ro (Risk Handling QA)",
+    "description": "Kiểm tra quan điểm phòng ngừa hệ lụy công nghệ."
+  },
+  {
+    "id": "TW-198",
+    "input_query":"Ngoài chủ quyền quốc gia, quyền an ninh dữ liệu nào cần được bảo đảm trên nền tảng số?",
+    "success_criteria": "Chủ quyền an ninh dữ liệu quốc gia.",
+    "test_category": "Khái niệm chủ quyền (Sovereignty Concept QA)",
+    "description": "Kiểm tra khái niệm độc lập chủ quyền mở rộng trên không gian số."
+  },
+  {
+    "id": "TW-199",
+    "input_query":"Để hỗ trợ doanh nghiệp công nghệ trong nước vươn tầm, Nhà nước có chính sách hỗ trợ đầu tư đi đâu?",
+    "success_criteria": "Hỗ trợ doanh nghiệp công nghệ trong nước đầu tư ra nước ngoài.",
+    "test_category": "Chiến lược đối ngoại (Outward Strategy QA)",
+    "description": "Kiểm tra định hướng xuất khẩu vốn và năng lực công nghệ."
+  },
+  {
+    "id": "TW-200",
+    "input_query":"Doanh nghiệp tái đầu tư vào đâu được Nghị quyết thúc đẩy mạnh mẽ?",
+    "success_criteria": "Tái đầu tư hạ tầng, đầu tư nghiên cứu và phát triển (R&D).",
+    "test_category": "Định hướng dòng vốn (Capital Flow Direction)",
+    "description": "Kiểm tra chủ trương khuyến khích tái đầu tư lợi nhuận vào công nghệ lõi."
+  },
+  {
+    "id": "TW-201",
+    "input_query":"Ngành hậu cần vận tải nào được đưa vào danh sách cần đẩy mạnh sản xuất, vận hành thông minh?",
+    "success_criteria": "Logistics.",
+    "test_category": "Trích xuất ngành nghề (Sector Extraction QA)",
+    "description": "Kiểm tra thuật ngữ ngành dịch vụ chuỗi cung ứng."
+  },
+  {
+    "id": "TW-202",
+    "input_query":"Sự tham gia vào các quy tắc, tiêu chuẩn quốc tế giúp Việt Nam bảo đảm yếu tố gì bên cạnh sự an toàn?",
+    "success_criteria": "Cùng có lợi.",
+    "test_category": "Nguyên tắc ngoại giao (Diplomatic Principle QA)",
+    "description": "Kiểm tra phương châm hợp tác quốc tế trên mặt trận tiêu chuẩn công nghệ."
+  },
+  {
+    "id": "TW-203",
+    "input_query":"Mặt trận Tổ quốc Việt Nam tham gia xây dựng phát triển KHCN thông qua quyền gì đối với các dự luật và chính sách?",
+    "success_criteria": "Tham gia xây dựng pháp luật, cơ chế, chính sách.",
+    "test_category": "Quyền hạn chính trị (Political Right QA)",
+    "description": "Kiểm tra quyền tham chính và góp ý văn bản của MTTQ."
+  },
+  {
+    "id": "TW-204",
+    "input_query":"Cơ quan nào chủ trì hướng dẫn quán triệt Nghị quyết 57-NQ/TW?",
+    "success_criteria": "Ban Tuyên giáo Trung ương chủ trì.",
+    "test_category": "Phân công chủ trì (Lead Assignment QA)",
+    "description": "Kiểm tra cơ quan đứng đầu mảng tư tưởng văn hóa."
+  },
+  {
+    "id": "TW-205",
+    "input_query":"Ban Chỉ đạo Trung ương về phát triển KHCN, ĐMST và CĐS được thành lập theo yêu cầu của Nghị quyết, Trưởng Ban là chức danh nào?",
+    "success_criteria": "Đồng chí Tổng Bí thư Ban Chấp hành Trung ương Đảng.",
+    "test_category": "Trích xuất chức danh (Title Extraction QA)",
+    "description": "Kiểm tra chức vụ chỉ đạo tối cao của Ủy ban trọng điểm."
+  },
+  {
+    "id": "TW-206",
+    "input_query":"Nghị quyết nhận định gì về chất lượng an toàn thông tin và bảo vệ dữ liệu hiện nay?",
+    "success_criteria": "Còn nhiều thách thức.",
+    "test_category": "Đánh giá rủi ro (Risk Assessment QA)",
+    "description": "Kiểm tra từ ngữ đánh giá mức độ khó khăn trong bảo mật."
+  },
+  {
+    "id": "TW-207",
+    "input_query":"Công nghệ nào liên quan đến vật lý siêu vi mô nằm trong chiến lược phát triển công nghệ số?",
+    "success_criteria": "Công nghệ lượng tử.",
+    "test_category": "Thuật ngữ khoa học (Scientific Term QA)",
+    "description": "Kiểm tra nhánh công nghệ tính toán thế hệ mới."
+  },
+  {
+    "id": "TW-208",
+    "input_query":"Mục tiêu đóng góp của TFP (Năng suất nhân tố tổng hợp) vào tăng trưởng kinh tế đến năm 2030 là trên 55%. TFP viết tắt của từ gì trong văn bản?",
+    "success_criteria": "Năng suất nhân tố tổng hợp.",
+    "test_category": "Giải nghĩa từ viết tắt (Acronym Decoding QA)",
+    "description": "Kiểm tra việc giải nghĩa chỉ số kinh tế vĩ mô."
+  },
+  {
+    "id": "TW-209",
+    "input_query":"Kinh phí từ xã hội đóng góp cho hoạt động nghiên cứu phát triển (R&D) đặt mục tiêu đạt hơn bao nhiêu phần trăm tổng chi R&D vào 2030?",
+    "success_criteria": "Hơn 60%.",
+    "test_category": "Tỉ trọng ngân sách (Budget Proportion QA)",
+    "description": "Kiểm tra chỉ tiêu xã hội hóa nguồn vốn khoa học."
+  },
+  {
+    "id": "TW-210",
+    "input_query":"Việc hiện đại hóa phương thức đào tạo cần ứng dụng mạnh mẽ công nghệ tiên tiến, nhất là công nghệ nào?",
+    "success_criteria": "Trí tuệ nhân tạo (AI).",
+    "test_category": "Ứng dụng giáo dục (EdTech Application QA)",
+    "description": "Kiểm tra công nghệ lõi được ưu tiên trong chuyển đổi số giáo dục."
+  },
+  {
+    "id": "TW-211",
+    "input_query":"Theo Nghị quyết, kỷ nguyên mới của đất nước được gọi là kỷ nguyên gì?",
+    "success_criteria": "Kỷ nguyên vươn mình của Dân tộc.",
+    "test_category": "Trích xuất thuật ngữ (Terminology QA)",
+    "description": "Kiểm tra khả năng nhận diện cụm từ biểu tượng mang tính định hướng chiến lược."
+  },
+  {
+    "id": "TW-212",
+    "input_query":"Giải pháp 'đổi mới tư duy' thuộc nhóm giải pháp mang tính chất gì trong tiêu đề phần nhiệm vụ 1?",
+    "success_criteria": "Đột phá.",
+    "test_category": "Đọc hiểu cấu trúc (Structural QA)",
+    "description": "Kiểm tra nhận diện tính chất của nhóm giải pháp ưu tiên hàng đầu."
+  },
+  {
+    "id": "TW-213",
+    "input_query":"Để khơi dậy tinh thần tự chủ, tự cường, các phong trào thi đua nào cần được triển khai sâu rộng?",
+    "success_criteria": "Các phong trào khởi nghiệp, sáng tạo, cải tiến nâng cao hiệu quả công việc, năng suất lao động.",
+    "test_category": "Liệt kê hoạt động (Activity Listing QA)",
+    "description": "Kiểm tra khả năng trích xuất danh sách các phong trào cơ sở."
+  },
+  {
+    "id": "TW-214",
+    "input_query":"Nhiệm vụ chuyển đổi số và phát triển KHCN phải được đưa vào đâu trong hoạt động của các cơ quan, đơn vị?",
+    "success_criteria": "Chương trình, kế hoạch công tác hằng năm.",
+    "test_category": "Quy trình hành chính (Administrative Process QA)",
+    "description": "Kiểm tra quy định về việc lập kế hoạch công tác bắt buộc."
+  },
+  {
+    "id": "TW-215",
+    "input_query":"Thái độ cần có đối với các phát minh, sáng chế dù là nhỏ nhất của người lao động là gì?",
+    "success_criteria": "Trân trọng.",
+    "test_category": "Thái độ ứng xử (Attitude QA)",
+    "description": "Kiểm tra quan điểm trân trọng sáng kiến từ vi mô."
+  },
+  {
+    "id": "TW-216",
+    "input_query":"Thể chế cần được đưa thành yếu tố gì để thúc đẩy phát triển KHCN và CĐS?",
+    "success_criteria": "Một lợi thế cạnh tranh.",
+    "test_category": "Hỏi đáp khái niệm (Concept QA)",
+    "description": "Kiểm tra sự thay đổi góc nhìn về vai trò của thể chế pháp luật."
+  },
+  {
+    "id": "TW-217",
+    "input_query":"Để giải phóng nguồn lực, luật pháp về lĩnh vực tài sản nào của Nhà nước cần được khẩn trương sửa đổi?",
+    "success_criteria": "Tài sản công (và ngân sách nhà nước, mua sắm công).",
+    "test_category": "Lĩnh vực pháp lý (Legal Domain QA)",
+    "description": "Kiểm tra danh mục các luật cần ưu tiên tháo gỡ."
+  },
+  {
+    "id": "TW-218",
+    "input_query":"Thủ tục hành chính trong cơ chế quản lý tài chính đối với nhiệm vụ KHCN cần được thực hiện theo hướng nào?",
+    "success_criteria": "Đơn giản hoá tối đa.",
+    "test_category": "Mục tiêu cải cách (Reform Target QA)",
+    "description": "Kiểm tra định hướng giảm tải giấy tờ hành chính."
+  },
+  {
+    "id": "TW-219",
+    "input_query":"Tính chất 'độ trễ' trong nghiên cứu khoa học, phát triển công nghệ cần được nhìn nhận với thái độ nào?",
+    "success_criteria": "Chấp nhận.",
+    "test_category": "Quan điểm đầu tư (Investment Viewpoint QA)",
+    "description": "Kiểm tra sự thấu hiểu đặc thù rủi ro thời gian của R&D."
+  },
+  {
+    "id": "TW-220",
+    "input_query":"Doanh nghiệp thử nghiệm mô hình kinh doanh mới mà bị thiệt hại khách quan thì được hưởng chính sách gì?",
+    "success_criteria": "Miễn trừ trách nhiệm.",
+    "test_category": "Bảo vệ pháp lý (Legal Protection QA)",
+    "description": "Kiểm tra chính sách an toàn cho đổi mới sáng tạo (Sandbox)."
+  },
+  {
+    "id": "TW-221",
+    "input_query":"Tổ chức khoa học công lập được phép sử dụng tài sản trí tuệ của mình để làm gì với doanh nghiệp?",
+    "success_criteria": "Liên kết, hợp tác khoa học và công nghệ.",
+    "test_category": "Quyền tài sản (Property Right QA)",
+    "description": "Kiểm tra quyền khai thác thương mại đối với chất xám."
+  },
+  {
+    "id": "TW-222",
+    "input_query":"Ngân sách chi sự nghiệp khoa học phải được cơ cấu lại để tránh tình trạng chi tiêu như thế nào?",
+    "success_criteria": "Dàn trải.",
+    "test_category": "Quản lý ngân sách (Budget Management QA)",
+    "description": "Kiểm tra nguyên tắc chống lãng phí, phân tán nguồn lực."
+  },
+  {
+    "id": "TW-223",
+    "input_query":"Quỹ đầu tư phát triển công nghiệp chiến lược ưu tiên lĩnh vực tự động hoá và thiết bị nào?",
+    "success_criteria": "Robot và tự động hoá.",
+    "test_category": "Trích xuất công nghệ (Tech Extraction QA)",
+    "description": "Kiểm tra danh mục ngành công nghiệp cốt lõi được nhận vốn."
+  },
+  {
+    "id": "TW-224",
+    "input_query":"Phát triển hạ tầng năng lượng phục vụ KHCN cần chú trọng đặc biệt vào loại năng lượng nào?",
+    "success_criteria": "Năng lượng mới, năng lượng sạch.",
+    "test_category": "Chiến lược năng lượng (Energy Strategy QA)",
+    "description": "Kiểm tra xu hướng phát triển hạ tầng năng lượng bền vững."
+  },
+  {
+    "id": "TW-225",
+    "input_query":"Ngoài không gian biển và không gian vũ trụ, không gian nào cũng cần ban hành chiến lược nghiên cứu?",
+    "success_criteria": "Không gian ngầm.",
+    "test_category": "Phạm vi không gian (Spatial Scope QA)",
+    "description": "Kiểm tra môi trường địa lý cần đẩy mạnh khai thác R&D."
+  },
+  {
+    "id": "TW-226",
+    "input_query":"Hệ thống các phòng thí nghiệm trọng điểm quốc gia cần tập trung phục vụ cho nhóm công nghệ nào?",
+    "success_criteria": "Công nghệ chiến lược.",
+    "test_category": "Phân bổ hạ tầng (Infra Allocation QA)",
+    "description": "Kiểm tra đối tượng thụ hưởng chính của các lab quốc gia."
+  },
+  {
+    "id": "TW-227",
+    "input_query":"Nền tảng số dùng chung quốc gia phải bảo đảm hoạt động như thế nào giữa các ngành, lĩnh vực?",
+    "success_criteria": "Thống nhất, liên thông.",
+    "test_category": "Yêu cầu hệ thống (System Requirement QA)",
+    "description": "Kiểm tra tiêu chuẩn kỹ thuật kết nối liên ngành."
+  },
+  {
+    "id": "TW-228",
+    "input_query":"Trong cơ chế hợp tác công tư để phát triển hạ tầng số, nguồn lực nào được xác định là chủ yếu?",
+    "success_criteria": "Nguồn lực nhà nước.",
+    "test_category": "Cơ cấu vốn (Capital Structure QA)",
+    "description": "Kiểm tra vai trò chủ đạo của Nhà nước trong đầu tư nền tảng."
+  },
+  {
+    "id": "TW-229",
+    "input_query":"Nghị quyết chủ trương xây dựng các cụm công nghiệp chuyên biệt về công nghệ thiết bị kết nối nào?",
+    "success_criteria": "Cụm công nghiệp IoT di động.",
+    "test_category": "Quy hoạch công nghiệp (Industrial Zoning QA)",
+    "description": "Kiểm tra định hướng quy hoạch khu vực sản xuất phần cứng mạng."
+  },
+  {
+    "id": "TW-230",
+    "input_query":"Để hình thành thị trường dữ liệu, cần phải xây dựng nền tảng giao dịch nào?",
+    "success_criteria": "Sàn giao dịch dữ liệu.",
+    "test_category": "Kinh tế số (Digital Economy QA)",
+    "description": "Kiểm tra mô hình thương mại hóa dữ liệu số."
+  },
+  {
+    "id": "TW-231",
+    "input_query":"Ứng dụng trí tuệ nhân tạo (AI) trong các ngành quan trọng phải được phát triển mạnh mẽ dựa trên nền tảng gì?",
+    "success_criteria": "Dựa trên dữ liệu lớn.",
+    "test_category": "Nguyên lý công nghệ (Tech Principle QA)",
+    "description": "Kiểm tra mối quan hệ cốt lõi giữa Big Data và AI."
+  },
+  {
+    "id": "TW-232",
+    "input_query":"Để thu hút học sinh giỏi vào các ngành STEM, Nhà nước có chính sách hấp dẫn về học phí, học bổng và gì nữa?",
+    "success_criteria": "Tín dụng.",
+    "test_category": "Hỗ trợ giáo dục (Education Support QA)",
+    "description": "Kiểm tra công cụ tài chính hỗ trợ người học tài năng."
+  },
+  {
+    "id": "TW-233",
+    "input_query":"Cần ban hành cơ chế gì để thu hút người Việt Nam ở nước ngoài có trình độ cao về nước làm việc?",
+    "success_criteria": "Cơ chế đặc thù.",
+    "test_category": "Chính sách nhân sự (HR Policy QA)",
+    "description": "Kiểm tra loại hình chính sách áp dụng cho kiều bào trí thức."
+  },
+  {
+    "id": "TW-234",
+    "input_query":"Bên cạnh thu nhập và môi trường làm việc, chuyên gia quốc tế còn được ưu đãi đặc biệt về thủ tục nhân thân nào?",
+    "success_criteria": "Nhập quốc tịch.",
+    "test_category": "Đãi ngộ chuyên gia (Expert Benefit QA)",
+    "description": "Kiểm tra quyền lợi công dân đặc quyền cho nhân tài ngoại."
+  },
+  {
+    "id": "TW-235",
+    "input_query":"Quá trình hiện đại hoá phương thức đào tạo đại học nhấn mạnh việc ứng dụng công nghệ tiên tiến nào nhất?",
+    "success_criteria": "Trí tuệ nhân tạo.",
+    "test_category": "Công nghệ giáo dục (EdTech QA)",
+    "description": "Kiểm tra công nghệ lõi cần tích hợp vào giảng dạy."
+  },
+  {
+    "id": "TW-236",
+    "input_query":"Đội ngũ giảng viên cần đẩy mạnh hợp tác với đối tác giáo dục nào ở nước ngoài?",
+    "success_criteria": "Các đại học uy tín.",
+    "test_category": "Hợp tác giáo dục (Education Co-op QA)",
+    "description": "Kiểm tra định hướng giao lưu học thuật quốc tế."
+  },
+  {
+    "id": "TW-237",
+    "input_query":"Khi đưa toàn bộ hoạt động của hệ thống chính trị lên môi trường số, yêu cầu bắt buộc về mặt an ninh là gì?",
+    "success_criteria": "Bảo đảm bí mật nhà nước.",
+    "test_category": "Bảo mật thông tin (Information Security QA)",
+    "description": "Kiểm tra giới hạn đỏ trong chuyển đổi số chính quyền."
+  },
+  {
+    "id": "TW-238",
+    "input_query":"Nghị quyết hướng tới cung cấp dịch vụ công trực tuyến ở mức độ hoàn thiện nào?",
+    "success_criteria": "Toàn trình.",
+    "test_category": "Chất lượng dịch vụ (Service Quality QA)",
+    "description": "Kiểm tra mức độ tự động hóa mục tiêu của dịch vụ hành chính."
+  },
+  {
+    "id": "TW-239",
+    "input_query":"Dịch vụ công trực tuyến cần hướng tới việc thiết kế phù hợp với từng nhu cầu riêng biệt, gọi là gì?",
+    "success_criteria": "Cá nhân hoá.",
+    "test_category": "Tiêu chuẩn phục vụ (Service Standard QA)",
+    "description": "Kiểm tra xu hướng lấy người dùng làm trung tâm trong e-Gov."
+  },
+  {
+    "id": "TW-240",
+    "input_query":"Việc phát triển nền tảng số an toàn nhằm mục đích hình thành lớp người dùng có kỹ năng số, gọi là gì?",
+    "success_criteria": "Công dân số.",
+    "test_category": "Hỏi đáp khái niệm (Concept QA)",
+    "description": "Kiểm tra mục tiêu nhân lực số của xã hội."
+  },
+  {
+    "id": "TW-241",
+    "input_query":"Mục tiêu của việc xây dựng nền tảng số trong lĩnh vực tài nguyên, môi trường là gì?",
+    "success_criteria": "Giám sát, thu thập dữ liệu.",
+    "test_category": "Chức năng hệ thống (System Function QA)",
+    "description": "Kiểm tra vai trò của IT trong quản lý sinh thái."
+  },
+  {
+    "id": "TW-242",
+    "input_query":"Lực lượng vũ trang ứng dụng công nghệ số vào quá trình nào trong hoạt động quân sự?",
+    "success_criteria": "Chỉ huy, điều hành tác chiến.",
+    "test_category": "Ứng dụng quân sự (Military Application QA)",
+    "description": "Kiểm tra trọng tâm số hóa của Bộ Quốc phòng."
+  },
+  {
+    "id": "TW-243",
+    "input_query":"Khối doanh nghiệp nào mang sứ mệnh đẩy mạnh chuyển giao tri thức và đào tạo nhân lực công nghệ cho Việt Nam?",
+    "success_criteria": "Doanh nghiệp có vốn đầu tư trực tiếp nước ngoài (FDI).",
+    "test_category": "Vai trò chủ thể (Entity Role QA)",
+    "description": "Kiểm tra trách nhiệm lan tỏa năng lực của khối ngoại."
+  },
+  {
+    "id": "TW-244",
+    "input_query":"Để mở rộng quy mô, doanh nghiệp công nghệ trong nước được hỗ trợ thực hiện hoạt động đầu tư nào?",
+    "success_criteria": "Đầu tư ra nước ngoài.",
+    "test_category": "Chiến lược mở rộng (Expansion Strategy QA)",
+    "description": "Kiểm tra định hướng xuất khẩu năng lực số."
+  },
+  {
+    "id": "TW-245",
+    "input_query":"Nhà nước có chính sách thu hút các doanh nghiệp trong và ngoài nước thực hiện hoạt động gì tại Việt Nam?",
+    "success_criteria": "Khởi nghiệp.",
+    "test_category": "Hệ sinh thái kinh doanh (Business Ecosystem QA)",
+    "description": "Kiểm tra chủ trương biến VN thành trung tâm Startup."
+  },
+  {
+    "id": "TW-246",
+    "input_query":"Vai trò dẫn dắt chuyển đổi số quốc gia được giao cho nhóm doanh nghiệp nào?",
+    "success_criteria": "Doanh nghiệp công nghệ số chiến lược trong nước (quy mô lớn).",
+    "test_category": "Định vị doanh nghiệp (Enterprise Positioning QA)",
+    "description": "Kiểm tra vai trò của các 'đại bàng' công nghệ nội địa."
+  },
+  {
+    "id": "TW-247",
+    "input_query":"Nhà nước giao nhiệm vụ trọng điểm về chuyển đổi số cho doanh nghiệp công nghệ thông qua cơ chế nào?",
+    "success_criteria": "Cơ chế đặt hàng, giao nhiệm vụ.",
+    "test_category": "Cơ chế giao việc (Task Delegation QA)",
+    "description": "Kiểm tra cách thức tạo nguồn cầu cho thị trường IT."
+  },
+  {
+    "id": "TW-248",
+    "input_query":"Các lĩnh vực nông nghiệp, thương mại, y tế, giáo dục cần đẩy mạnh phương thức hoạt động gì?",
+    "success_criteria": "Sản xuất thông minh.",
+    "test_category": "Cập nhật mô hình (Model Upgrade QA)",
+    "description": "Kiểm tra mục tiêu tự động hóa các ngành truyền thống."
+  },
+  {
+    "id": "TW-249",
+    "input_query":"Công nghệ bán dẫn, trí tuệ nhân tạo, lượng tử được Nghị quyết xếp vào nhóm công nghệ gì?",
+    "success_criteria": "Công nghệ chiến lược.",
+    "test_category": "Phân loại thuật ngữ (Term Classification QA)",
+    "description": "Kiểm tra định nghĩa tập hợp các công nghệ lõi."
+  },
+  {
+    "id": "TW-250",
+    "input_query":"Chính sách mua và chuyển giao công nghệ tiên tiến từ nước ngoài phải phù hợp với yếu tố nào?",
+    "success_criteria": "Điều kiện Việt Nam.",
+    "test_category": "Tiêu chí tiếp nhận (Adoption Criteria QA)",
+    "description": "Kiểm tra yêu cầu nội địa hóa công nghệ ngoại."
+  },
+  {
+    "id": "TW-251",
+    "input_query":"Nguyên tắc khi Việt Nam tham gia xây dựng các tiêu chuẩn quốc tế về công nghệ mới là bảo đảm an toàn và điều gì?",
+    "success_criteria": "Cùng có lợi.",
+    "test_category": "Nguyên tắc ngoại giao (Diplomatic Principle QA)",
+    "description": "Kiểm tra phương châm đàm phán quốc tế về luật chơi số."
+  },
+  {
+    "id": "TW-252",
+    "input_query":"Cơ quan tư vấn nào sẽ được thành lập để hỗ trợ Ban Chỉ đạo Trung ương về phát triển KHCN?",
+    "success_criteria": "Hội đồng Tư vấn quốc gia về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số.",
+    "test_category": "Tổ chức bộ máy (Organizational Structure QA)",
+    "description": "Kiểm tra tên gọi tổ chức tham mưu chiến lược."
+  },
+  {
+    "id": "TW-253",
+    "input_query":"Cơ quan nào có trách nhiệm xây dựng chương trình hành động triển khai thực hiện Nghị quyết?",
+    "success_criteria": "Ban cán sự đảng Chính phủ.",
+    "test_category": "Phân công nhiệm vụ (Task Assignment QA)",
+    "description": "Kiểm tra trách nhiệm của khối cơ quan hành pháp."
+  },
+  {
+    "id": "TW-254",
+    "input_query":"Mặt trận Tổ quốc Việt Nam thực hiện vai trò gì đối với các cơ chế, chính sách KHCN?",
+    "success_criteria": "Giám sát, phản biện xã hội.",
+    "test_category": "Chức năng đoàn thể (Mass Organization Function QA)",
+    "description": "Kiểm tra quyền hạn dân chủ của MTTQ."
+  },
+  {
+    "id": "TW-255",
+    "input_query":"Thời hạn cơ bản hoàn thành việc thể chế hoá và bố trí nguồn lực để thực hiện Nghị quyết là năm nào?",
+    "success_criteria": "Năm 2025.",
+    "test_category": "Trích xuất mốc thời gian (Deadline QA)",
+    "description": "Kiểm tra mục tiêu thời gian thực hiện ngắn hạn."
+  },
+  {
+    "id": "TW-256",
+    "input_query":"Đoạn mở đầu Nghị quyết đánh giá tốc độ và sự bứt phá về phát triển KHCN, ĐMST và CĐS như thế nào?",
+    "success_criteria": "Còn chậm.",
+    "test_category": "Đánh giá thực trạng (Status Evaluation QA)",
+    "description": "Kiểm tra góc nhìn khách quan về nhược điểm hiện tại."
+  },
+  {
+    "id": "TW-257",
+    "input_query":"Tình trạng thể chế pháp luật, cơ chế, chính sách hiện tại bị đánh giá là chưa đáp ứng được điều gì?",
+    "success_criteria": "Chưa đáp ứng yêu cầu.",
+    "test_category": "Đánh giá pháp lý (Legal Evaluation QA)",
+    "description": "Kiểm tra nhận định về sự yếu kém của hành lang luật pháp."
+  },
+  {
+    "id": "TW-258",
+    "input_query":"Bối cảnh hiện nay đòi hỏi các quyết sách mạnh mẽ mang tính chiến lược và tính gì?",
+    "success_criteria": "Tính cách mạng.",
+    "test_category": "Tính chất quyết sách (Policy Nature QA)",
+    "description": "Kiểm tra yêu cầu về độ sâu rộng của các giải pháp mới."
+  },
+  {
+    "id": "TW-259",
+    "input_query":"Đẩy mạnh chuyển đổi số quốc gia là giải pháp để đất nước ngăn chặn nguy cơ gì?",
+    "success_criteria": "Nguy cơ tụt hậu.",
+    "test_category": "Xác định rủi ro (Risk Identification QA)",
+    "description": "Kiểm tra mối đe dọa vĩ mô nếu không phát triển KHCN."
+  },
+  {
+    "id": "TW-260",
+    "input_query":"Sự nghiệp phát triển KHCN, CĐS được coi là cuộc cách mạng diễn ra trên phạm vi nào?",
+    "success_criteria": "Sâu sắc, toàn diện trên tất cả các lĩnh vực.",
+    "test_category": "Phạm vi ảnh hưởng (Impact Scope QA)",
+    "description": "Kiểm tra độ phủ của công cuộc chuyển đổi số."
+  },
+  {
+    "id": "TW-261",
+    "input_query":"Trong định hướng của Đảng, ai được xác định là nguồn lực, động lực chính của chuyển đổi số?",
+    "success_criteria": "Người dân và doanh nghiệp.",
+    "test_category": "Xác định chủ thể (Main Subject QA)",
+    "description": "Kiểm tra lực lượng nòng cốt thực thi đổi mới."
+  },
+  {
+    "id": "TW-262",
+    "input_query":"Sự thiếu hụt yếu tố nào hiện nay được nêu ra như một hạn chế cần khắc phục?",
+    "success_criteria": "Nguồn nhân lực chất lượng cao.",
+    "test_category": "Nhận diện hạn chế (Shortcoming ID QA)",
+    "description": "Kiểm tra việc xác định điểm nghẽn về con người."
+  },
+  {
+    "id": "TW-263",
+    "input_query":"Nghị quyết yêu cầu đưa dữ liệu thành tư liệu sản xuất chính nhằm mục đích gì đối với tiềm năng dữ liệu?",
+    "success_criteria": "Làm giàu, khai thác tối đa tiềm năng.",
+    "test_category": "Mục tiêu kinh tế số (Digital Economy Goal QA)",
+    "description": "Kiểm tra định hướng tối ưu hóa giá trị của data."
+  },
+  {
+    "id": "TW-264",
+    "input_query":"Bảo đảm chủ quyền quốc gia trên không gian mạng là yêu cầu mang tính chất gì trong quá trình phát triển?",
+    "success_criteria": "Xuyên suốt, không thể tách rời.",
+    "test_category": "Đánh giá tính chất (Nature Evaluation QA)",
+    "description": "Kiểm tra mức độ tuyệt đối của nguyên tắc an ninh."
+  },
+  {
+    "id": "TW-265",
+    "input_query":"Mục tiêu trình độ năng lực công nghệ của doanh nghiệp Việt Nam đến 2030 so với thế giới là gì?",
+    "success_criteria": "Đạt mức trên trung bình của thế giới.",
+    "test_category": "So sánh quốc tế (Intl Comparison QA)",
+    "description": "Kiểm tra mục tiêu cạnh tranh năng lực khối tư nhân."
+  },
+  {
+    "id": "TW-266",
+    "input_query":"Việt Nam phấn đấu trở thành trung tâm phát triển công nghiệp công nghệ số của khu vực vào năm nào?",
+    "success_criteria": "Năm 2030 (nhóm ngành có lợi thế) và 2045 (trung tâm thế giới).",
+    "test_category": "Mốc thời gian (Timeline QA)",
+    "description": "Kiểm tra thời điểm hoàn thành mục tiêu trung tâm công nghệ."
+  },
+  {
+    "id": "TW-267",
+    "input_query":"Năng suất nhân tố tổng hợp (TFP) đóng góp vào tăng trưởng kinh tế phải đạt trên 55% vào năm nào?",
+    "success_criteria": "Năm 2030.",
+    "test_category": "Chỉ tiêu kinh tế (Economic Metric QA)",
+    "description": "Kiểm tra hạn định thời gian cho chỉ số vĩ mô TFP."
+  },
+  {
+    "id": "TW-268",
+    "input_query":"Chỉ số HDI duy trì trên 0,7 là kết quả của việc phát triển lĩnh vực nào đối với giá trị con người?",
+    "success_criteria": "Khoa học, công nghệ và đổi mới sáng tạo.",
+    "test_category": "Mối tương quan xã hội (Social Correlation QA)",
+    "description": "Kiểm tra nguyên nhân thúc đẩy chỉ số phát triển con người."
+  },
+  {
+    "id": "TW-269",
+    "input_query":"Tỷ trọng kinh phí đầu tư cho R&D từ nguồn lực xã hội phấn đấu đạt mức nào vào năm 2030?",
+    "success_criteria": "Chiếm hơn 60% (trong tổng số 2% GDP chi cho R&D).",
+    "test_category": "Cơ cấu vốn (Capital Structure QA)",
+    "description": "Kiểm tra chỉ tiêu xã hội hóa ngân sách nghiên cứu."
+  },
+  {
+    "id": "TW-270",
+    "input_query":"Mức 3% tổng chi ngân sách hằng năm được Nhà nước cam kết bố trí để làm gì?",
+    "success_criteria": "Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số quốc gia.",
+    "test_category": "Chi tiêu công (Public Spending QA)",
+    "description": "Kiểm tra định mức ngân sách nhà nước cho công nghệ."
+  },
+  {
+    "id": "TW-271",
+    "input_query":"Chỉ tiêu tỷ lệ khai thác thương mại đối với các sáng chế đến năm 2030 là bao nhiêu?",
+    "success_criteria": "Đạt 8 - 10%.",
+    "test_category": "Chỉ số thương mại (Commercial Metric QA)",
+    "description": "Kiểm tra mục tiêu đưa bằng sáng chế vào ứng dụng thực tế."
+  },
+  {
+    "id": "TW-272",
+    "input_query":"Đối với công nghệ mạng di động thế hệ thứ 6 (6G), Việt Nam đặt mục tiêu gì đến năm 2030?",
+    "success_criteria": "Từng bước làm chủ.",
+    "test_category": "Mục tiêu công nghệ (Tech Target QA)",
+    "description": "Kiểm tra lộ trình đối với công nghệ viễn thông tương lai."
+  },
+  {
+    "id": "TW-273",
+    "input_query":"Việt Nam phấn đấu lọt vào nhóm các nước dẫn đầu về khả năng bảo vệ lĩnh vực nào trên môi trường số?",
+    "success_criteria": "An toàn, an ninh không gian mạng, an ninh dữ liệu và bảo vệ dữ liệu.",
+    "test_category": "Chỉ tiêu an ninh (Security Metric QA)",
+    "description": "Kiểm tra tham vọng thứ hạng toàn cầu về an ninh mạng."
+  },
+  {
+    "id": "TW-274",
+    "input_query":"Để trở thành nước phát triển thu nhập cao năm 2045, quy mô kinh tế số phải đạt tỷ trọng bao nhiêu?",
+    "success_criteria": "Tối thiểu 50% GDP.",
+    "test_category": "Mục tiêu dài hạn (Long-term Target QA)",
+    "description": "Kiểm tra chỉ tiêu kinh tế vĩ mô cho tầm nhìn 100 năm lập nước."
+  },
+  {
+    "id": "TW-275",
+    "input_query":"Trong tầm nhìn 2045, vị thế của Việt Nam trong chuỗi cung ứng công nghệ số toàn cầu là gì?",
+    "success_criteria": "Là một trong các trung tâm công nghiệp công nghệ số của khu vực và thế giới.",
+    "test_category": "Vị thế quốc tế (Intl Position QA)",
+    "description": "Kiểm tra mục tiêu định vị quốc gia trên bản đồ công nghệ."
+  },
+  {
+    "id": "TW-276",
+    "input_query":"Cấp uỷ các cấp cần quan tâm bố trí phù hợp số lượng cán bộ có trình độ chuyên môn gì?",
+    "success_criteria": "Trình độ chuyên môn khoa học kỹ thuật.",
+    "test_category": "Tiêu chuẩn cán bộ (Cadre Standard QA)",
+    "description": "Kiểm tra yêu cầu cơ cấu chuyên môn trong bộ máy Đảng."
+  },
+  {
+    "id": "TW-277",
+    "input_query":"Kết quả thực hiện nhiệm vụ KHCN, CĐS được sử dụng làm tiêu chí để đánh giá hoạt động nào hằng năm?",
+    "success_criteria": "Đánh giá thi đua, khen thưởng.",
+    "test_category": "Đánh giá hiệu suất (Performance Eval QA)",
+    "description": "Kiểm tra tiêu chí KPI cho cán bộ, đơn vị nhà nước."
+  },
+  {
+    "id": "TW-278",
+    "input_query":"Tinh thần 'dám nghĩ, dám làm, dám chịu trách nhiệm' đi liền với tinh thần gì của đảng viên?",
+    "success_criteria": "Tinh thần sáng tạo.",
+    "test_category": "Phẩm chất đạo đức (Moral Quality QA)",
+    "description": "Kiểm tra phẩm chất cốt lõi để thúc đẩy đổi mới."
+  },
+  {
+    "id": "TW-279",
+    "input_query":"Các phong trào thi đua cần trân trọng điều gì từ người lao động để nâng cao hiệu suất công việc?",
+    "success_criteria": "Từng phát minh, sáng chế, cải tiến kỹ thuật, sáng kiến.",
+    "test_category": "Định hướng thi đua (Emulation Direction QA)",
+    "description": "Kiểm tra tinh thần khuyến khích sáng kiến cơ sở."
+  },
+  {
+    "id": "TW-280",
+    "input_query":"Quy định pháp luật về vấn đề bảo hộ chất xám nào cần khẩn trương sửa đổi, hoàn thiện?",
+    "success_criteria": "Sở hữu trí tuệ.",
+    "test_category": "Lĩnh vực pháp luật (Legal Domain QA)",
+    "description": "Kiểm tra trọng tâm tháo gỡ rào cản thương mại hóa chất xám."
+  },
+  {
+    "id": "TW-281",
+    "input_query":"Việc giao quyền tự chủ cho các nhà khoa học tập trung vào khâu sử dụng nguồn lực nào?",
+    "success_criteria": "Sử dụng kinh phí nghiên cứu khoa học.",
+    "test_category": "Tự chủ tài chính (Financial Autonomy QA)",
+    "description": "Kiểm tra mục tiêu cởi trói thủ tục giải ngân."
+  },
+  {
+    "id": "TW-282",
+    "input_query":"Cơ chế ưu tiên phân bổ ngân sách nhà nước cho nghiên cứu KHCN là thông qua các tổ chức tài chính nào?",
+    "success_criteria": "Các quỹ phát triển khoa học và công nghệ.",
+    "test_category": "Công cụ phân bổ (Allocation Tool QA)",
+    "description": "Kiểm tra định chế tài chính trung gian cấp vốn R&D."
+  },
+  {
+    "id": "TW-283",
+    "input_query":"Mô hình hợp tác công tư (PPP) được Nghị quyết đề xuất ban hành để phục vụ cho nghiên cứu nhóm công nghệ nào?",
+    "success_criteria": "Công nghệ chiến lược.",
+    "test_category": "Hợp tác đầu tư (Investment Co-op QA)",
+    "description": "Kiểm tra cơ chế hút vốn tư nhân vào công nghệ lõi."
+  },
+  {
+    "id": "TW-284",
+    "input_query":"Sự phát triển khoa học trong không gian vũ trụ sẽ được định hướng bởi văn bản quản lý nào?",
+    "success_criteria": "Các chiến lược nghiên cứu, ứng dụng khoa học, công nghệ.",
+    "test_category": "Công cụ hoạch định (Planning Tool QA)",
+    "description": "Kiểm tra loại hình văn bản sẽ được ban hành cho kinh tế vũ trụ."
+  },
+  {
+    "id": "TW-285",
+    "input_query":"Mạng cáp quang được yêu cầu phát triển phải đạt tiêu chuẩn nào về tốc độ truyền tải?",
+    "success_criteria": "Băng thông rộng tốc độ cao.",
+    "test_category": "Yêu cầu kỹ thuật (Tech Requirement QA)",
+    "description": "Kiểm tra tiêu chí hạ tầng viễn thông cáp quang."
+  },
+  {
+    "id": "TW-286",
+    "input_query":"Nhà nước có chính sách thu hút doanh nghiệp FDI đặt hạ tầng vật lý số nào tại Việt Nam?",
+    "success_criteria": "Trung tâm dữ liệu, điện toán đám mây.",
+    "test_category": "Thu hút FDI (FDI Attraction QA)",
+    "description": "Kiểm tra trọng điểm thu hút đầu tư hạ tầng dữ liệu nước ngoài."
+  },
+  {
+    "id": "TW-287",
+    "input_query":"Quyền phân phối giá trị tạo ra từ dữ liệu là một phần của việc xây dựng thị trường nào?",
+    "success_criteria": "Thị trường dữ liệu (và kinh tế dữ liệu).",
+    "test_category": "Quyền kinh tế (Economic Right QA)",
+    "description": "Kiểm tra nền tảng pháp lý cho kinh doanh data."
+  },
+  {
+    "id": "TW-288",
+    "input_query":"Các chương trình đào tạo tài năng được chỉ đạo triển khai với phạm vi lĩnh vực như thế nào?",
+    "success_criteria": "Trên các lĩnh vực.",
+    "test_category": "Phạm vi đào tạo (Training Scope QA)",
+    "description": "Kiểm tra độ mở của chính sách bồi dưỡng nhân tài."
+  },
+  {
+    "id": "TW-289",
+    "input_query":"Để đào tạo nguồn nhân lực công nghệ số, Nghị quyết đề xuất áp dụng cơ chế đặc thù gì?",
+    "success_criteria": "Hợp tác công tư.",
+    "test_category": "Mô hình hợp tác (Co-op Model QA)",
+    "description": "Kiểm tra phương thức liên kết nhà nước - doanh nghiệp trong giáo dục."
+  },
+  {
+    "id": "TW-290",
+    "input_query":"Cơ quan, môi trường nào cần có chính sách đặc thù để tuyển dụng và giữ chân nhân lực KHCN?",
+    "success_criteria": "Trong các cơ quan của hệ thống chính trị.",
+    "test_category": "Môi trường công vụ (Public Sector QA)",
+    "description": "Kiểm tra chính sách nâng cao chất lượng cán bộ nhà nước."
+  },
+  {
+    "id": "TW-291",
+    "input_query":"Để xây dựng môi trường xã hội số lành mạnh, Việt Nam cần phát triển nền tảng giao tiếp nào của riêng mình?",
+    "success_criteria": "Một số mạng xã hội Việt Nam.",
+    "test_category": "Nền tảng nội địa (Domestic Platform QA)",
+    "description": "Kiểm tra chủ trương tự chủ về không gian mạng xã hội."
+  },
+  {
+    "id": "TW-292",
+    "input_query":"Việc ứng dụng công nghệ số trong lực lượng vũ trang nhằm phục vụ trực tiếp cho hoạt động gì?",
+    "success_criteria": "Chỉ huy, điều hành tác chiến.",
+    "test_category": "Hoạt động quân sự (Military Operation QA)",
+    "description": "Kiểm tra trọng tâm CĐS trong vận hành quân đội."
+  },
+  {
+    "id": "TW-293",
+    "input_query":"Nhiệm vụ chống lừa đảo trực tuyến thuộc giải pháp ngăn chặn tội phạm trong lĩnh vực nào?",
+    "success_criteria": "Lĩnh vực chuyển đổi số.",
+    "test_category": "Phân loại tội phạm (Crime Classification QA)",
+    "description": "Kiểm tra nhóm tội phạm không gian mạng trọng điểm."
+  },
+  {
+    "id": "TW-294",
+    "input_query":"Nhóm doanh nghiệp nào được đặc biệt nhấn mạnh cần có chính sách ưu đãi đầu tư chuyển đổi số?",
+    "success_criteria": "Doanh nghiệp vừa và nhỏ.",
+    "test_category": "Đối tượng chính sách (Policy Target QA)",
+    "description": "Kiểm tra phân khúc doanh nghiệp được ưu tiên hỗ trợ."
+  },
+  {
+    "id": "TW-295",
+    "input_query":"Chính sách hỗ trợ khởi nghiệp nhắm tới việc thu hút doanh nghiệp từ khu vực địa lý nào đến Việt Nam?",
+    "success_criteria": "Trong và ngoài nước.",
+    "test_category": "Phạm vi thu hút (Attraction Scope QA)",
+    "description": "Kiểm tra tầm nhìn quốc tế hóa hệ sinh thái Startup."
+  },
+  {
+    "id": "TW-296",
+    "input_query":"Không gian vật lý nào sẽ được phát triển chuyên biệt để tập trung các doanh nghiệp IT?",
+    "success_criteria": "Một số khu công nghiệp công nghệ số.",
+    "test_category": "Quy hoạch hạ tầng (Infra Planning QA)",
+    "description": "Kiểm tra định hướng xây dựng các 'thung lũng silicon' nội địa."
+  },
+  {
+    "id": "TW-297",
+    "input_query":"Nghị quyết đẩy mạnh tiêu dùng sản phẩm trên môi trường số nhằm mục tiêu tỷ trọng kinh tế số các ngành đạt bao nhiêu?",
+    "success_criteria": "Tối thiểu 70% kinh tế số.",
+    "test_category": "Mục tiêu tiêu dùng (Consumption Target QA)",
+    "description": "Kiểm tra tỷ trọng số hóa trong các ngành kinh tế cụ thể."
+  },
+  {
+    "id": "TW-298",
+    "input_query":"Khi tham gia xây dựng tiêu chuẩn quốc tế, thái độ của Việt Nam cần được thể hiện ra sao?",
+    "success_criteria": "Chủ động, tích cực.",
+    "test_category": "Định hướng ngoại giao (Diplomatic Direction QA)",
+    "description": "Kiểm tra tư thế sẵn sàng đóng góp vào luật chơi toàn cầu."
+  },
+  {
+    "id": "TW-299",
+    "input_query":"Chế độ báo cáo định kỳ kết quả thực hiện Nghị quyết cho Bộ Chính trị là bao lâu một lần?",
+    "success_criteria": "Định kỳ 6 tháng.",
+    "test_category": "Chế độ báo cáo (Reporting Regime QA)",
+    "description": "Kiểm tra quy định về tần suất giám sát tiến độ."
+  },
+  {
+    "id": "TW-300",
+    "input_query":"Các tổ chức chính trị - xã hội có quyền thực hiện chức năng gì đối với việc xây dựng pháp luật, chính sách KHCN?",
+    "success_criteria": "Phản biện xã hội (và giám sát, tham gia xây dựng).",
+    "test_category": "Quyền hạn đoàn thể (Mass Org Rights QA)",
+    "description": "Kiểm tra cơ chế phản biện dân chủ trong hoạch định chính sách."
+  },
+  {
+    "id": "TW-301",
+    "input_query":"Tên gọi đầy đủ của Nghị quyết 57 là gì?",
+    "success_criteria": "Nghị quyết về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia.",
+    "test_category": "Trích xuất tiêu đề (Title QA)",
+    "description": "Kiểm tra khả năng nhận diện tên gọi đầy đủ của văn bản pháp quy."
+  },
+  {
+    "id": "TW-302",
+    "input_query":"Kỷ nguyên mới được nhắc đến trong văn bản là kỷ nguyên gì?",
+    "success_criteria": "Kỷ nguyên vươn mình của Dân tộc.",
+    "test_category": "Trích xuất thuật ngữ (Terminology QA)",
+    "description": "Kiểm tra khả năng nhận diện thông điệp mang tính khẩu hiệu cốt lõi."
+  },
+  {
+    "id": "TW-303",
+    "input_query":"Thời cơ để nước ta phát triển giàu mạnh, hùng cường hiện nay được xác định là gì?",
+    "success_criteria": "Phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số.",
+    "test_category": "Nhận diện bối cảnh (Context QA)",
+    "description": "Kiểm tra khả năng đánh giá bối cảnh cơ hội của đất nước."
+  },
+  {
+    "id": "TW-304",
+    "input_query":"Cổng thông tin nào đã đăng tải toàn văn Nghị quyết này trong bài viết?",
+    "success_criteria": "Cổng TTĐT Chính phủ.",
+    "test_category": "Trích xuất thực thể nguồn (Source Entity QA)",
+    "description": "Kiểm tra khả năng nhận diện cơ quan báo chí/thông tin truyền tải."
+  },
+  {
+    "id": "TW-305",
+    "input_query":"Nhận thức của nhiều cấp, ngành về chuyển đổi số bị đánh giá là thiếu 2 yếu tố nào?",
+    "success_criteria": "Đầy đủ và sâu sắc.",
+    "test_category": "Đánh giá thực trạng (Status Evaluation QA)",
+    "description": "Kiểm tra từ vựng thể hiện mức độ đánh giá sự hạn chế."
+  },
+  {
+    "id": "TW-306",
+    "input_query":"Việc nghiên cứu, ứng dụng KHCN hiện nay chưa có bước gì?",
+    "success_criteria": "Chưa có bước đột phá.",
+    "test_category": "Đánh giá hạn chế (Limitation Evaluation QA)",
+    "description": "Kiểm tra nhận định về sự trì trệ trong ứng dụng thực tiễn."
+  },
+  {
+    "id": "TW-307",
+    "input_query":"Hạ tầng nào được nhấn mạnh là còn nhiều hạn chế trong phần đánh giá tình hình?",
+    "success_criteria": "Hạ tầng số.",
+    "test_category": "Nhận diện đối tượng (Target Identification QA)",
+    "description": "Kiểm tra việc định vị điểm yếu về cơ sở vật chất kỹ thuật."
+  },
+  {
+    "id": "TW-308",
+    "input_query":"Văn bản yêu cầu có chủ trương, quyết sách mang tính chiến lược và tính gì để tạo xung lực mới?",
+    "success_criteria": "Tính cách mạng.",
+    "test_category": "Tính chất quyết sách (Policy Nature QA)",
+    "description": "Kiểm tra yêu cầu về độ sâu rộng của các giải pháp."
+  },
+  {
+    "id": "TW-309",
+    "input_query":"Đích đến của Việt Nam vào năm 2030 là trở thành nước có thu nhập ở mức nào?",
+    "success_criteria": "Thu nhập trung bình cao.",
+    "test_category": "Mục tiêu kinh tế (Economic Goal QA)",
+    "description": "Kiểm tra chỉ tiêu phân loại mức sống quốc gia."
+  },
+  {
+    "id": "TW-310",
+    "input_query":"Mục tiêu đến năm 2045 của Việt Nam là trở thành nước có đặc điểm gì?",
+    "success_criteria": "Nước phát triển, thu nhập cao.",
+    "test_category": "Mục tiêu dài hạn (Long-term Goal QA)",
+    "description": "Kiểm tra tầm nhìn vĩ mô 100 năm thành lập nước."
+  },
+  {
+    "id": "TW-311",
+    "input_query":"Phát triển KHCN và CĐS được xác định là đột phá quan trọng ở vị trí nào?",
+    "success_criteria": "Hàng đầu.",
+    "test_category": "Xếp hạng ưu tiên (Priority Ranking QA)",
+    "description": "Kiểm tra nhận thức về mức độ cấp thiết của nghị quyết."
+  },
+  {
+    "id": "TW-312",
+    "input_query":"Điều gì giúp đổi mới phương thức quản trị quốc gia theo quan điểm chỉ đạo?",
+    "success_criteria": "Phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia.",
+    "test_category": "Hỏi đáp tác động (Impact QA)",
+    "description": "Kiểm tra lợi ích của CĐS đối với bộ máy quản lý nhà nước."
+  },
+  {
+    "id": "TW-313",
+    "input_query":"Đối với công cuộc phát triển KHCN, sự lãnh đạo của Đảng mang tính chất gì?",
+    "success_criteria": "Toàn diện.",
+    "test_category": "Vai trò chính trị (Political Role QA)",
+    "description": "Kiểm tra tính bao quát trong sự chỉ đạo của Đảng."
+  },
+  {
+    "id": "TW-314",
+    "input_query":"Doanh nhân, doanh nghiệp và Nhân dân tham gia vào công cuộc này với thái độ thế nào?",
+    "success_criteria": "Tích cực.",
+    "test_category": "Thái độ tham gia (Participation Attitude QA)",
+    "description": "Kiểm tra kỳ vọng đối với khối tư nhân và quần chúng."
+  },
+  {
+    "id": "TW-315",
+    "input_query":"Cuộc cách mạng KHCN và CĐS phải được triển khai với tính chất thời gian như thế nào?",
+    "success_criteria": "Kiên trì, nhất quán, lâu dài.",
+    "test_category": "Nguyên tắc thực thi (Execution Principle QA)",
+    "description": "Kiểm tra sự nhận thức về tính bền bỉ của chính sách."
+  },
+  {
+    "id": "TW-316",
+    "input_query":"Trong hệ sinh thái KHCN, nhà khoa học đóng vai trò gì?",
+    "success_criteria": "Nhân tố then chốt.",
+    "test_category": "Xác định vai trò (Role ID QA)",
+    "description": "Kiểm tra việc định vị trí thức trong công cuộc đổi mới."
+  },
+  {
+    "id": "TW-317",
+    "input_query":"Nhà nước tạo điều kiện cho phát triển KHCN thông qua việc giữ vai trò gì?",
+    "success_criteria": "Dẫn dắt, thúc đẩy.",
+    "test_category": "Chức năng nhà nước (State Function QA)",
+    "description": "Kiểm tra vai trò kiến tạo của cơ quan quản lý."
+  },
+  {
+    "id": "TW-318",
+    "input_query":"Trong 5 yếu tố trọng tâm (Thể chế, nhân lực, hạ tầng, dữ liệu, công nghệ), yếu tố nào cần đi trước một bước?",
+    "success_criteria": "Thể chế.",
+    "test_category": "Yếu tố tiên quyết (Prerequisite Element QA)",
+    "description": "Kiểm tra việc xác định gốc rễ của sự phát triển."
+  },
+  {
+    "id": "TW-319",
+    "input_query":"Tư duy xây dựng pháp luật cần đổi mới để khuyến khích điều gì?",
+    "success_criteria": "Đổi mới sáng tạo.",
+    "test_category": "Mục tiêu lập pháp (Legislative Goal QA)",
+    "description": "Kiểm tra định hướng làm luật kiến tạo."
+  },
+  {
+    "id": "TW-320",
+    "input_query":"Sự loại bỏ tư duy 'không quản được thì cấm' giúp đáp ứng yêu cầu gì trong quản lý?",
+    "success_criteria": "Bảo đảm yêu cầu quản lý và khuyến khích đổi mới sáng tạo.",
+    "test_category": "Cân bằng chính sách (Policy Balance QA)",
+    "description": "Kiểm tra sự hài hòa giữa an toàn và phát triển."
+  },
+  {
+    "id": "TW-321",
+    "input_query":"Nguồn nhân lực phục vụ phát triển KHCN và CĐS cần đạt trình độ nào?",
+    "success_criteria": "Trình độ cao.",
+    "test_category": "Tiêu chuẩn nhân sự (Personnel Standard QA)",
+    "description": "Kiểm tra yêu cầu chất lượng đối với lực lượng lao động."
+  },
+  {
+    "id": "TW-322",
+    "input_query":"Chính sách đối với nhân tài được yêu cầu xây dựng mang tính chất gì?",
+    "success_criteria": "Đặc biệt.",
+    "test_category": "Tính chất chính sách (Policy Nature QA)",
+    "description": "Kiểm tra mức độ ưu tiên đãi ngộ đối với người tài."
+  },
+  {
+    "id": "TW-323",
+    "input_query":"Nguyên tắc phát triển hạ tầng số là tránh điều gì?",
+    "success_criteria": "Tránh lãng phí.",
+    "test_category": "Nguyên tắc đầu tư (Investment Principle QA)",
+    "description": "Kiểm tra quan điểm chống thất thoát trong xây dựng cơ sở số."
+  },
+  {
+    "id": "TW-324",
+    "input_query":"Dữ liệu cần được khai thác tối đa để trở thành gì trong nền kinh tế?",
+    "success_criteria": "Tư liệu sản xuất chính.",
+    "test_category": "Hỏi đáp khái niệm (Concept QA)",
+    "description": "Kiểm tra khái niệm mới về Data trong kinh tế chính trị."
+  },
+  {
+    "id": "TW-325",
+    "input_query":"Từng bước tự chủ về công nghệ cần nhấn mạnh nhất vào loại công nghệ nào?",
+    "success_criteria": "Công nghệ chiến lược.",
+    "test_category": "Định hướng công nghệ (Tech Direction QA)",
+    "description": "Kiểm tra trọng tâm của sự tự chủ quốc gia."
+  },
+  {
+    "id": "TW-326",
+    "input_query":"Sự phát triển KHCN phải phát huy tối đa trí tuệ gì?",
+    "success_criteria": "Trí tuệ Việt Nam.",
+    "test_category": "Nguồn lực quốc gia (National Resource QA)",
+    "description": "Kiểm tra tinh thần đề cao nội lực dân tộc."
+  },
+  {
+    "id": "TW-327",
+    "input_query":"Quá trình tiếp thu công nghệ thế giới cần diễn ra với tốc độ như thế nào?",
+    "success_criteria": "Nhanh chóng.",
+    "test_category": "Đánh giá tốc độ (Speed Assessment QA)",
+    "description": "Kiểm tra yêu cầu về sự linh hoạt, bắt nhịp thời đại."
+  },
+  {
+    "id": "TW-328",
+    "input_query":"Việc nghiên cứu ứng dụng được đẩy mạnh đồng thời với việc chú trọng loại hình nghiên cứu nào?",
+    "success_criteria": "Nghiên cứu cơ bản.",
+    "test_category": "Phân loại nghiên cứu (Research Classification QA)",
+    "description": "Kiểm tra sự cân bằng giữa nghiên cứu nền tảng và thực tiễn."
+  },
+  {
+    "id": "TW-329",
+    "input_query":"Quyền lợi hợp pháp của tổ chức, cá nhân trên không gian mạng được bảo đảm thông qua việc giữ gìn yếu tố gì?",
+    "success_criteria": "An toàn thông tin.",
+    "test_category": "Bảo vệ quyền lợi (Right Protection QA)",
+    "description": "Kiểm tra nguyên tắc bảo vệ công dân số."
+  },
+  {
+    "id": "TW-330",
+    "input_query":"An ninh mạng và an ninh dữ liệu là yêu cầu không thể làm gì trong quá trình phát triển?",
+    "success_criteria": "Không thể tách rời.",
+    "test_category": "Mối quan hệ hữu cơ (Organic Relationship QA)",
+    "description": "Kiểm tra tính gắn kết của an ninh và phát triển."
+  },
+  {
+    "id": "TW-331",
+    "input_query":"Năm 2030, trình độ đổi mới sáng tạo của Việt Nam phấn đấu đạt mức tiên tiến ở đâu?",
+    "success_criteria": "Ở nhiều lĩnh vực quan trọng.",
+    "test_category": "Phạm vi mục tiêu (Target Scope QA)",
+    "description": "Kiểm tra mức độ phủ sóng của sự tiên tiến."
+  },
+  {
+    "id": "TW-332",
+    "input_query":"Vị trí của Việt Nam trong Đông Nam Á về nghiên cứu AI vào năm 2030 là nhóm mấy nước?",
+    "success_criteria": "Nhóm 3 nước dẫn đầu.",
+    "test_category": "Trích xuất chỉ số (Metric Extraction QA)",
+    "description": "Kiểm tra xếp hạng mục tiêu khu vực về trí tuệ nhân tạo."
+  },
+  {
+    "id": "TW-333",
+    "input_query":"Có bao nhiêu doanh nghiệp công nghệ số ngang tầm các nước tiên tiến vào năm 2030?",
+    "success_criteria": "Tối thiểu 5 doanh nghiệp.",
+    "test_category": "Trích xuất số lượng (Quantity QA)",
+    "description": "Kiểm tra chỉ tiêu số lượng đối với tập đoàn lớn."
+  },
+  {
+    "id": "TW-334",
+    "input_query":"Chỉ tiêu năng suất nhân tố tổng hợp (TFP) đóng góp vào tăng trưởng kinh tế ở mức nào?",
+    "success_criteria": "Trên 55%.",
+    "test_category": "Chỉ tiêu kinh tế (Economic Metric QA)",
+    "description": "Kiểm tra số liệu kinh tế vĩ mô đặc thù (TFP)."
+  },
+  {
+    "id": "TW-335",
+    "input_query":"Tỷ trọng xuất khẩu sản phẩm công nghệ cao đạt mức nào trên tổng giá trị hàng hoá xuất khẩu?",
+    "success_criteria": "Tối thiểu 50%.",
+    "test_category": "Chỉ tiêu thương mại (Trade Metric QA)",
+    "description": "Kiểm tra mục tiêu chuyển dịch cơ cấu hàng xuất khẩu."
+  },
+  {
+    "id": "TW-336",
+    "input_query":"Tỷ lệ giao dịch không dùng tiền mặt năm 2030 được kỳ vọng đạt bao nhiêu?",
+    "success_criteria": "80%.",
+    "test_category": "Chỉ tiêu thanh toán (Payment Metric QA)",
+    "description": "Kiểm tra mức độ phổ cập thanh toán số."
+  },
+  {
+    "id": "TW-337",
+    "input_query":"Vào năm 2030, có bao nhiêu phần trăm doanh nghiệp có hoạt động đổi mới sáng tạo?",
+    "success_criteria": "Trên 40%.",
+    "test_category": "Chỉ tiêu doanh nghiệp (Enterprise Metric QA)",
+    "description": "Kiểm tra tỷ lệ cải tiến trong khối doanh nghiệp."
+  },
+  {
+    "id": "TW-338",
+    "input_query":"Chỉ số phát triển con người (HDI) vào năm 2030 duy trì trên con số nào?",
+    "success_criteria": "0,7.",
+    "test_category": "Chỉ số xã hội (Social Index QA)",
+    "description": "Kiểm tra mục tiêu phát triển con người HDI."
+  },
+  {
+    "id": "TW-339",
+    "input_query":"Kinh phí chi cho nghiên cứu phát triển (R&D) năm 2030 đạt bao nhiêu % GDP?",
+    "success_criteria": "2% GDP.",
+    "test_category": "Ngân sách R&D (R&D Budget QA)",
+    "description": "Kiểm tra tỷ trọng chi tiêu R&D trên toàn nền kinh tế."
+  },
+  {
+    "id": "TW-340",
+    "input_query":"Phần lớn kinh phí R&D (hơn 60%) sẽ đến từ nguồn nào vào năm 2030?",
+    "success_criteria": "Từ xã hội.",
+    "test_category": "Nguồn vốn huy động (Capital Source QA)",
+    "description": "Kiểm tra chủ trương xã hội hóa đầu tư khoa học."
+  },
+  {
+    "id": "TW-341",
+    "input_query":"Ít nhất 3% ngân sách hằng năm sẽ được bố trí cho lĩnh vực nào?",
+    "success_criteria": "Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số quốc gia.",
+    "test_category": "Phân bổ ngân sách (Budget Allocation QA)",
+    "description": "Kiểm tra tỷ lệ chi cố định từ ngân sách nhà nước."
+  },
+  {
+    "id": "TW-342",
+    "input_query":"Định hướng sắp xếp hệ thống tổ chức KHCN phải đảm bảo sự gắn kết giữa những khâu nào?",
+    "success_criteria": "Nghiên cứu - ứng dụng - đào tạo.",
+    "test_category": "Liên kết hệ thống (System Linkage QA)",
+    "description": "Kiểm tra mô hình chuỗi giá trị tri thức."
+  },
+  {
+    "id": "TW-343",
+    "input_query":"Mục tiêu số lượng nhân lực nghiên cứu khoa học trên một vạn dân vào năm 2030 là bao nhiêu?",
+    "success_criteria": "12 người.",
+    "test_category": "Chỉ tiêu nhân lực (HR Metric QA)",
+    "description": "Kiểm tra mật độ nhà nghiên cứu trong dân số."
+  },
+  {
+    "id": "TW-344",
+    "input_query":"Số lượng tổ chức KH&CN được xếp hạng quốc tế và khu vực vào năm 2030 là bao nhiêu?",
+    "success_criteria": "Từ 40 - 50 tổ chức.",
+    "test_category": "Chỉ tiêu học thuật (Academic Metric QA)",
+    "description": "Kiểm tra mục tiêu xếp hạng tổ chức nghiên cứu."
+  },
+  {
+    "id": "TW-345",
+    "input_query":"Tốc độ tăng trưởng trung bình số lượng công bố khoa học quốc tế mỗi năm là bao nhiêu?",
+    "success_criteria": "10%/năm.",
+    "test_category": "Tốc độ tăng trưởng (Growth Rate QA)",
+    "description": "Kiểm tra mục tiêu gia tăng bài báo quốc tế."
+  },
+  {
+    "id": "TW-346",
+    "input_query":"Đơn đăng ký sáng chế được kỳ vọng tăng trung bình bao nhiêu phần trăm mỗi năm?",
+    "success_criteria": "16 - 18%/năm.",
+    "test_category": "Tốc độ tăng trưởng (Growth Rate QA)",
+    "description": "Kiểm tra mục tiêu đăng ký bảo hộ sở hữu trí tuệ."
+  },
+  {
+    "id": "TW-347",
+    "input_query":"Tỉ lệ khai thác thương mại các sáng chế phấn đấu đạt từ bao nhiêu phần trăm?",
+    "success_criteria": "8 - 10%.",
+    "test_category": "Thương mại hóa (Commercialization QA)",
+    "description": "Kiểm tra khả năng biến sáng chế thành giá trị kinh tế."
+  },
+  {
+    "id": "TW-348",
+    "input_query":"Hạ tầng công nghệ số dung lượng siêu lớn, băng thông siêu rộng phải ngang tầm với ai?",
+    "success_criteria": "Các nước tiên tiến.",
+    "test_category": "Tiêu chuẩn so sánh (Benchmarking QA)",
+    "description": "Kiểm tra tham vọng xây dựng hạ tầng viễn thông."
+  },
+  {
+    "id": "TW-349",
+    "input_query":"Việc phủ sóng 5G sẽ được thực hiện trên phạm vi nào vào năm 2030?",
+    "success_criteria": "Toàn quốc.",
+    "test_category": "Phạm vi phủ sóng (Coverage Scope QA)",
+    "description": "Kiểm tra mục tiêu triển khai công nghệ 5G."
+  },
+  {
+    "id": "TW-350",
+    "input_query":"Đến năm 2030, thu hút thêm bao nhiêu tổ chức/doanh nghiệp công nghệ hàng đầu thế giới đặt trụ sở tại Việt Nam?",
+    "success_criteria": "Ít nhất 3 tổ chức, doanh nghiệp.",
+    "test_category": "Thu hút FDI (FDI Attraction QA)",
+    "description": "Kiểm tra số lượng tập đoàn công nghệ lớn kỳ vọng."
+  },
+  {
+    "id": "TW-351",
+    "input_query":"Việc kết nối cơ sở dữ liệu quốc gia và các ngành phải đảm bảo tính chất gì?",
+    "success_criteria": "Đồng bộ, kết nối, chia sẻ.",
+    "test_category": "Nguyên tắc dữ liệu (Data Principle QA)",
+    "description": "Kiểm tra yêu cầu kỹ thuật đối với hệ thống dữ liệu nhà nước."
+  },
+  {
+    "id": "TW-352",
+    "input_query":"Kinh tế số và xã hội số phấn đấu đạt mức nào của thế giới vào năm 2030?",
+    "success_criteria": "Mức cao của thế giới.",
+    "test_category": "Định vị quốc tế (International Positioning QA)",
+    "description": "Kiểm tra mục tiêu phát triển tổng thể môi trường số."
+  },
+  {
+    "id": "TW-353",
+    "input_query":"Việt Nam thuộc nhóm các nước dẫn đầu thế giới về những mảng an ninh nào vào 2030?",
+    "success_criteria": "An toàn, an ninh không gian mạng, an ninh dữ liệu và bảo vệ dữ liệu.",
+    "test_category": "Mục tiêu an ninh mạng (Cybersecurity Goal QA)",
+    "description": "Kiểm tra các khía cạnh an ninh thông tin trọng tâm."
+  },
+  {
+    "id": "TW-354",
+    "input_query":"Năm 2045, quy mô kinh tế số của Việt Nam đạt mức nào?",
+    "success_criteria": "Tối thiểu 50% GDP.",
+    "test_category": "Chỉ tiêu dài hạn (Long-term Metric QA)",
+    "description": "Kiểm tra tỷ trọng kinh tế số tầm nhìn 100 năm."
+  },
+  {
+    "id": "TW-355",
+    "input_query":"Việt Nam hướng đến mục tiêu thuộc nhóm 30 nước dẫn đầu thế giới về lĩnh vực gì vào năm 2045?",
+    "success_criteria": "Đổi mới sáng tạo, chuyển đổi số.",
+    "test_category": "Thứ hạng quốc tế (Global Ranking QA)",
+    "description": "Kiểm tra mục tiêu lọt top 30 quốc gia sáng tạo."
+  },
+  {
+    "id": "TW-356",
+    "input_query":"Tỉ lệ doanh nghiệp công nghệ số năm 2045 được kỳ vọng sẽ tương đương với khu vực nào?",
+    "success_criteria": "Các nước phát triển.",
+    "test_category": "So sánh doanh nghiệp (Enterprise Comparison QA)",
+    "description": "Kiểm tra sự tiệm cận khối tư nhân với thế giới."
+  },
+  {
+    "id": "TW-357",
+    "input_query":"Năm 2045, có bao nhiêu doanh nghiệp công nghệ số ngang tầm các nước tiên tiến?",
+    "success_criteria": "Tối thiểu 10 doanh nghiệp.",
+    "test_category": "Chỉ tiêu số lượng (Quantity Target QA)",
+    "description": "Kiểm tra số lượng tập đoàn Big Tech nội địa mục tiêu."
+  },
+  {
+    "id": "TW-358",
+    "input_query":"Số lượng tổ chức, doanh nghiệp công nghệ hàng đầu thế giới thu hút thêm vào Việt Nam tính đến 2045 là bao nhiêu?",
+    "success_criteria": "Ít nhất 5 tổ chức, doanh nghiệp.",
+    "test_category": "Thu hút đầu tư (Investment Attraction QA)",
+    "description": "Kiểm tra mục tiêu dài hạn đón 'đại bàng' FDI."
+  },
+  {
+    "id": "TW-359",
+    "input_query":"Đô thị thông minh sẽ hoàn thành xây dựng ở các thành phố trực thuộc Trung ương vào năm nào?",
+    "success_criteria": "Năm 2030.",
+    "test_category": "Mốc thời gian quy hoạch (Planning Timeline QA)",
+    "description": "Kiểm tra thời điểm hoàn thành mục tiêu Smart City cốt lõi."
+  },
+  {
+    "id": "TW-360",
+    "input_query":"Theo mục tiêu 2030, đóng góp của TFP vào tăng trưởng kinh tế phải đạt trên bao nhiêu phần trăm?",
+    "success_criteria": "55%.",
+    "test_category": "Chỉ số kinh tế (Economic Index QA)",
+    "description": "Kiểm tra chỉ số đo lường hiệu quả các yếu tố sản xuất."
+  },
+  {
+    "id": "TW-361",
+    "input_query":"Nhiệm vụ đầu tiên (Mục III.1) nhấn mạnh việc đột phá về đổi mới yếu tố gì?",
+    "success_criteria": "Đổi mới tư duy.",
+    "test_category": "Xác định trọng tâm (Focus ID QA)",
+    "description": "Kiểm tra sự nhận thức về thay đổi nhận thức tư duy."
+  },
+  {
+    "id": "TW-362",
+    "input_query":"Kết quả thực hiện chuyển đổi số là tiêu chí để đánh giá gì hàng năm?",
+    "success_criteria": "Đánh giá hiệu quả thực hiện nhiệm vụ, đánh giá thi đua, khen thưởng.",
+    "test_category": "Đánh giá KPI (KPI Evaluation QA)",
+    "description": "Kiểm tra thước đo năng lực dành cho cán bộ công chức."
+  },
+  {
+    "id": "TW-363",
+    "input_query":"Cấp ủy các cấp cần bố trí cán bộ có trình độ gì để đáp ứng yêu cầu mới?",
+    "success_criteria": "Trình độ chuyên môn khoa học kỹ thuật.",
+    "test_category": "Tiêu chuẩn cán bộ (Cadre Standard QA)",
+    "description": "Kiểm tra cơ cấu nhân sự Đảng bộ."
+  },
+  {
+    "id": "TW-364",
+    "input_query":"Để khơi dậy khí thế mới trong xã hội, cần triển khai sâu rộng phong trào gì về học tập?",
+    "success_criteria": "Phong trào 'học tập số'.",
+    "test_category": "Phong trào xã hội (Social Campaign QA)",
+    "description": "Kiểm tra chương trình hành động nâng cao dân trí số."
+  },
+  {
+    "id": "TW-365",
+    "input_query":"Cần mở rộng các hình thức gì đối với những tổ chức, cá nhân có thành tích trong CĐS?",
+    "success_criteria": "Tôn vinh, biểu dương, khen thưởng.",
+    "test_category": "Chính sách động viên (Motivation Policy QA)",
+    "description": "Kiểm tra chủ trương khích lệ cá nhân, tập thể."
+  },
+  {
+    "id": "TW-366",
+    "input_query":"Giải pháp nào được xem là tháo gỡ điểm nghẽn, giải phóng các nguồn lực?",
+    "success_criteria": "Sửa đổi, bổ sung, hoàn thiện đồng bộ các quy định pháp luật.",
+    "test_category": "Cải cách pháp lý (Legal Reform QA)",
+    "description": "Kiểm tra phương hướng giải quyết rào cản thể chế."
+  },
+  {
+    "id": "TW-367",
+    "input_query":"Thủ tục hành chính trong nghiên cứu KHCN cần được thực hiện theo hướng nào?",
+    "success_criteria": "Đơn giản hoá tối đa.",
+    "test_category": "Cải cách thủ tục (Procedure Reform QA)",
+    "description": "Kiểm tra chủ trương giảm bớt gánh nặng giấy tờ."
+  },
+  {
+    "id": "TW-368",
+    "input_query":"Đối với những vấn đề thực tiễn mới đặt ra, Nghị quyết khuyến khích cách tiếp cận nào?",
+    "success_criteria": "Cách tiếp cận mở, vận dụng sáng tạo, cho phép thí điểm.",
+    "test_category": "Cách thức tiếp cận (Approach QA)",
+    "description": "Kiểm tra phương pháp xử lý các sự kiện chưa có tiền lệ."
+  },
+  {
+    "id": "TW-369",
+    "input_query":"Thái độ đối với đầu tư mạo hiểm và rủi ro trong R&D theo chỉ đạo của Nghị quyết là gì?",
+    "success_criteria": "Chấp nhận rủi ro, đầu tư mạo hiểm và độ trễ.",
+    "test_category": "Tư duy đầu tư (Investment Mindset QA)",
+    "description": "Kiểm tra sự thay đổi trong quan điểm về hiệu quả R&D."
+  },
+  {
+    "id": "TW-370",
+    "input_query":"Quỹ đầu tư nào cần được hình thành cho các startup và ươm tạo công nghệ?",
+    "success_criteria": "Quỹ đầu tư mạo hiểm.",
+    "test_category": "Công cụ tài chính (Financial Tool QA)",
+    "description": "Kiểm tra sự hình thành quỹ hỗ trợ khởi nghiệp (VC)."
+  },
+  {
+    "id": "TW-371",
+    "input_query":"Viện nghiên cứu và trường đại học cần phát triển để trở thành những chủ thể gì?",
+    "success_criteria": "Các chủ thể nghiên cứu mạnh.",
+    "test_category": "Phát triển học thuật (Academic Development QA)",
+    "description": "Kiểm tra định hướng tái cơ cấu các trường, viện."
+  },
+  {
+    "id": "TW-372",
+    "input_query":"Biện pháp xử lý đối với các tổ chức KH&CN hoạt động không hiệu quả là gì?",
+    "success_criteria": "Sáp nhập, giải thể.",
+    "test_category": "Biện pháp xử lý (Handling Measure QA)",
+    "description": "Kiểm tra sự quyết liệt trong tinh gọn bộ máy nghiên cứu."
+  },
+  {
+    "id": "TW-373",
+    "input_query":"Tổ chức KH&CN công lập được trao quyền tự chủ trên những lĩnh vực nào?",
+    "success_criteria": "Tổ chức, cán bộ, tài chính, chuyên môn.",
+    "test_category": "Phân cấp quyền hạn (Decentralization QA)",
+    "description": "Kiểm tra 4 trụ cột tự chủ của đơn vị sự nghiệp."
+  },
+  {
+    "id": "TW-374",
+    "input_query":"Nhà khoa học được quyền thành lập và điều hành doanh nghiệp dựa trên yếu tố nào?",
+    "success_criteria": "Dựa trên kết quả nghiên cứu.",
+    "test_category": "Thương mại hóa nghiên cứu (Research Commercialization)",
+    "description": "Kiểm tra quyền lợi khởi nghiệp Spin-off từ phòng lab."
+  },
+  {
+    "id": "TW-375",
+    "input_query":"Ngân sách chi cho KHCN ưu tiên thực hiện thông qua công cụ tài chính nào?",
+    "success_criteria": "Cơ chế quỹ (Các quỹ phát triển khoa học và công nghệ).",
+    "test_category": "Cơ chế giải ngân (Disbursement Mechanism QA)",
+    "description": "Kiểm tra cách thức điều phối dòng tiền R&D của nhà nước."
+  },
+  {
+    "id": "TW-376",
+    "input_query":"Cơ chế nào được áp dụng đối với sản phẩm nghiên cứu trong nước để khuyến khích tiêu thụ?",
+    "success_criteria": "Mua sắm công.",
+    "test_category": "Chính sách kích cầu (Demand Stimulus QA)",
+    "description": "Kiểm tra việc sử dụng ngân sách nhà nước để mua hàng nội."
+  },
+  {
+    "id": "TW-377",
+    "input_query":"Quỹ đầu tư phát triển công nghiệp chiến lược ưu tiên các lĩnh vực nào?",
+    "success_criteria": "Quốc phòng, không gian, năng lượng, môi trường, công nghệ sinh học, trí tuệ nhân tạo, vật liệu tiên tiến, bán dẫn, công nghệ lượng tử, robot và tự động hoá.",
+    "test_category": "Lĩnh vực ưu tiên (Priority Field QA)",
+    "description": "Kiểm tra danh sách đầy đủ các ngành được rót vốn chiến lược."
+  },
+  {
+    "id": "TW-378",
+    "input_query":"Tỉ lệ ngân sách nhà nước chi sự nghiệp khoa học dành cho công nghệ chiến lược là bao nhiêu?",
+    "success_criteria": "Ít nhất 15%.",
+    "test_category": "Hạn mức ngân sách (Budget Quota QA)",
+    "description": "Kiểm tra phần trăm tối thiểu ngân sách R&D bắt buộc."
+  },
+  {
+    "id": "TW-379",
+    "input_query":"Các không gian nào được định hướng ban hành chiến lược nghiên cứu, khai thác?",
+    "success_criteria": "Không gian biển, không gian ngầm, không gian vũ trụ.",
+    "test_category": "Chiến lược không gian (Spatial Strategy QA)",
+    "description": "Kiểm tra các môi trường vật lý mới cần được nghiên cứu."
+  },
+  {
+    "id": "TW-380",
+    "input_query":"Nguồn tài nguyên khoáng sản nào được nhắc đến cụ thể cần quản lý chặt chẽ?",
+    "success_criteria": "Đất hiếm.",
+    "test_category": "Quản lý tài nguyên (Resource Management QA)",
+    "description": "Kiểm tra khoáng sản chiến lược đối với công nghệ cao."
+  },
+  {
+    "id": "TW-381",
+    "input_query":"Hạ tầng lưu trữ, tính toán cần đạt tiêu chuẩn nào ngoài tiêu chuẩn quốc tế?",
+    "success_criteria": "Tiêu chuẩn xanh.",
+    "test_category": "Tiêu chuẩn kỹ thuật (Tech Standard QA)",
+    "description": "Kiểm tra yêu cầu về môi trường đối với trung tâm dữ liệu."
+  },
+  {
+    "id": "TW-382",
+    "input_query":"Ai được hưởng cơ chế đặc biệt về nhập quốc tịch, sở hữu nhà đất để về nước làm việc?",
+    "success_criteria": "Nhà khoa học đầu ngành, chuyên gia, 'tổng công trình sư' (Người Việt Nam ở nước ngoài và người nước ngoài).",
+    "test_category": "Chính sách nhân tài (Talent Policy QA)",
+    "description": "Kiểm tra nhóm đối tượng được hưởng đặc quyền thu hút nhân tài."
+  },
+  {
+    "id": "TW-383",
+    "input_query":"Trường học tiên tiến chuyên sâu sẽ được xây dựng tập trung vào công nghệ nào?",
+    "success_criteria": "Trí tuệ nhân tạo.",
+    "test_category": "Cơ sở đào tạo (Training Facility QA)",
+    "description": "Kiểm tra lĩnh vực giáo dục đại học được ưu tiên đầu tư."
+  },
+  {
+    "id": "TW-384",
+    "input_query":"Các cơ quan hệ thống chính trị phải đưa hoạt động lên môi trường số bảo đảm yếu tố gì?",
+    "success_criteria": "Liên thông, đồng bộ, bí mật nhà nước.",
+    "test_category": "An toàn thông tin công (Public Info Security QA)",
+    "description": "Kiểm tra yêu cầu bảo mật của chính phủ điện tử."
+  },
+  {
+    "id": "TW-385",
+    "input_query":"Dịch vụ công cung cấp cho người dân không được phụ thuộc vào ranh giới nào?",
+    "success_criteria": "Địa giới hành chính.",
+    "test_category": "Cải cách hành chính (Admin Reform QA)",
+    "description": "Kiểm tra chủ trương số hóa thủ tục toàn trình."
+  },
+  {
+    "id": "TW-386",
+    "input_query":"Cần xây dựng nền tảng số nhằm giám sát, thu thập dữ liệu trong lĩnh vực nào?",
+    "success_criteria": "Lĩnh vực tài nguyên, môi trường.",
+    "test_category": "Số hóa chuyên ngành (Sector Digitalization QA)",
+    "description": "Kiểm tra định hướng ứng dụng IT vào quản lý sinh thái."
+  },
+  {
+    "id": "TW-387",
+    "input_query":"Đối tượng doanh nghiệp nào cần được khuyến khích đầu tư cho CĐS thông qua ưu đãi?",
+    "success_criteria": "Doanh nghiệp vừa và nhỏ.",
+    "test_category": "Hỗ trợ SME (SME Support QA)",
+    "description": "Kiểm tra nhóm doanh nghiệp cần trợ lực lớn nhất."
+  },
+  {
+    "id": "TW-388",
+    "input_query":"Doanh nghiệp công nghệ số chiến lược trong nước được giao nhiệm vụ thông qua cơ chế nào?",
+    "success_criteria": "Cơ chế đặt hàng, giao nhiệm vụ.",
+    "test_category": "Cơ chế giao việc (Task Mechanism QA)",
+    "description": "Kiểm tra cách thức tạo thị trường nội địa cho Big Tech Việt."
+  },
+  {
+    "id": "TW-389",
+    "input_query":"Việc đẩy mạnh sản xuất thông minh được áp dụng trong các ngành nào?",
+    "success_criteria": "Nông nghiệp, thương mại, tài chính, giáo dục, y tế, giao thông, logistics.",
+    "test_category": "Ứng dụng đa ngành (Multi-sector Application QA)",
+    "description": "Kiểm tra phạm vi chuyển đổi số trong các ngành kinh tế cốt lõi."
+  },
+  {
+    "id": "TW-390",
+    "input_query":"Khi tham gia xây dựng các tiêu chuẩn quốc tế về công nghệ, nguyên tắc của Việt Nam là gì?",
+    "success_criteria": "Bảo đảm an toàn và cùng có lợi.",
+    "test_category": "Nguyên tắc ngoại giao (Diplomatic Principle QA)",
+    "description": "Kiểm tra quan điểm đàm phán luật chơi công nghệ toàn cầu."
+  },
+  {
+    "id": "TW-391",
+    "input_query":"Ban Chỉ đạo Trung ương về phát triển KHCN, ĐMST và CĐS do ai đứng đầu?",
+    "success_criteria": "Đồng chí Tổng Bí thư Ban Chấp hành Trung ương Đảng.",
+    "test_category": "Cơ cấu tổ chức (Org Structure QA)",
+    "description": "Kiểm tra mức độ cao nhất của ban chỉ đạo quốc gia."
+  },
+  {
+    "id": "TW-392",
+    "input_query":"Hội đồng Tư vấn quốc gia về KHCN, ĐMST có sự tham gia của đối tượng nào?",
+    "success_criteria": "Các chuyên gia trong và ngoài nước.",
+    "test_category": "Thành phần tham vấn (Consultation Body QA)",
+    "description": "Kiểm tra thành phần nòng cốt của hội đồng tư vấn vĩ mô."
+  },
+  {
+    "id": "TW-393",
+    "input_query":"Trách nhiệm rà soát, hoàn thiện pháp luật thuộc về cơ quan nào?",
+    "success_criteria": "Đảng đoàn Quốc hội.",
+    "test_category": "Phân công lập pháp (Legislative Assignment QA)",
+    "description": "Kiểm tra đầu mối chịu trách nhiệm sửa đổi luật."
+  },
+  {
+    "id": "TW-394",
+    "input_query":"Cơ quan nào chịu trách nhiệm xây dựng chương trình hành động triển khai Nghị quyết?",
+    "success_criteria": "Ban cán sự đảng Chính phủ.",
+    "test_category": "Phân công hành pháp (Executive Assignment QA)",
+    "description": "Kiểm tra đầu mối tổ chức thực thi Nghị quyết trong thực tiễn."
+  },
+  {
+    "id": "TW-395",
+    "input_query":"Thời hạn cơ bản hoàn thành bố trí nguồn lực và thể chế hóa Nghị quyết là bao giờ?",
+    "success_criteria": "Năm 2025.",
+    "test_category": "Mốc thời gian (Deadline QA)",
+    "description": "Kiểm tra hạn chót thực hiện nền tảng pháp lý."
+  },
+  {
+    "id": "TW-396",
+    "input_query":"Chức năng phản biện xã hội đối với pháp luật KHCN thuộc về tổ chức nào?",
+    "success_criteria": "Mặt trận Tổ quốc Việt Nam và các tổ chức chính trị - xã hội.",
+    "test_category": "Chức năng giám sát (Monitoring Function QA)",
+    "description": "Kiểm tra vai trò của khối đoàn thể, nhân dân."
+  },
+  {
+    "id": "TW-397",
+    "input_query":"Cơ quan chủ trì hướng dẫn quán triệt và tuyên truyền Nghị quyết là ai?",
+    "success_criteria": "Ban Tuyên giáo Trung ương.",
+    "test_category": "Phân công truyền thông (Communication Assignment QA)",
+    "description": "Kiểm tra đầu mối tư tưởng, thông tin truyền thông của Đảng."
+  },
+  {
+    "id": "TW-398",
+    "input_query":"Kết quả thực hiện Nghị quyết được định kỳ báo cáo bao lâu một lần?",
+    "success_criteria": "Định kỳ 6 tháng.",
+    "test_category": "Chế độ báo cáo (Reporting Routine QA)",
+    "description": "Kiểm tra quy định về thời gian nộp báo cáo giám sát."
+  },
+  {
+    "id": "TW-399",
+    "input_query":"Báo cáo kết quả thực hiện Nghị quyết được gửi cho cơ quan nào để chỉ đạo?",
+    "success_criteria": "Ban Chỉ đạo Trung ương và Bộ Chính trị.",
+    "test_category": "Đầu mối tiếp nhận (Receiving Entity QA)",
+    "description": "Kiểm tra cơ quan tiếp nhận và ra quyết định từ báo cáo."
+  },
+  {
+    "id": "TW-400",
+    "input_query":"Mức độ phổ biến của Nghị quyết này xuống tới cấp ủy nào?",
+    "success_criteria": "Đến chi bộ.",
+    "test_category": "Phạm vi phổ biến (Dissemination Scope QA)",
+    "description": "Kiểm tra độ sâu của việc triển khai học tập nghị quyết."
+  },
+  {
+    "id": "TW-401",
+    "input_query":"Kỷ nguyên vươn mình của Dân tộc được đánh giá là điều kiện tiên quyết và thời cơ gì đối với nước ta?",
+    "success_criteria": "Thời cơ tốt nhất để nước ta phát triển giàu mạnh, hùng cường.",
+    "test_category": "Nhận định bối cảnh (Context Evaluation QA)",
+    "description": "Kiểm tra khả năng trích xuất đánh giá mang tính thời đại."
+  },
+  {
+    "id": "TW-402",
+    "input_query":"Đảng và Nhà nước ta đã chủ động, tích cực tham gia vào cuộc cách mạng công nghiệp lần thứ mấy?",
+    "success_criteria": "Cuộc Cách mạng công nghiệp lần thứ tư.",
+    "test_category": "Kiến thức nền tảng (Background Knowledge QA)",
+    "description": "Kiểm tra sự nhận diện thuật ngữ cách mạng công nghiệp."
+  },
+  {
+    "id": "TW-403",
+    "input_query":"Mặc dù đạt được nhiều kết quả, nhưng quy mô, tiềm lực KHCN của quốc gia bị đánh giá là còn khoảng cách xa so với nhóm nước nào?",
+    "success_criteria": "Nhóm các nước phát triển.",
+    "test_category": "So sánh đối chiếu (Comparison QA)",
+    "description": "Kiểm tra đánh giá vị thế quốc gia trên trường quốc tế."
+  },
+  {
+    "id": "TW-404",
+    "input_query":"Một trong những nguyên nhân kìm hãm sự phát triển được xác định là do chưa làm chủ được các loại công nghệ nào?",
+    "success_criteria": "Công nghệ chiến lược, công nghệ cốt lõi.",
+    "test_category": "Đánh giá nguyên nhân (Cause Evaluation QA)",
+    "description": "Kiểm tra việc xác định điểm yếu về mặt kỹ thuật lõi."
+  },
+  {
+    "id": "TW-405",
+    "input_query":"Việc đổi mới phương thức quản trị quốc gia được xác định là kết quả của động lực chính nào?",
+    "success_criteria": "Phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia.",
+    "test_category": "Quan hệ nhân quả (Causal Relationship QA)",
+    "description": "Kiểm tra tác động của công nghệ lên quản trị nhà nước."
+  },
+  {
+    "id": "TW-406",
+    "input_query":"Để đưa đất nước phát triển bứt phá trong kỷ nguyên mới, giải pháp CĐS và KHCN có tác dụng ngăn chặn nguy cơ gì?",
+    "success_criteria": "Nguy cơ tụt hậu.",
+    "test_category": "Định hướng rủi ro (Risk Orientation QA)",
+    "description": "Kiểm tra mục đích phòng vệ của chiến lược công nghệ."
+  },
+  {
+    "id": "TW-407",
+    "input_query":"Trong quan điểm thứ 2, sự tham gia của những chủ thể nào cần được phát huy sức mạnh tổng hợp?",
+    "success_criteria": "Cả hệ thống chính trị, sự tham gia tích cực của doanh nhân, doanh nghiệp và Nhân dân.",
+    "test_category": "Liệt kê chủ thể (Subject Listing QA)",
+    "description": "Kiểm tra danh sách lực lượng tham gia công cuộc số hóa."
+  },
+  {
+    "id": "TW-408",
+    "input_query":"Nhà khoa học được xác định là nhân tố then chốt, còn Nhà nước giữ vai trò gì để tạo điều kiện thuận lợi nhất?",
+    "success_criteria": "Giữ vai trò dẫn dắt, thúc đẩy.",
+    "test_category": "Phân vai chức năng (Role Assignment QA)",
+    "description": "Kiểm tra vai trò điều phối của cơ quan nhà nước."
+  },
+  {
+    "id": "TW-409",
+    "input_query":"Trong 5 nội dung cốt lõi: Thể chế, nhân lực, hạ tầng, dữ liệu và công nghệ chiến lược, yếu tố nào cần đi trước một bước?",
+    "success_criteria": "Thể chế.",
+    "test_category": "Sắp xếp ưu tiên (Priority Sorting QA)",
+    "description": "Kiểm tra việc xác định yếu tố tiền đề."
+  },
+  {
+    "id": "TW-410",
+    "input_query":"Yêu cầu đổi mới tư duy xây dựng pháp luật nhằm mục đích loại bỏ tư duy quản lý nào?",
+    "success_criteria": "Tư duy 'không quản được thì cấm'.",
+    "test_category": "Cải cách lập pháp (Legislative Reform QA)",
+    "description": "Kiểm tra quan điểm chống bảo thủ trong xây dựng luật."
+  },
+  {
+    "id": "TW-411",
+    "input_query":"Nguyên tắc phát triển hạ tầng số yêu cầu phải tránh tình trạng gì?",
+    "success_criteria": "Tránh lãng phí.",
+    "test_category": "Nguyên tắc đầu tư (Investment Principle QA)",
+    "description": "Kiểm tra yêu cầu chống thất thoát trong đầu tư công."
+  },
+  {
+    "id": "TW-412",
+    "input_query":"Dữ liệu được yêu cầu khai thác tối đa để trở thành gì trong sản xuất?",
+    "success_criteria": "Tư liệu sản xuất chính.",
+    "test_category": "Kinh tế chính trị số (Digital Political Economy QA)",
+    "description": "Kiểm tra sự tiến hóa của khái niệm tư liệu sản xuất."
+  },
+  {
+    "id": "TW-413",
+    "input_query":"Việc phát triển KHCN phải nhanh chóng thực hiện các chuỗi hành động nào đối với thành tựu của thế giới?",
+    "success_criteria": "Tiếp thu, hấp thụ, làm chủ và ứng dụng.",
+    "test_category": "Quy trình tiếp nhận (Adoption Process QA)",
+    "description": "Kiểm tra 4 bước trong quy trình chuyển giao công nghệ."
+  },
+  {
+    "id": "TW-414",
+    "input_query":"An ninh mạng, an ninh dữ liệu và an toàn thông tin là yêu cầu mang tính chất gì trong quá trình phát triển?",
+    "success_criteria": "Yêu cầu xuyên suốt, không thể tách rời.",
+    "test_category": "Nguyên tắc an ninh (Security Principle QA)",
+    "description": "Kiểm tra tính kiên định trong bảo vệ an toàn không gian số."
+  },
+  {
+    "id": "TW-415",
+    "input_query":"Năm 2030, tiềm lực và trình độ khoa học của Việt Nam đặt mục tiêu thuộc nhóm dẫn đầu trong tập hợp các nước có mức thu nhập nào?",
+    "success_criteria": "Các nước có thu nhập trung bình cao.",
+    "test_category": "Phân khúc quốc gia (Country Segment QA)",
+    "description": "Kiểm tra mục tiêu xếp hạng theo phân khúc thu nhập."
+  },
+  {
+    "id": "TW-416",
+    "input_query":"Vào năm 2030, năng lực công nghệ và đổi mới sáng tạo của doanh nghiệp Việt Nam cần đạt mức nào so với thế giới?",
+    "success_criteria": "Mức trên trung bình của thế giới.",
+    "test_category": "So sánh vĩ mô (Macro Comparison QA)",
+    "description": "Kiểm tra mục tiêu năng lực cạnh tranh khu vực tư nhân."
+  },
+  {
+    "id": "TW-417",
+    "input_query":"Chỉ số phát triển Chính phủ điện tử của Việt Nam phấn đấu đứng trong nhóm bao nhiêu nước dẫn đầu thế giới vào 2030?",
+    "success_criteria": "Nhóm 50 nước đứng đầu thế giới.",
+    "test_category": "Chỉ số E-Gov (E-Gov Index QA)",
+    "description": "Kiểm tra thứ hạng mục tiêu của chính phủ số."
+  },
+  {
+    "id": "TW-418",
+    "input_query":"Mục tiêu đến năm 2030, Việt Nam có tối thiểu 5 doanh nghiệp công nghệ số có quy mô như thế nào?",
+    "success_criteria": "Ngang tầm các nước tiên tiến.",
+    "test_category": "Định vị doanh nghiệp (Enterprise Positioning QA)",
+    "description": "Kiểm tra tham vọng xây dựng tập đoàn đa quốc gia."
+  },
+  {
+    "id": "TW-419",
+    "input_query":"Tỉ trọng xuất khẩu sản phẩm công nghệ cao phải đạt tối thiểu bao nhiêu phần trăm trên tổng giá trị hàng hoá xuất khẩu?",
+    "success_criteria": "Tối thiểu 50%.",
+    "test_category": "Cơ cấu xuất khẩu (Export Structure QA)",
+    "description": "Kiểm tra mục tiêu chuyển dịch cơ cấu hàng hóa thương mại."
+  },
+  {
+    "id": "TW-420",
+    "input_query":"Năm 2030, tỉ lệ sử dụng dịch vụ công trực tuyến của người dân và doanh nghiệp được đặt mục tiêu là bao nhiêu?",
+    "success_criteria": "Đạt trên 80%.",
+    "test_category": "Chỉ tiêu dịch vụ công (Public Service Target QA)",
+    "description": "Kiểm tra tỷ lệ số hóa trong tương tác hành chính."
+  },
+  {
+    "id": "TW-421",
+    "input_query":"Chỉ số phát triển con người (HDI) vào năm 2030 được duy trì trên mức nào nhờ sự đóng góp của khoa học công nghệ?",
+    "success_criteria": "Duy trì trên 0,7.",
+    "test_category": "Chỉ số phát triển xã hội (Social Dev Index QA)",
+    "description": "Kiểm tra chỉ tiêu quốc tế về chất lượng sống."
+  },
+  {
+    "id": "TW-422",
+    "input_query":"Kinh phí từ xã hội chiếm hơn 60% tổng chi cho hoạt động nào vào năm 2030?",
+    "success_criteria": "Nghiên cứu phát triển (R&D).",
+    "test_category": "Phân bổ tài chính (Financial Allocation QA)",
+    "description": "Kiểm tra nguồn vốn xã hội hóa cho khoa học."
+  },
+  {
+    "id": "TW-423",
+    "input_query":"Mục tiêu ngân sách nhà nước chi cho phát triển KHCN, CĐS hằng năm phải tăng dần theo yêu cầu gì?",
+    "success_criteria": "Yêu cầu phát triển.",
+    "test_category": "Nguyên tắc cấp vốn (Funding Principle QA)",
+    "description": "Kiểm tra cam kết tăng ngân sách linh hoạt của nhà nước."
+  },
+  {
+    "id": "TW-424",
+    "input_query":"Hệ thống tổ chức khoa học công nghệ cần sắp xếp lại để gắn kết chặt chẽ 3 khâu nào?",
+    "success_criteria": "Nghiên cứu - ứng dụng - đào tạo.",
+    "test_category": "Liên kết hệ thống (System Linkage QA)",
+    "description": "Kiểm tra 3 trụ cột của chuỗi giá trị tri thức."
+  },
+  {
+    "id": "TW-425",
+    "input_query":"Mật độ nhân lực nghiên cứu khoa học phấn đấu đạt 12 người trên quy mô dân số bao nhiêu vào 2030?",
+    "success_criteria": "Một vạn dân.",
+    "test_category": "Tỷ lệ nhân lực (HR Ratio QA)",
+    "description": "Kiểm tra đơn vị đo lường mật độ trí thức."
+  },
+  {
+    "id": "TW-426",
+    "input_query":"Mục tiêu 2030 sẽ có từ 40-50 tổ chức khoa học công nghệ đạt được vị thế nào?",
+    "success_criteria": "Được xếp hạng khu vực và thế giới.",
+    "test_category": "Mục tiêu học thuật (Academic Goal QA)",
+    "description": "Kiểm tra khát vọng quốc tế hóa các viện nghiên cứu."
+  },
+  {
+    "id": "TW-427",
+    "input_query":"Đơn đăng ký sáng chế và văn bằng bảo hộ sáng chế cần tăng trung bình bao nhiêu % mỗi năm?",
+    "success_criteria": "16 - 18%/năm.",
+    "test_category": "Chỉ tiêu IP (IP Target QA)",
+    "description": "Kiểm tra tỷ lệ tăng trưởng tài sản trí tuệ."
+  },
+  {
+    "id": "TW-428",
+    "input_query":"Hạ tầng công nghệ số được định hướng phải có đặc điểm băng thông và dung lượng như thế nào?",
+    "success_criteria": "Dung lượng siêu lớn, băng thông siêu rộng.",
+    "test_category": "Tiêu chuẩn hạ tầng (Infrastructure Standard QA)",
+    "description": "Kiểm tra yêu cầu kỹ thuật cao nhất của đường truyền."
+  },
+  {
+    "id": "TW-429",
+    "input_query":"Mạng thông tin di động nào được đặt mục tiêu phủ sóng toàn quốc vào năm 2030?",
+    "success_criteria": "Thông tin di động 5G.",
+    "test_category": "Mục tiêu viễn thông (Telecom Goal QA)",
+    "description": "Kiểm tra công nghệ mạng di động mục tiêu."
+  },
+  {
+    "id": "TW-430",
+    "input_query":"Năm 2030, ngoài quy mô toàn quốc đối với 5G, Việt Nam dự kiến từng bước làm chủ công nghệ di động thế hệ nào?",
+    "success_criteria": "Thông tin di động 6G.",
+    "test_category": "Tầm nhìn công nghệ (Tech Vision QA)",
+    "description": "Kiểm tra định hướng R&D công nghệ viễn thông tương lai."
+  },
+  {
+    "id": "TW-431",
+    "input_query":"Việt Nam mong muốn thu hút các doanh nghiệp công nghệ hàng đầu thế giới vào làm hai việc gì tại nước ta?",
+    "success_criteria": "Đầu tư nghiên cứu, sản xuất.",
+    "test_category": "Mục tiêu FDI (FDI Goal QA)",
+    "description": "Kiểm tra trọng tâm thu hút vốn ngoại chất lượng cao."
+  },
+  {
+    "id": "TW-432",
+    "input_query":"Quản lý nhà nước trên môi trường số phải kết nối và vận hành thông suốt giữa các cơ quan thuộc hệ thống nào?",
+    "success_criteria": "Hệ thống chính trị.",
+    "test_category": "Mục tiêu hành chính (Administrative Target QA)",
+    "description": "Kiểm tra tính bao trùm của chính phủ số."
+  },
+  {
+    "id": "TW-433",
+    "input_query":"Để khai thác tài nguyên số hiệu quả, cần hình thành loại hình giao dịch nào?",
+    "success_criteria": "Sàn giao dịch dữ liệu.",
+    "test_category": "Thương mại dữ liệu (Data Commerce QA)",
+    "description": "Kiểm tra mô hình kinh doanh nền tảng mới."
+  },
+  {
+    "id": "TW-434",
+    "input_query":"Phát triển công nghiệp văn hoá số được đặt mục tiêu đạt mức nào của thế giới vào năm 2030?",
+    "success_criteria": "Mức cao của thế giới.",
+    "test_category": "Mục tiêu văn hóa (Cultural Target QA)",
+    "description": "Kiểm tra tham vọng xuất khẩu sức mạnh mềm kỹ thuật số."
+  },
+  {
+    "id": "TW-435",
+    "input_query":"Tầm nhìn 2045, quy mô kinh tế số phấn đấu đạt tối thiểu 50% chỉ số kinh tế nào?",
+    "success_criteria": "GDP (Tổng sản phẩm quốc nội).",
+    "test_category": "Chỉ tiêu kinh tế (Economic Index QA)",
+    "description": "Kiểm tra tỷ trọng đóng góp vĩ mô dài hạn."
+  },
+  {
+    "id": "TW-436",
+    "input_query":"Năm 2045, Việt Nam phấn đấu trở thành trung tâm công nghiệp công nghệ số của khu vực và đâu nữa?",
+    "success_criteria": "Và thế giới.",
+    "test_category": "Định vị toàn cầu (Global Positioning QA)",
+    "description": "Kiểm tra tham vọng địa chính trị số của quốc gia."
+  },
+  {
+    "id": "TW-437",
+    "input_query":"Số lượng doanh nghiệp công nghệ số ngang tầm các nước tiên tiến tăng từ 5 (năm 2030) lên bao nhiêu vào năm 2045?",
+    "success_criteria": "Tối thiểu 10 doanh nghiệp.",
+    "test_category": "So sánh mốc thời gian (Timeline Comparison QA)",
+    "description": "Kiểm tra sự tịnh tiến chỉ tiêu doanh nghiệp lõi."
+  },
+  {
+    "id": "TW-438",
+    "input_query":"Trong các nhiệm vụ, ai là người phải trực tiếp phụ trách, chỉ đạo phát triển KHCN tại các đơn vị?",
+    "success_criteria": "Người đứng đầu.",
+    "test_category": "Trách nhiệm lãnh đạo (Leadership Responsibility QA)",
+    "description": "Kiểm tra quy định gắn trách nhiệm thủ trưởng."
+  },
+  {
+    "id": "TW-439",
+    "input_query":"Kết quả thực hiện chuyển đổi số được sử dụng làm tiêu chí để đánh giá hoạt động gì hằng năm?",
+    "success_criteria": "Đánh giá thi đua, khen thưởng hằng năm.",
+    "test_category": "Chỉ tiêu KPIs (KPIs Metric QA)",
+    "description": "Kiểm tra chế tài thúc đẩy thi đua trong tổ chức."
+  },
+  {
+    "id": "TW-440",
+    "input_query":"Cấp ủy các cấp cần được bố trí số lượng cán bộ có trình độ chuyên môn gì một cách phù hợp?",
+    "success_criteria": "Trình độ chuyên môn khoa học kỹ thuật.",
+    "test_category": "Cơ cấu Đảng ủy (Party Committee Structure QA)",
+    "description": "Kiểm tra định hướng tái cơ cấu năng lực lãnh đạo Đảng."
+  },
+  {
+    "id": "TW-441",
+    "input_query":"Để khơi dậy tinh thần tự chủ, tự cường, phong trào học tập nào cần được triển khai sâu rộng?",
+    "success_criteria": "Phong trào 'học tập số'.",
+    "test_category": "Phong trào quần chúng (Mass Campaign QA)",
+    "description": "Kiểm tra tên gọi chiến dịch nâng cao dân trí số."
+  },
+  {
+    "id": "TW-442",
+    "input_query":"Nghị quyết yêu cầu đa dạng hóa các hình thức tôn vinh, biểu dương, khen thưởng một cách như thế nào?",
+    "success_criteria": "Kịp thời, xứng đáng.",
+    "test_category": "Tiêu chuẩn khen thưởng (Reward Standard QA)",
+    "description": "Kiểm tra thái độ đối với việc ghi nhận công lao."
+  },
+  {
+    "id": "TW-443",
+    "input_query":"Cần phải trân trọng những phát minh, cải tiến nâng cao hiệu suất công việc dù là thế nào?",
+    "success_criteria": "Dù là nhỏ nhất.",
+    "test_category": "Quan điểm vi mô (Micro Perspective QA)",
+    "description": "Kiểm tra sự thay đổi tư duy ghi nhận nỗ lực cấp thấp."
+  },
+  {
+    "id": "TW-444",
+    "input_query":"Giải pháp 'Khẩn trương, quyết liệt hoàn thiện thể chế' nhằm mục đích đưa thể chế thành yếu tố gì?",
+    "success_criteria": "Thành một lợi thế cạnh tranh.",
+    "test_category": "Chiến lược vĩ mô (Macro Strategy QA)",
+    "description": "Kiểm tra tầm nhìn biến pháp luật thành sức mạnh mềm."
+  },
+  {
+    "id": "TW-445",
+    "input_query":"Để giải phóng nguồn lực, quy định pháp luật về vấn đề nào liên quan đến ngân sách cần khẩn trương sửa đổi?",
+    "success_criteria": "Đầu tư, đầu tư công, mua sắm công, ngân sách nhà nước, tài sản công, thuế.",
+    "test_category": "Lĩnh vực pháp lý (Legal Domain QA)",
+    "description": "Kiểm tra danh mục các luật tài chính cần gỡ nghẽn."
+  },
+  {
+    "id": "TW-446",
+    "input_query":"Cơ chế quản lý tài chính trong thực hiện nhiệm vụ KHCN cần đơn giản hóa tối đa yếu tố gì?",
+    "success_criteria": "Các thủ tục hành chính.",
+    "test_category": "Cải cách hành chính (Admin Reform QA)",
+    "description": "Kiểm tra trọng tâm của việc giảm tải quan liêu."
+  },
+  {
+    "id": "TW-447",
+    "input_query":"Người làm khoa học được giao quyền tự chủ trong việc sử dụng cái gì?",
+    "success_criteria": "Sử dụng kinh phí nghiên cứu khoa học.",
+    "test_category": "Quyền tự chủ (Autonomy Right QA)",
+    "description": "Kiểm tra việc trao quyền quyết định tài chính cho nhà nghiên cứu."
+  },
+  {
+    "id": "TW-448",
+    "input_query":"Đối với những vấn đề thực tiễn mới đặt ra, cách tiếp cận được khuyến khích là gì?",
+    "success_criteria": "Cách tiếp cận mở, vận dụng sáng tạo, cho phép thí điểm.",
+    "test_category": "Phương pháp luận (Methodology QA)",
+    "description": "Kiểm tra nguyên lý xây dựng chính sách Sandbox."
+  },
+  {
+    "id": "TW-449",
+    "input_query":"Nghị quyết yêu cầu chấp nhận đầu tư mạo hiểm và yếu tố gì trong nghiên cứu khoa học?",
+    "success_criteria": "Độ trễ trong nghiên cứu khoa học, phát triển công nghệ.",
+    "test_category": "Đặc thù nghiên cứu (Research Specifics QA)",
+    "description": "Kiểm tra sự thấu hiểu về thời gian hoàn vốn của R&D."
+  },
+  {
+    "id": "TW-450",
+    "input_query":"Doanh nghiệp thử nghiệm công nghệ mới được hưởng chính sách miễn trừ trách nhiệm khi có thiệt hại kinh tế do nguyên nhân nào?",
+    "success_criteria": "Nguyên nhân khách quan.",
+    "test_category": "Bảo vệ pháp lý (Legal Protection QA)",
+    "description": "Kiểm tra điều kiện để được bảo vệ khi đổi mới sáng tạo thất bại."
+  },
+  {
+    "id": "TW-451",
+    "input_query":"Các quỹ nào được yêu cầu hình thành để hỗ trợ ươm tạo công nghệ và chuyển đổi số?",
+    "success_criteria": "Các quỹ đầu tư mạo hiểm.",
+    "test_category": "Cơ chế tài chính (Financial Mechanism QA)",
+    "description": "Kiểm tra chủ trương phát triển quỹ Venture Capital."
+  },
+  {
+    "id": "TW-452",
+    "input_query":"Trường đại học và viện nghiên cứu cần phát triển trở thành gì?",
+    "success_criteria": "Các chủ thể nghiên cứu mạnh.",
+    "test_category": "Mục tiêu học thuật (Academic Target QA)",
+    "description": "Kiểm tra định vị của các đơn vị giáo dục bậc cao."
+  },
+  {
+    "id": "TW-453",
+    "input_query":"Viện Hàn lâm nào bên cạnh Viện KHCN Việt Nam cần được đầu tư, nâng cấp?",
+    "success_criteria": "Viện Hàn lâm Khoa học xã hội Việt Nam.",
+    "test_category": "Định danh tổ chức (Org Identification QA)",
+    "description": "Kiểm tra việc định danh các cơ quan khoa học cấp cao nhất."
+  },
+  {
+    "id": "TW-454",
+    "input_query":"Tổ chức nghiên cứu công lập được quyền sử dụng tài sản hữu hình và trí tuệ để làm gì?",
+    "success_criteria": "Liên kết, hợp tác khoa học và công nghệ với các tổ chức, doanh nghiệp.",
+    "test_category": "Thương mại hóa (Commercialization QA)",
+    "description": "Kiểm tra quyền kinh doanh từ tài sản khoa học công."
+  },
+  {
+    "id": "TW-455",
+    "input_query":"Nhà khoa học được khuyến khích thành lập và tham gia điều hành cái gì dựa trên kết quả nghiên cứu?",
+    "success_criteria": "Doanh nghiệp.",
+    "test_category": "Mô hình Spin-off (Spin-off Model QA)",
+    "description": "Kiểm tra chủ trương đưa trí thức ra thị trường kinh doanh."
+  },
+  {
+    "id": "TW-456",
+    "input_query":"Ngân sách chi cho nghiên cứu phát triển ưu tiên thực hiện thông qua cơ chế nào?",
+    "success_criteria": "Cơ chế quỹ (thông qua các quỹ phát triển khoa học và công nghệ).",
+    "test_category": "Phương thức giải ngân (Disbursement Method QA)",
+    "description": "Kiểm tra cách thức điều tiết dòng vốn R&D nhà nước."
+  },
+  {
+    "id": "TW-457",
+    "input_query":"Ngân sách chi sự nghiệp khoa học cần được cơ cấu lại bảo đảm tính chất gì thay vì dàn trải?",
+    "success_criteria": "Tập trung, có trọng tâm, trọng điểm.",
+    "test_category": "Nguyên tắc tài chính (Financial Principle QA)",
+    "description": "Kiểm tra yêu cầu chống lãng phí ngân sách khoa học."
+  },
+  {
+    "id": "TW-458",
+    "input_query":"Để tiêu thụ sản phẩm nghiên cứu trong nước, cơ chế nào được sử dụng để khuyến khích?",
+    "success_criteria": "Cơ chế khuyến khích mua sắm công.",
+    "test_category": "Chính sách kích cầu (Demand Stimulus Policy QA)",
+    "description": "Kiểm tra việc sử dụng ngân sách mua sắm để hỗ trợ hàng nội."
+  },
+  {
+    "id": "TW-459",
+    "input_query":"Chính phủ có cơ chế đặc biệt đối với công nghệ tiên tiến nước ngoài thông qua hình thức học hỏi và gì nữa?",
+    "success_criteria": "Tiếp cận, mua các bí mật công nghệ, sao chép.",
+    "test_category": "Chiến lược tiếp thu (Acquisition Strategy QA)",
+    "description": "Kiểm tra phương pháp Reverse Engineering được thừa nhận."
+  },
+  {
+    "id": "TW-460",
+    "input_query":"Chương trình nào cần được ban hành liên quan đến các ngành công nghiệp mũi nhọn?",
+    "success_criteria": "Chương trình phát triển công nghệ và công nghiệp chiến lược.",
+    "test_category": "Văn bản định hướng (Directional Document QA)",
+    "description": "Kiểm tra tên gọi chương trình quốc gia mới."
+  },
+  {
+    "id": "TW-461",
+    "input_query":"Quỹ đầu tư phát triển công nghiệp chiến lược ưu tiên lĩnh vực liên quan đến môi trường và vật liệu nào?",
+    "success_criteria": "Môi trường, vật liệu tiên tiến.",
+    "test_category": "Phân loại lĩnh vực (Field Classification QA)",
+    "description": "Kiểm tra các nhánh ngành công nghiệp được bảo trợ vốn."
+  },
+  {
+    "id": "TW-462",
+    "input_query":"Ngân sách nhà nước chi sự nghiệp khoa học tối thiểu 15% dành cho việc gì?",
+    "success_criteria": "Phục vụ nghiên cứu công nghệ chiến lược.",
+    "test_category": "Định mức ngân sách (Budget Quota QA)",
+    "description": "Kiểm tra hạn mức tối thiểu cho các công nghệ lõi quốc gia."
+  },
+  {
+    "id": "TW-463",
+    "input_query":"Cơ chế hợp tác công tư (PPP) được sử dụng để nghiên cứu và phát triển nhóm công nghệ nào?",
+    "success_criteria": "Công nghệ chiến lược.",
+    "test_category": "Mô hình đầu tư (Investment Model QA)",
+    "description": "Kiểm tra sự huy động vốn tư nhân vào lĩnh vực nhạy cảm."
+  },
+  {
+    "id": "TW-464",
+    "input_query":"Không gian vật lý nào ngoài vũ trụ và biển cần ban hành chiến lược nghiên cứu, khai thác?",
+    "success_criteria": "Không gian ngầm.",
+    "test_category": "Mở rộng không gian (Spatial Expansion QA)",
+    "description": "Kiểm tra định hướng phát triển địa không gian mới."
+  },
+  {
+    "id": "TW-465",
+    "input_query":"Trong việc phát triển KHCN, cần quản lý chặt chẽ nguồn tài nguyên nào để làm vật liệu chiến lược?",
+    "success_criteria": "Các nguồn tài nguyên khoáng sản, nhất là đất hiếm.",
+    "test_category": "Quản lý tài nguyên (Resource Management QA)",
+    "description": "Kiểm tra tầm quan trọng của khoáng sản đất hiếm."
+  },
+  {
+    "id": "TW-466",
+    "input_query":"Tập trung đầu tư cho phòng thí nghiệm nào để phục vụ công nghệ chiến lược?",
+    "success_criteria": "Các phòng thí nghiệm trọng điểm quốc gia.",
+    "test_category": "Cơ sở hạ tầng (Infrastructure QA)",
+    "description": "Kiểm tra định vị của các trung tâm R&D cấp nhà nước."
+  },
+  {
+    "id": "TW-467",
+    "input_query":"Nhà nước có chính sách khuyến khích hình thức nào đối với các sản phẩm, dịch vụ số?",
+    "success_criteria": "Đầu tư, mua, thuê.",
+    "test_category": "Hình thức sử dụng (Usage Form QA)",
+    "description": "Kiểm tra sự linh hoạt trong việc tiêu dùng dịch vụ IT công."
+  },
+  {
+    "id": "TW-468",
+    "input_query":"Công nghiệp bảo vệ hệ thống thông tin được nhắc đến với tên gọi là công nghiệp gì?",
+    "success_criteria": "Công nghiệp an ninh mạng.",
+    "test_category": "Định danh ngành nghề (Industry Identification QA)",
+    "description": "Kiểm tra nhánh ngành dịch vụ an toàn thông tin."
+  },
+  {
+    "id": "TW-469",
+    "input_query":"Nền tảng số dùng chung quốc gia phải bảo đảm hoạt động như thế nào?",
+    "success_criteria": "Thống nhất, liên thông của các ngành, lĩnh vực.",
+    "test_category": "Tiêu chuẩn kỹ thuật (Technical Standard QA)",
+    "description": "Kiểm tra yêu cầu không bị phân mảnh của nền tảng quốc gia."
+  },
+  {
+    "id": "TW-470",
+    "input_query":"Phát triển hạ tầng viễn thông phải đáp ứng 4 yêu cầu: dự phòng, kết nối, an toàn và gì nữa?",
+    "success_criteria": "Bền vững.",
+    "test_category": "Tiêu chuẩn hạ tầng (Infrastructure Criteria QA)",
+    "description": "Kiểm tra thuộc tính cuối cùng trong bộ 4 tiêu chuẩn viễn thông."
+  },
+  {
+    "id": "TW-471",
+    "input_query":"Nghị quyết yêu cầu tích hợp yếu tố gì vào hạ tầng thiết yếu thông qua công nghệ số?",
+    "success_criteria": "Tích hợp cảm biến.",
+    "test_category": "Công nghệ ứng dụng (Applied Tech QA)",
+    "description": "Kiểm tra giải pháp vật lý hóa (IoT) hạ tầng công cộng."
+  },
+  {
+    "id": "TW-472",
+    "input_query":"Nhà nước thu hút doanh nghiệp nước ngoài đặt hệ thống nào tại Việt Nam để lưu trữ dữ liệu?",
+    "success_criteria": "Trung tâm dữ liệu, điện toán đám mây.",
+    "test_category": "Thu hút FDI số (Digital FDI QA)",
+    "description": "Kiểm tra mục tiêu biến VN thành Data Hub khu vực."
+  },
+  {
+    "id": "TW-473",
+    "input_query":"Bên cạnh Trung tâm dữ liệu quốc gia, cần đầu tư xây dựng các trung tâm dữ liệu ở quy mô nào?",
+    "success_criteria": "Các trung tâm dữ liệu vùng.",
+    "test_category": "Quy hoạch hạ tầng (Infrastructure Planning QA)",
+    "description": "Kiểm tra sự phân cấp hệ thống Data Center cấp khu vực."
+  },
+  {
+    "id": "TW-474",
+    "input_query":"Thị trường dữ liệu cần được xác lập các quyền nào để phân phối giá trị?",
+    "success_criteria": "Xác lập quyền sở hữu, kinh doanh dữ liệu.",
+    "test_category": "Kinh tế học số (Digital Economics QA)",
+    "description": "Kiểm tra nền tảng pháp lý để thương mại hóa Data."
+  },
+  {
+    "id": "TW-475",
+    "input_query":"Sự phát triển mạnh mẽ của AI trong các lĩnh vực quan trọng phải dựa trên nền tảng cốt lõi nào?",
+    "success_criteria": "Dựa trên dữ liệu lớn.",
+    "test_category": "Công nghệ nền tảng (Foundation Tech QA)",
+    "description": "Kiểm tra mối quan hệ bắt buộc giữa AI và Big Data."
+  },
+  {
+    "id": "TW-476",
+    "input_query":"Học sinh, sinh viên giỏi theo học kỹ thuật và công nghệ then chốt được hưởng chính sách hấp dẫn về học bổng, học phí và gì nữa?",
+    "success_criteria": "Tín dụng.",
+    "test_category": "Chính sách giáo dục (Educational Policy QA)",
+    "description": "Kiểm tra công cụ tài chính hỗ trợ người học STEM."
+  },
+  {
+    "id": "TW-477",
+    "input_query":"Cơ chế đặc biệt để thu hút chuyên gia quốc tế bao gồm các vấn đề nhập quốc tịch, sở hữu nhà đất và gì nữa?",
+    "success_criteria": "Thu nhập, môi trường làm việc.",
+    "test_category": "Chính sách đãi ngộ (Remuneration Policy QA)",
+    "description": "Kiểm tra các yếu tố giữ chân nhân tài cấp cao."
+  },
+  {
+    "id": "TW-478",
+    "input_query":"Chuyên gia, 'tổng công trình sư' quốc tế được kỳ vọng thực hiện các khả năng gì đối với nhiệm vụ trọng điểm?",
+    "success_criteria": "Tổ chức, điều hành, chỉ huy, triển khai.",
+    "test_category": "Yêu cầu năng lực (Competency Requirement QA)",
+    "description": "Kiểm tra vai trò quản lý dự án cấp bách của nhân tài ngoại."
+  },
+  {
+    "id": "TW-479",
+    "input_query":"Đội ngũ giảng viên cần đẩy mạnh hợp tác với đối tượng nào để nâng cao trình độ giảng dạy?",
+    "success_criteria": "Các đại học uy tín của nước ngoài.",
+    "test_category": "Hợp tác quốc tế (Intl Cooperation QA)",
+    "description": "Kiểm tra định hướng giao lưu giáo dục xuyên quốc gia."
+  },
+  {
+    "id": "TW-480",
+    "input_query":"Để đào tạo nhân lực công nghệ số, cơ chế đặc thù nào được áp dụng?",
+    "success_criteria": "Cơ chế đặc thù về hợp tác công tư.",
+    "test_category": "Mô hình đào tạo (Training Model QA)",
+    "description": "Kiểm tra cách thức xã hội hóa ngành giáo dục số."
+  },
+  {
+    "id": "TW-481",
+    "input_query":"Kế hoạch đưa hoạt động của các cơ quan chính trị lên môi trường số phải bảo đảm yếu tố mật nào?",
+    "success_criteria": "Bí mật nhà nước.",
+    "test_category": "An ninh chính trị (Political Security QA)",
+    "description": "Kiểm tra giới hạn rủi ro trong quản trị chính phủ số."
+  },
+  {
+    "id": "TW-482",
+    "input_query":"Việc đổi mới giải quyết thủ tục hành chính phải không được phụ thuộc vào yếu tố địa lý nào?",
+    "success_criteria": "Địa giới hành chính.",
+    "test_category": "Cải cách thủ tục (Procedure Reform QA)",
+    "description": "Kiểm tra mục tiêu xóa nhòa khoảng cách không gian."
+  },
+  {
+    "id": "TW-483",
+    "input_query":"Dịch vụ công trực tuyến hướng tới cá nhân hóa và phải cung cấp ở mức độ nào?",
+    "success_criteria": "Toàn trình.",
+    "test_category": "Chất lượng dịch vụ (Service Quality QA)",
+    "description": "Kiểm tra thuật ngữ đánh giá mức độ số hóa thủ tục."
+  },
+  {
+    "id": "TW-484",
+    "input_query":"Để nâng cao trách nhiệm giải trình của cơ quan nhà nước, hệ thống ứng dụng công nghệ cần tăng cường tính năng gì?",
+    "success_criteria": "Giám sát, đánh giá.",
+    "test_category": "Công cụ quản lý (Management Tool QA)",
+    "description": "Kiểm tra cách dùng IT để kiểm soát quyền lực nhà nước."
+  },
+  {
+    "id": "TW-485",
+    "input_query":"Ai là lực lượng được chính sách đặc thù tuyển dụng và giữ chân trong các cơ quan của hệ thống chính trị?",
+    "success_criteria": "Nhân lực về khoa học, công nghệ và chuyển đổi số.",
+    "test_category": "Chính sách nhân sự công (Public HR Policy QA)",
+    "description": "Kiểm tra ưu tiên tuyển dụng viên chức nhà nước."
+  },
+  {
+    "id": "TW-486",
+    "input_query":"Mạng xã hội Việt Nam cần được phát triển để xây dựng một xã hội số có tính chất gì?",
+    "success_criteria": "An toàn, lành mạnh.",
+    "test_category": "Môi trường số (Digital Environment QA)",
+    "description": "Kiểm tra định hướng xây dựng hệ sinh thái mạng nội địa."
+  },
+  {
+    "id": "TW-487",
+    "input_query":"Sự phát triển văn hóa số phải đảm bảo giữ gìn yếu tố cốt lõi nào?",
+    "success_criteria": "Bản sắc dân tộc.",
+    "test_category": "Văn hóa xã hội (Socio-Cultural QA)",
+    "description": "Kiểm tra sự cân bằng giữa hiện đại số và truyền thống."
+  },
+  {
+    "id": "TW-488",
+    "input_query":"Nền tảng số được xây dựng trong lĩnh vực tài nguyên, môi trường phục vụ mục đích gì?",
+    "success_criteria": "Giám sát, thu thập dữ liệu.",
+    "test_category": "Ứng dụng chuyên ngành (Specialized App QA)",
+    "description": "Kiểm tra chức năng của hệ thống IT trong quản lý sinh thái."
+  },
+  {
+    "id": "TW-489",
+    "input_query":"Công nghệ số được ứng dụng vào hoạt động tác chiến của lực lượng vũ trang ở khâu nào?",
+    "success_criteria": "Chỉ huy, điều hành tác chiến.",
+    "test_category": "Chuyển đổi số quân sự (Military DX QA)",
+    "description": "Kiểm tra trọng tâm hiện đại hóa C4ISR của quân đội."
+  },
+  {
+    "id": "TW-490",
+    "input_query":"Thế trận lòng dân và thế trận chiến tranh nhân dân cần được xây dựng ở đâu để bảo vệ Tổ quốc?",
+    "success_criteria": "Trên không gian mạng.",
+    "test_category": "Học thuyết quốc phòng (Defense Doctrine QA)",
+    "description": "Kiểm tra sự mở rộng lãnh thổ tác chiến theo học thuyết mới."
+  },
+  {
+    "id": "TW-491",
+    "input_query":"Doanh nghiệp FDI có trách nhiệm gì đối với tri thức khoa học tại Việt Nam?",
+    "success_criteria": "Đẩy mạnh chuyển giao tri thức, đào tạo nhân lực khoa học, công nghệ, đổi mới sáng tạo.",
+    "test_category": "Trách nhiệm doanh nghiệp ngoại (FDI Responsibility QA)",
+    "description": "Kiểm tra yêu cầu lan tỏa năng lực từ khối FDI."
+  },
+  {
+    "id": "TW-492",
+    "input_query":"Doanh nghiệp công nghệ số chiến lược trong nước được xây dựng để thực hiện vai trò gì đối với chuyển đổi số quốc gia?",
+    "success_criteria": "Dẫn dắt chuyển đổi số quốc gia (và phát triển hạ tầng số).",
+    "test_category": "Định vị doanh nghiệp nội (Local Enterprise Positioning QA)",
+    "description": "Kiểm tra sứ mệnh của các tập đoàn Big Tech nội địa."
+  },
+  {
+    "id": "TW-493",
+    "input_query":"Các khu công nghiệp nào sẽ được phát triển dành riêng cho lĩnh vực công nghệ?",
+    "success_criteria": "Một số khu công nghiệp công nghệ số.",
+    "test_category": "Quy hoạch không gian số (Digital Zoning QA)",
+    "description": "Kiểm tra định hướng xây dựng các trung tâm sản xuất IT."
+  },
+  {
+    "id": "TW-494",
+    "input_query":"Doanh nghiệp được thúc đẩy tái đầu tư lợi nhuận vào đâu để tăng năng lực cốt lõi?",
+    "success_criteria": "Tái đầu tư hạ tầng, đầu tư nghiên cứu và phát triển (R&D).",
+    "test_category": "Định hướng dòng vốn (Capital Flow QA)",
+    "description": "Kiểm tra sự khuyến khích dồn nguồn lực tích lũy vào đổi mới."
+  },
+  {
+    "id": "TW-495",
+    "input_query":"Tỷ trọng kinh tế số trong tiêu dùng sản phẩm dịch vụ của các ngành lĩnh vực phải đạt tối thiểu bao nhiêu?",
+    "success_criteria": "Tối thiểu 70% kinh tế số.",
+    "test_category": "Chỉ tiêu tiêu dùng số (Digital Consumption Target QA)",
+    "description": "Kiểm tra mức độ số hóa của thị trường bán lẻ dịch vụ."
+  },
+  {
+    "id": "TW-496",
+    "input_query":"Hợp tác quốc tế tập trung đẩy mạnh nghiên cứu các lĩnh vực chiến lược nào bên cạnh AI, bán dẫn?",
+    "success_criteria": "Công nghệ sinh học, công nghệ lượng tử, năng lượng nguyên tử.",
+    "test_category": "Định hướng ngoại giao công nghệ (Tech Diplomacy QA)",
+    "description": "Kiểm tra các chuyên ngành kỹ thuật cao cần hợp tác ngoại giao."
+  },
+  {
+    "id": "TW-497",
+    "input_query":"Việt Nam tiếp thu, chuyển giao công nghệ mới theo nguyên tắc phù hợp với điều kiện gì?",
+    "success_criteria": "Phù hợp với điều kiện Việt Nam.",
+    "test_category": "Nguyên tắc nội địa hóa (Localization Principle QA)",
+    "description": "Kiểm tra tính độc lập tự chủ khi nhập khẩu công nghệ."
+  },
+  {
+    "id": "TW-498",
+    "input_query":"Hội đồng Tư vấn quốc gia về KHCN được thành lập để phục vụ tư vấn cho cơ quan nào?",
+    "success_criteria": "Ban Chỉ đạo Trung ương về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số.",
+    "test_category": "Cơ cấu tổ chức (Organizational Structure QA)",
+    "description": "Kiểm tra mối quan hệ giữa cơ quan tư vấn và cơ quan chỉ đạo."
+  },
+  {
+    "id": "TW-499",
+    "input_query":"Ban Kinh tế Trung ương có nhiệm vụ theo dõi, đánh giá kết quả thực hiện Nghị quyết phối hợp với cơ quan nào?",
+    "success_criteria": "Văn phòng Trung ương Đảng.",
+    "test_category": "Phân công phối hợp (Coordination Assignment QA)",
+    "description": "Kiểm tra sự liên kết giữa các ban tham mưu của Đảng."
+  },
+  {
+    "id": "TW-500",
+    "input_query":"Mặt trận Tổ quốc Việt Nam tham gia vào quá trình lập quy thông qua hoạt động gì?",
+    "success_criteria": "Tham gia xây dựng pháp luật, cơ chế, chính sách.",
+    "test_category": "Quyền hạn lập quy (Rule-making Power QA)",
+    "description": "Kiểm tra quyền phản biện và góp ý của tổ chức quần chúng."
+  }
+]
+}
