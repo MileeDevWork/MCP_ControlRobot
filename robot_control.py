@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger('RobotControl')
 
 # Đọc IP từ .env
-ROBOT_IP = os.getenv("ROBOT_IP", "192.168.1.100")
+ROBOT_IP = os.getenv("ROBOT_IP")
 ROBOT_URL = f"http://{ROBOT_IP}:9000/control"
 TIMEOUT = 12.0
 
