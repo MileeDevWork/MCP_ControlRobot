@@ -29,6 +29,7 @@ import signal
 import sys
 import json
 from dotenv import load_dotenv
+from app.app_config import load_config as load_app_config
 
 # Auto-load environment variables from a .env file if present
 load_dotenv()
@@ -169,9 +170,9 @@ def signal_handler(sig, frame):
     logger.info("Received interrupt signal, shutting down...")
     sys.exit(0)
 
-def load_config():
-    """Load JSON config from $MCP_CONFIG or ./mcp_config.json. Return dict or {}."""
-    path = os.environ.get("MCP_CONFIG") or os.path.join(os.getcwd(), "mcp_config.json")
+def load_servers_config():
+    """Load JSON config from $MCP_CONFIG or ./config/mcp_config.json. Return dict or {}."""
+    path = os.environ.get("MCP_CONFIG") or os.path.join(os.getcwd(), "config", "mcp_config.json")
     if not os.path.exists(path):
         return {}
     try:
@@ -193,7 +194,7 @@ def build_server_command(target=None):
     if target is None:
         assert len(sys.argv) >= 2, "missing server name or script path"
         target = sys.argv[1]
-    cfg = load_config()
+    cfg = load_servers_config()
     servers = cfg.get("mcpServers", {}) if isinstance(cfg, dict) else {}
 
     if target in servers:
@@ -243,10 +244,11 @@ if __name__ == "__main__":
     # Register signal handler
     signal.signal(signal.SIGINT, signal_handler)
 
-    # Get token from environment variable or command line arguments
-    endpoint_url = os.environ.get('MCP_ENDPOINT')
+    # Get endpoint only from config.yaml
+    app_cfg = load_app_config()
+    endpoint_url = str((app_cfg.get("mcp") or {}).get("endpoint") or "")
     if not endpoint_url:
-        logger.error("Please set the `MCP_ENDPOINT` environment variable")
+        logger.error("Please set `mcp.endpoint` in config.yaml")
         sys.exit(1)
 
     # Determine target: default to all if no arg; single target otherwise
@@ -254,7 +256,7 @@ if __name__ == "__main__":
 
     async def _main():
         if not target_arg:
-            cfg = load_config()
+            cfg = load_servers_config()
             servers_cfg = (cfg.get("mcpServers") or {})
             all_servers = list(servers_cfg.keys())
             enabled = [name for name, entry in servers_cfg.items() if not (entry or {}).get("disabled")]

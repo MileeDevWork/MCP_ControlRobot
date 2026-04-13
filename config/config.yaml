@@ -1,0 +1,14 @@
+runtime:
+  log_level: INFO
+
+mcp:
+  endpoint: "wss://api.xiaozhi.me/mcp/?token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcwNjI2OSwiYWdlbnRJZCI6MTE4MTM4NSwiZW5kcG9pbnRJZCI6ImFnZW50XzExODEzODUiLCJwdXJwb3NlIjoibWNwLWVuZHBvaW50IiwiaWF0IjoxNzc2MDcwMTQ4LCJleHAiOjE4MDc2Mjc3NDh9._rAI8cp3xDWv7rrcr2e90mc5kJBojb6NHBWwApeSKFChlpQStFxM5jb2V7QAOLUxSckmHmFWTHwe5aSRtHX6Dw"
+
+robot:
+  ip: ""
+  port: 9000
+  control_path: /control
+  timeout_seconds: 12.0
+
+hcmut:
+  enabled: true
