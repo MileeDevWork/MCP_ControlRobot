@@ -1,14 +1,9 @@
 {
   "mcpServers": {
-    "local-stdio-calculator": {
-      "type": "stdio",
-      "command": "python",
-      "args": ["-m", "calculator"]
-    },
     "robot-control": {
       "type": "stdio",
       "command": "python",
-      "args": ["robot_control.py"]
+      "args": ["-m", "app.mcp_server"]
     },
     "remote-sse-server": {
       "type": "sse",
