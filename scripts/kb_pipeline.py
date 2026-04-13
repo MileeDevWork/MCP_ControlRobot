@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import logging
+import math
 import os
 import re
 import subprocess
@@ -38,6 +39,8 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger("kb_pipeline")
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 STATE_SCHEMA = "mcp.ingestion.state.v1"
 API_KEY_RE = re.compile(r"sk-[^\s'\"}]+")
@@ -47,6 +50,10 @@ SOURCE_EXTENSION_PRIORITY = {
     ".txt": 2,
     ".pdf": 1,
 }
+CHUNKING_STRATEGIES = ("semantic", "static")
+DEFAULT_CHUNKING_STRATEGY = os.getenv("MCP_CHUNKING_STRATEGY", "semantic").strip().lower() or "semantic"
+if DEFAULT_CHUNKING_STRATEGY not in CHUNKING_STRATEGIES:
+    DEFAULT_CHUNKING_STRATEGY = "semantic"
 
 
 def utc_now() -> str:
@@ -134,6 +141,184 @@ def chunk_text(text: str, chunk_chars: int, overlap_chars: int) -> List[str]:
     return chunks
 
 
+def _split_sentences(paragraph: str) -> List[str]:
+    parts = re.split(r"(?<=[.!?;:])\s+(?=[A-ZÀ-Ỹ0-9\-\"'])", paragraph)
+    return [part.strip() for part in parts if part.strip()]
+
+
+def _split_semantic_units(text: str, max_unit_chars: int) -> List[str]:
+    units: List[str] = []
+    paragraphs = [part.strip() for part in re.split(r"\n\s*\n+", text) if part.strip()]
+    if not paragraphs:
+        return []
+
+    for paragraph in paragraphs:
+        if len(paragraph) <= max_unit_chars:
+            units.append(paragraph)
+            continue
+
+        sentences = _split_sentences(paragraph)
+        if not sentences:
+            sentences = [paragraph]
+
+        current_parts: List[str] = []
+        current_len = 0
+        for sentence in sentences:
+            sentence_len = len(sentence)
+            if current_parts and current_len + 1 + sentence_len > max_unit_chars:
+                units.append(" ".join(current_parts).strip())
+                current_parts = [sentence]
+                current_len = sentence_len
+            else:
+                current_parts.append(sentence)
+                current_len += sentence_len if current_len == 0 else sentence_len + 1
+
+        if current_parts:
+            units.append(" ".join(current_parts).strip())
+
+    return [unit for unit in units if unit]
+
+
+def _cosine_similarity(a: List[float], b: List[float]) -> float:
+    if not a or not b:
+        return 0.0
+
+    n = min(len(a), len(b))
+    if n == 0:
+        return 0.0
+
+    dot = sum(a[i] * b[i] for i in range(n))
+    norm_a = math.sqrt(sum(a[i] * a[i] for i in range(n)))
+    norm_b = math.sqrt(sum(b[i] * b[i] for i in range(n)))
+    if norm_a == 0 or norm_b == 0:
+        return 0.0
+    return dot / (norm_a * norm_b)
+
+
+def chunk_text_semantic(
+    text: str,
+    chunk_chars: int,
+    min_chunk_chars: int,
+    max_unit_chars: int,
+    similarity_threshold: float,
+    embedding_provider: ProviderClientFallback,
+) -> Tuple[List[str], Dict[str, Any]]:
+    units = _split_semantic_units(text, max_unit_chars=max_unit_chars)
+    if not units:
+        return [], {"units": 0, "semantic_boundaries": 0}
+    if len(units) == 1:
+        return units, {"units": 1, "semantic_boundaries": 0}
+
+    vectors, provider = embedding_provider.embed_texts(units)
+    if len(vectors) != len(units):
+        raise RuntimeError("Semantic chunking embedding response length mismatch")
+
+    chunks: List[str] = []
+    current_units: List[str] = []
+    current_len = 0
+    semantic_boundaries = 0
+
+    for idx, unit in enumerate(units):
+        unit_len = len(unit)
+        should_break = False
+
+        if current_units:
+            next_len = current_len + unit_len + 2
+            if next_len > chunk_chars and current_len >= min_chunk_chars:
+                should_break = True
+            else:
+                similarity = _cosine_similarity(vectors[idx - 1], vectors[idx])
+                if similarity < similarity_threshold and current_len >= min_chunk_chars:
+                    should_break = True
+                    semantic_boundaries += 1
+
+        if should_break:
+            chunk = "\n\n".join(current_units).strip()
+            if chunk:
+                chunks.append(chunk)
+            current_units = [unit]
+            current_len = unit_len
+        else:
+            current_units.append(unit)
+            current_len = unit_len if current_len == 0 else current_len + unit_len + 2
+
+    if current_units:
+        chunk = "\n\n".join(current_units).strip()
+        if chunk:
+            chunks.append(chunk)
+
+    return chunks, {
+        "units": len(units),
+        "semantic_boundaries": semantic_boundaries,
+        "embedding_provider": provider,
+    }
+
+
+def chunk_document(
+    text: str,
+    strategy: str,
+    chunk_chars: int,
+    overlap_chars: int,
+    semantic_threshold: float,
+    semantic_min_chunk_chars: int,
+    semantic_max_unit_chars: int,
+    embedding_provider: Optional[ProviderClientFallback],
+) -> Tuple[List[str], Dict[str, Any]]:
+    requested = (strategy or DEFAULT_CHUNKING_STRATEGY).strip().lower()
+    if requested not in CHUNKING_STRATEGIES:
+        requested = DEFAULT_CHUNKING_STRATEGY
+
+    if requested == "static":
+        chunks = chunk_text(text, chunk_chars=chunk_chars, overlap_chars=overlap_chars)
+        return chunks, {
+            "requested_strategy": requested,
+            "effective_strategy": "static",
+            "chunk_chars": chunk_chars,
+            "overlap_chars": overlap_chars,
+        }
+
+    if embedding_provider is None:
+        chunks = chunk_text(text, chunk_chars=chunk_chars, overlap_chars=overlap_chars)
+        return chunks, {
+            "requested_strategy": requested,
+            "effective_strategy": "static",
+            "fallback_reason": "embedding provider unavailable",
+            "chunk_chars": chunk_chars,
+            "overlap_chars": overlap_chars,
+        }
+
+    try:
+        chunks, semantic_meta = chunk_text_semantic(
+            text=text,
+            chunk_chars=chunk_chars,
+            min_chunk_chars=max(120, semantic_min_chunk_chars),
+            max_unit_chars=max(80, semantic_max_unit_chars),
+            similarity_threshold=max(0.0, min(1.0, semantic_threshold)),
+            embedding_provider=embedding_provider,
+        )
+        if not chunks:
+            raise RuntimeError("Semantic chunking produced no output")
+        return chunks, {
+            "requested_strategy": requested,
+            "effective_strategy": "semantic",
+            "chunk_chars": chunk_chars,
+            "semantic_threshold": semantic_threshold,
+            "semantic_min_chunk_chars": semantic_min_chunk_chars,
+            "semantic_max_unit_chars": semantic_max_unit_chars,
+            **semantic_meta,
+        }
+    except Exception as exc:
+        logger.warning("Semantic chunking failed; fallback to static chunking: %s", sanitize_error_message(exc))
+        chunks = chunk_text(text, chunk_chars=chunk_chars, overlap_chars=overlap_chars)
+        return chunks, {
+            "requested_strategy": requested,
+            "effective_strategy": "static",
+            "fallback_reason": sanitize_error_message(exc),
+            "chunk_chars": chunk_chars,
+            "overlap_chars": overlap_chars,
+        }
+
+
 def load_state(path: Path) -> Dict[str, Any]:
     state = load_json(
         path,
@@ -168,6 +353,12 @@ def iter_source_docs(docs_dir: Path, processed_dir: Path) -> Iterable[Path]:
             continue
         if processed_dir in path.parents:
             continue
+        try:
+            rel_parts = path.relative_to(docs_dir).parts
+            if rel_parts and rel_parts[0].lower() == "processed":
+                continue
+        except Exception:
+            pass
 
         base_key = path.relative_to(docs_dir).with_suffix("").as_posix().lower()
         existing = selected_by_base.get(base_key)
@@ -327,8 +518,12 @@ def process_documents(
     docs_dir: Path,
     processed_dir: Path,
     state_path: Path,
+    chunking_strategy: str,
     chunk_chars: int,
     overlap_chars: int,
+    semantic_threshold: float,
+    semantic_min_chunk_chars: int,
+    semantic_max_unit_chars: int,
     enable_ocr: bool,
     ocr_language: str,
     min_pdf_chars: int,
@@ -352,9 +547,24 @@ def process_documents(
         "processed": 0,
         "skipped": 0,
         "failed": 0,
+        "chunking_strategy": (chunking_strategy or DEFAULT_CHUNKING_STRATEGY).strip().lower(),
+        "semantic_threshold": semantic_threshold,
+        "semantic_min_chunk_chars": semantic_min_chunk_chars,
+        "semantic_max_unit_chars": semantic_max_unit_chars,
         "removed_state_variants": removed_variants,
         "documents": [],
     }
+
+    semantic_provider: Optional[ProviderClientFallback] = None
+    if summary["chunking_strategy"] == "semantic":
+        embedding_model = os.getenv("MCP_EMBEDDING_MODEL", "text-embedding-3-small").strip()
+        try:
+            semantic_provider = _ensure_embedding_provider(embedding_model)
+        except Exception as exc:
+            logger.warning(
+                "Unable to initialize embedding provider for semantic chunking; static fallback will be used: %s",
+                sanitize_error_message(exc),
+            )
 
     for source in iter_source_docs(docs_dir, processed_dir):
         summary["total"] += 1
@@ -386,7 +596,16 @@ def process_documents(
             if not text:
                 raise RuntimeError("No extractable text found")
 
-            chunks = chunk_text(text, chunk_chars=chunk_chars, overlap_chars=overlap_chars)
+            chunks, chunking_meta = chunk_document(
+                text=text,
+                strategy=summary["chunking_strategy"],
+                chunk_chars=chunk_chars,
+                overlap_chars=overlap_chars,
+                semantic_threshold=semantic_threshold,
+                semantic_min_chunk_chars=semantic_min_chunk_chars,
+                semantic_max_unit_chars=semantic_max_unit_chars,
+                embedding_provider=semantic_provider,
+            )
             if not chunks:
                 raise RuntimeError("No chunks generated")
 
@@ -418,8 +637,17 @@ def process_documents(
                 "processor": {
                     "mode": mode,
                     "warnings": warnings,
+                    "strategy": chunking_meta.get("effective_strategy"),
+                    "requested_strategy": chunking_meta.get("requested_strategy"),
                     "chunk_chars": chunk_chars,
                     "overlap_chars": overlap_chars,
+                    "semantic_threshold": chunking_meta.get("semantic_threshold"),
+                    "semantic_min_chunk_chars": chunking_meta.get("semantic_min_chunk_chars"),
+                    "semantic_max_unit_chars": chunking_meta.get("semantic_max_unit_chars"),
+                    "semantic_units": chunking_meta.get("units"),
+                    "semantic_boundaries": chunking_meta.get("semantic_boundaries"),
+                    "embedding_provider": chunking_meta.get("embedding_provider"),
+                    "fallback_reason": chunking_meta.get("fallback_reason"),
                 },
                 "outputs": {
                     "text_file": to_posix_rel(text_path, processed_dir),
@@ -440,6 +668,9 @@ def process_documents(
                     "doc_id": doc_id,
                     "chunks": len(chunk_rows),
                     "mode": mode,
+                    "chunking_strategy": chunking_meta.get("effective_strategy"),
+                    "requested_chunking_strategy": chunking_meta.get("requested_strategy"),
+                    "chunking_fallback_reason": chunking_meta.get("fallback_reason"),
                 }
             )
         except Exception as exc:
@@ -638,6 +869,70 @@ def _delete_doc_from_milvus(client: Any, collection_name: str, doc_id: str) -> N
         pass
 
 
+def _milvus_collection_exists(client: Any, collection_name: str) -> bool:
+    try:
+        collections = list(client.list_collections() or [])
+        return collection_name in collections
+    except Exception:
+        return False
+
+
+def _milvus_query_rows(client: Any, collection_name: str, expr: str, output_fields: List[str]) -> List[Dict[str, Any]]:
+    safe_limit = 16384
+    try:
+        return list(
+            client.query(
+                collection_name=collection_name,
+                filter=expr,
+                output_fields=output_fields,
+                limit=safe_limit,
+            )
+            or []
+        )
+    except TypeError:
+        return list(
+            client.query(
+                collection_name=collection_name,
+                expr=expr,
+                output_fields=output_fields,
+                limit=safe_limit,
+            )
+            or []
+        )
+
+
+def _milvus_doc_count(client: Any, collection_name: str, doc_id: str) -> int:
+    safe_doc_id = doc_id.replace("\\", "\\\\").replace('"', '\\"')
+    expr = f'doc_id == "{safe_doc_id}"'
+    try:
+        rows = _milvus_query_rows(client, collection_name, expr, output_fields=["doc_id"])
+        return len(rows)
+    except Exception:
+        return 0
+
+
+def _ensure_neo4j_constraints(session: Any) -> None:
+    session.run(
+        "CREATE CONSTRAINT document_doc_id IF NOT EXISTS FOR (d:Document) REQUIRE d.doc_id IS UNIQUE"
+    )
+    session.run(
+        "CREATE CONSTRAINT chunk_article_id IF NOT EXISTS FOR (c:Chunk) REQUIRE c.article_id IS UNIQUE"
+    )
+
+
+def _neo4j_counts(session: Any) -> Dict[str, int]:
+    docs = int((session.run("MATCH (d:Document) RETURN count(d) AS count").single() or {}).get("count") or 0)
+    chunks = int((session.run("MATCH (c:Chunk) RETURN count(c) AS count").single() or {}).get("count") or 0)
+    rels = int((session.run("MATCH ()-[r]->() RETURN count(r) AS count").single() or {}).get("count") or 0)
+    nodes = int((session.run("MATCH (n) RETURN count(n) AS count").single() or {}).get("count") or 0)
+    return {
+        "documents": docs,
+        "chunks": chunks,
+        "relationships": rels,
+        "nodes": nodes,
+    }
+
+
 def _ensure_embedding_provider(embedding_model: str) -> ProviderClientFallback:
     fallback = ProviderClientFallback(
         llm_model=os.getenv("MCP_LLM_MODEL", "gpt-4o-mini").strip(),
@@ -645,6 +940,179 @@ def _ensure_embedding_provider(embedding_model: str) -> ProviderClientFallback:
     )
     fallback.validate(require_generation=False, require_embeddings=True)
     return fallback
+
+
+def reset_neo4j_graph(
+    workspace_root: Path,
+    state_path: Path,
+    confirm: str,
+    keep_import_state: bool,
+) -> Dict[str, Any]:
+    if str(confirm).strip().lower() != "yes":
+        raise ValueError("Refusing to reset Neo4j. Re-run with --confirm yes")
+
+    state = load_state(state_path)
+    summary: Dict[str, Any] = {
+        "confirmed": True,
+        "keep_import_state": bool(keep_import_state),
+        "neo4j": {
+            "reachable": False,
+            "before": {},
+            "after": {},
+        },
+        "state_file": to_posix_rel(state_path, workspace_root),
+        "state_updates": {
+            "documents_touched": 0,
+            "cleared_import_metadata": False,
+        },
+    }
+
+    neo4j_driver = _neo4j_driver_from_env()
+    try:
+        with neo4j_driver.session(**_neo4j_session_kwargs()) as session:
+            summary["neo4j"]["reachable"] = True
+            summary["neo4j"]["before"] = _neo4j_counts(session)
+            session.run("MATCH (n) DETACH DELETE n")
+            _ensure_neo4j_constraints(session)
+            summary["neo4j"]["after"] = _neo4j_counts(session)
+    finally:
+        neo4j_driver.close()
+
+    if not keep_import_state:
+        touched = 0
+        for entry in (state.get("documents") or {}).values():
+            entry["last_imported_sha256"] = None
+            entry["import"] = {}
+            if str(entry.get("status") or "").startswith("import"):
+                entry["status"] = "processed"
+            touched += 1
+        if touched:
+            save_state(state_path, state)
+        summary["state_updates"] = {
+            "documents_touched": touched,
+            "cleared_import_metadata": True,
+        }
+
+    return summary
+
+
+def validate_ingestion(
+    workspace_root: Path,
+    processed_dir: Path,
+    state_path: Path,
+    skip_milvus: bool,
+    skip_neo4j: bool,
+) -> Dict[str, Any]:
+    state = load_state(state_path)
+    docs = state.get("documents") or {}
+
+    expected_counts: Dict[str, int] = {}
+    for entry in docs.values():
+        doc_id = str(entry.get("doc_id") or "").strip()
+        chunks_count = int((entry.get("outputs") or {}).get("chunks_count") or 0)
+        if not doc_id or chunks_count <= 0:
+            continue
+        expected_counts[doc_id] = chunks_count
+
+    summary: Dict[str, Any] = {
+        "state_file": to_posix_rel(state_path, workspace_root),
+        "processed_dir": to_posix_rel(processed_dir, workspace_root),
+        "expected": {
+            "documents": len(expected_counts),
+            "doc_ids": sorted(expected_counts.keys()),
+            "chunks": int(sum(expected_counts.values())),
+        },
+        "milvus": {
+            "attempted": not skip_milvus,
+            "collection": os.getenv("MCP_MILVUS_COLLECTION", "legal_articles").strip(),
+            "reachable": False,
+            "collection_exists": False,
+            "doc_counts": {},
+            "error": None,
+        },
+        "neo4j": {
+            "attempted": not skip_neo4j,
+            "reachable": False,
+            "counts": {},
+            "doc_counts": {},
+            "error": None,
+        },
+        "checks": {
+            "doc_level": [],
+            "all_doc_counts_match": False,
+        },
+        "success": False,
+    }
+
+    if not skip_milvus:
+        try:
+            milvus_client = _milvus_client_from_env()
+            collection_name = summary["milvus"]["collection"]
+            summary["milvus"]["reachable"] = True
+            summary["milvus"]["collection_exists"] = _milvus_collection_exists(milvus_client, collection_name)
+            if summary["milvus"]["collection_exists"]:
+                for doc_id in expected_counts:
+                    summary["milvus"]["doc_counts"][doc_id] = _milvus_doc_count(milvus_client, collection_name, doc_id)
+        except Exception as exc:
+            summary["milvus"]["error"] = sanitize_error_message(exc)
+
+    if not skip_neo4j:
+        neo4j_driver = None
+        try:
+            neo4j_driver = _neo4j_driver_from_env()
+            with neo4j_driver.session(**_neo4j_session_kwargs()) as session:
+                summary["neo4j"]["reachable"] = True
+                summary["neo4j"]["counts"] = _neo4j_counts(session)
+                if expected_counts:
+                    rows = session.run(
+                        """
+                        UNWIND $doc_ids AS doc_id
+                        OPTIONAL MATCH (c:Chunk {doc_id: doc_id})
+                        RETURN doc_id, count(c) AS chunks
+                        """,
+                        {"doc_ids": list(expected_counts.keys())},
+                    )
+                    for row in rows:
+                        summary["neo4j"]["doc_counts"][str(row["doc_id"])] = int(row["chunks"])
+        except Exception as exc:
+            summary["neo4j"]["error"] = sanitize_error_message(exc)
+        finally:
+            if neo4j_driver is not None:
+                neo4j_driver.close()
+
+    doc_checks: List[Dict[str, Any]] = []
+    for doc_id, expected in sorted(expected_counts.items()):
+        milvus_count = summary["milvus"]["doc_counts"].get(doc_id) if summary["milvus"]["attempted"] else None
+        neo4j_count = summary["neo4j"]["doc_counts"].get(doc_id) if summary["neo4j"]["attempted"] else None
+        matches = True
+        if milvus_count is not None and milvus_count != expected:
+            matches = False
+        if neo4j_count is not None and neo4j_count != expected:
+            matches = False
+        doc_checks.append(
+            {
+                "doc_id": doc_id,
+                "expected_chunks": expected,
+                "milvus_chunks": milvus_count,
+                "neo4j_chunks": neo4j_count,
+                "match": matches,
+            }
+        )
+
+    summary["checks"]["doc_level"] = doc_checks
+    summary["checks"]["all_doc_counts_match"] = all(item.get("match") for item in doc_checks) if doc_checks else False
+
+    store_checks = []
+    if summary["milvus"]["attempted"]:
+        store_checks.append(bool(summary["milvus"]["reachable"] and summary["milvus"]["collection_exists"]))
+    if summary["neo4j"]["attempted"]:
+        store_checks.append(bool(summary["neo4j"]["reachable"]))
+
+    if not store_checks:
+        summary["success"] = bool(summary["checks"]["all_doc_counts_match"])
+    else:
+        summary["success"] = all(store_checks) and bool(summary["checks"]["all_doc_counts_match"])
+    return summary
 
 
 def import_processed_documents(
@@ -700,16 +1168,24 @@ def import_processed_documents(
             "embedding_dimensions": target_embedding_dim,
             "available_embedding_providers": provider_status.get("available_embedding_providers") or [],
             "embedding_provider": None,
+            "preflight": {
+                "milvus_enabled": milvus_client is not None,
+                "milvus_collection_exists": bool(collection_info) if milvus_client is not None else None,
+                "neo4j_enabled": neo4j_driver is not None,
+                "neo4j_counts_before": None,
+                "configured_embedding_dim": configured_embedding_dim,
+                "collection_dim": collection_dim,
+            },
+            "postflight": {
+                "milvus_collection_exists": None,
+                "neo4j_counts_after": None,
+            },
         }
 
         if neo4j_driver is not None:
             with neo4j_driver.session(**_neo4j_session_kwargs()) as session:
-                session.run(
-                    "CREATE CONSTRAINT document_doc_id IF NOT EXISTS FOR (d:Document) REQUIRE d.doc_id IS UNIQUE"
-                )
-                session.run(
-                    "CREATE CONSTRAINT chunk_article_id IF NOT EXISTS FOR (c:Chunk) REQUIRE c.article_id IS UNIQUE"
-                )
+                _ensure_neo4j_constraints(session)
+                summary["preflight"]["neo4j_counts_before"] = _neo4j_counts(session)
 
         documents = list((state.get("documents") or {}).items())
         documents.sort(
@@ -934,6 +1410,16 @@ def import_processed_documents(
                 summary["failed"] += 1
                 summary["documents"].append({"source": key, "status": "failed", "error": error_text})
 
+        if milvus_client is not None:
+            summary["postflight"]["milvus_collection_exists"] = _milvus_collection_exists(
+                milvus_client,
+                configured_collection,
+            )
+
+        if neo4j_driver is not None:
+            with neo4j_driver.session(**_neo4j_session_kwargs()) as session:
+                summary["postflight"]["neo4j_counts_after"] = _neo4j_counts(session)
+
         save_state(state_path, state)
         summary["state_file"] = to_posix_rel(state_path, workspace_root)
         return summary
@@ -1075,9 +1561,16 @@ def parse_args() -> argparse.Namespace:
 
     sub = parser.add_subparsers(dest="command", required=True)
 
+    def _add_chunking_args(cmd: argparse.ArgumentParser) -> None:
+        cmd.add_argument("--chunking-strategy", choices=list(CHUNKING_STRATEGIES), default=DEFAULT_CHUNKING_STRATEGY)
+        cmd.add_argument("--chunk-chars", type=int, default=900)
+        cmd.add_argument("--overlap-chars", type=int, default=120)
+        cmd.add_argument("--semantic-threshold", type=float, default=0.72)
+        cmd.add_argument("--semantic-min-chunk-chars", type=int, default=420)
+        cmd.add_argument("--semantic-max-unit-chars", type=int, default=420)
+
     p_process = sub.add_parser("process", help="Process source docs into chunked data files.")
-    p_process.add_argument("--chunk-chars", type=int, default=900)
-    p_process.add_argument("--overlap-chars", type=int, default=120)
+    _add_chunking_args(p_process)
     p_process.add_argument("--enable-ocr", action="store_true")
     p_process.add_argument("--ocr-language", default="vie+eng")
     p_process.add_argument("--min-pdf-chars", type=int, default=600)
@@ -1102,9 +1595,26 @@ def parse_args() -> argparse.Namespace:
     p_cleanup.add_argument("--skip-milvus", action="store_true")
     p_cleanup.add_argument("--skip-neo4j", action="store_true")
 
+    p_reset = sub.add_parser(
+        "reset",
+        help="Reset Neo4j graph and recreate constraints. Requires explicit confirmation.",
+    )
+    p_reset.add_argument("--confirm", required=True, help="Type 'yes' to execute destructive reset.")
+    p_reset.add_argument(
+        "--keep-import-state",
+        action="store_true",
+        help="Keep import metadata in ingestion_state.json (default clears to force re-import).",
+    )
+
+    p_validate = sub.add_parser(
+        "validate",
+        help="Validate imported chunk parity across state, Milvus, and Neo4j.",
+    )
+    p_validate.add_argument("--skip-milvus", action="store_true")
+    p_validate.add_argument("--skip-neo4j", action="store_true")
+
     p_run = sub.add_parser("run", help="Run process then import.")
-    p_run.add_argument("--chunk-chars", type=int, default=900)
-    p_run.add_argument("--overlap-chars", type=int, default=120)
+    _add_chunking_args(p_run)
     p_run.add_argument("--enable-ocr", action="store_true")
     p_run.add_argument("--ocr-language", default="vie+eng")
     p_run.add_argument("--min-pdf-chars", type=int, default=600)
@@ -1120,8 +1630,7 @@ def parse_args() -> argparse.Namespace:
     )
     p_server_run.add_argument("--server-script", default="legal_answer_server.py")
     p_server_run.add_argument("--startup-seconds", type=float, default=2.0)
-    p_server_run.add_argument("--chunk-chars", type=int, default=900)
-    p_server_run.add_argument("--overlap-chars", type=int, default=120)
+    _add_chunking_args(p_server_run)
     p_server_run.add_argument("--enable-ocr", action="store_true")
     p_server_run.add_argument("--ocr-language", default="vie+eng")
     p_server_run.add_argument("--min-pdf-chars", type=int, default=600)
@@ -1151,8 +1660,12 @@ def main() -> int:
             docs_dir=docs_dir,
             processed_dir=processed_dir,
             state_path=state_path,
+            chunking_strategy=str(args.chunking_strategy),
             chunk_chars=max(200, int(args.chunk_chars)),
             overlap_chars=max(0, int(args.overlap_chars)),
+            semantic_threshold=max(0.0, min(float(args.semantic_threshold), 1.0)),
+            semantic_min_chunk_chars=max(120, int(args.semantic_min_chunk_chars)),
+            semantic_max_unit_chars=max(80, int(args.semantic_max_unit_chars)),
             enable_ocr=bool(args.enable_ocr),
             ocr_language=str(args.ocr_language),
             min_pdf_chars=max(1, int(args.min_pdf_chars)),
@@ -1164,6 +1677,21 @@ def main() -> int:
             workspace_root=workspace_root,
             state_path=state_path,
             source_suffixes=list(suffixes),
+            skip_milvus=bool(args.skip_milvus),
+            skip_neo4j=bool(args.skip_neo4j),
+        )
+    elif args.command == "reset":
+        result = reset_neo4j_graph(
+            workspace_root=workspace_root,
+            state_path=state_path,
+            confirm=str(args.confirm),
+            keep_import_state=bool(args.keep_import_state),
+        )
+    elif args.command == "validate":
+        result = validate_ingestion(
+            workspace_root=workspace_root,
+            processed_dir=processed_dir,
+            state_path=state_path,
             skip_milvus=bool(args.skip_milvus),
             skip_neo4j=bool(args.skip_neo4j),
         )
@@ -1183,8 +1711,12 @@ def main() -> int:
             docs_dir=docs_dir,
             processed_dir=processed_dir,
             state_path=state_path,
+            chunking_strategy=str(args.chunking_strategy),
             chunk_chars=max(200, int(args.chunk_chars)),
             overlap_chars=max(0, int(args.overlap_chars)),
+            semantic_threshold=max(0.0, min(float(args.semantic_threshold), 1.0)),
+            semantic_min_chunk_chars=max(120, int(args.semantic_min_chunk_chars)),
+            semantic_max_unit_chars=max(80, int(args.semantic_max_unit_chars)),
             enable_ocr=bool(args.enable_ocr),
             ocr_language=str(args.ocr_language),
             min_pdf_chars=max(1, int(args.min_pdf_chars)),
@@ -1200,15 +1732,19 @@ def main() -> int:
             skip_neo4j=bool(args.skip_neo4j),
         )
         result = {"process": process_result, "import": import_result}
-    else:
+    elif args.command == "server-run":
         def _run_combined() -> Dict[str, Any]:
             process_result = process_documents(
                 workspace_root=workspace_root,
                 docs_dir=docs_dir,
                 processed_dir=processed_dir,
                 state_path=state_path,
+                chunking_strategy=str(args.chunking_strategy),
                 chunk_chars=max(200, int(args.chunk_chars)),
                 overlap_chars=max(0, int(args.overlap_chars)),
+                semantic_threshold=max(0.0, min(float(args.semantic_threshold), 1.0)),
+                semantic_min_chunk_chars=max(120, int(args.semantic_min_chunk_chars)),
+                semantic_max_unit_chars=max(80, int(args.semantic_max_unit_chars)),
                 enable_ocr=bool(args.enable_ocr),
                 ocr_language=str(args.ocr_language),
                 min_pdf_chars=max(1, int(args.min_pdf_chars)),
@@ -1231,6 +1767,8 @@ def main() -> int:
             startup_seconds=float(args.startup_seconds),
             run_callable=_run_combined,
         )
+    else:
+        raise ValueError(f"Unsupported command: {args.command}")
 
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0

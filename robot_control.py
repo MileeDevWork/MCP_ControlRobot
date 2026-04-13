@@ -51,27 +51,38 @@ async def call_robot_api(payload: dict) -> dict:
 
 @mcp.tool()
 async def reset_robot() -> dict:
-    """Reset robot về trạng thái ban đầu."""
+    """Reset robot to a known baseline posture.
+
+    Use when previous robot state is unknown or command sequence fails.
+    Returns a standard payload with success/message/robot_response.
+    """
     return await call_robot_api({"command": "reset"})
 
 @mcp.tool()
 async def stand_up() -> dict:
-    """Robot đứng dậy (Stand Up)."""
+    """Move robot to standing posture (Stand_Up behavior)."""
     return await call_robot_api({"command": "posture", "name": "Stand_Up"})
 
 @mcp.tool()
 async def sit_down() -> dict:
-    """Robot ngồi xuống (Sit Down)."""
+    """Move robot to sitting posture (Sit_Down behavior)."""
     return await call_robot_api({"command": "posture", "name": "Sit_Down"})
 
 @mcp.tool()
 async def hand_shake() -> dict:
-    """Robot vẫy tay (Hand shake)."""
+    """Trigger handshake gesture behavior."""
     return await call_robot_api({"command": "behavior", "name": "Handshake"})
 
 @mcp.tool()
 async def robot_control(command: str, name: Optional[str] = None) -> dict:
-    """Điều khiển robot linh hoạt."""
+    """Generic robot control entrypoint.
+
+    Parameters:
+    - command: API command group (for example: posture, behavior, reset).
+    - name: Optional command detail (for example: Stand_Up, Sit_Down, Handshake).
+
+    Returns a payload with success flag, message, and downstream robot response.
+    """
     payload = {"command": command}
     if name:
         payload["name"] = name

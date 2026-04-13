@@ -99,7 +99,12 @@ def _safe_eval(expr: str) -> Any:
 # Add an addition tool
 @mcp.tool()
 def calculator(python_expression: str) -> dict:
-    """For mathamatical calculation, always use this tool to calculate the result of a python expression. You can use 'math' or 'random' directly, without 'import'."""
+    """Evaluate a numeric Python expression in a restricted runtime.
+
+    Use this for arithmetic, powers, math module functions, and simple random expressions.
+    Examples: "2**10", "math.sqrt(81)", "random.randint(1, 6)".
+    Non-numeric syntax, imports, and unsafe operations are rejected.
+    """
     logger.info('Tool calculator invoked expression=%s', _preview_expression(python_expression))
     try:
         result = _safe_eval(python_expression)

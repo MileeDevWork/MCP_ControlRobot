@@ -66,6 +66,7 @@ Optional tuning:
 - `MCP_MILVUS_DATABASE` (default empty)
 - `MCP_MILVUS_VECTOR_FIELD` (default `dense_vector`)
 - `MCP_NEO4J_DATABASE` (default empty)
+- `MCP_CHUNKING_STRATEGY` (`semantic|static`, default `semantic`)
 - `MCP_EMBEDDING_DIMENSIONS` (default empty, model default)
 - `MCP_LLM_MODEL` (default `gpt-4o-mini`)
 - `MCP_EMBEDDING_MODEL` (default `text-embedding-3-small`)
@@ -141,10 +142,10 @@ python mcp_pipe.py legal-answer
 
 Use the ingestion pipeline to process raw files under `docs/`, write normalized chunks into `docs/processed/`, and import them into Milvus + Neo4j.
 
-Process docs only:
+Process docs only (semantic chunking is now the default):
 
 ```bash
-python scripts/kb_pipeline.py process --enable-ocr
+python scripts/kb_pipeline.py process --chunking-strategy semantic --enable-ocr
 ```
 
 Import processed chunks only:
@@ -156,13 +157,25 @@ python scripts/kb_pipeline.py import
 Process + import in one command:
 
 ```bash
-python scripts/kb_pipeline.py run --enable-ocr
+python scripts/kb_pipeline.py run --chunking-strategy semantic --enable-ocr
 ```
 
 Start legal-answer server, then run process + import pipeline:
 
 ```bash
-python scripts/kb_pipeline.py server-run --enable-ocr
+python scripts/kb_pipeline.py server-run --chunking-strategy semantic --enable-ocr
+```
+
+Reset Neo4j graph and recreate constraints (destructive):
+
+```bash
+python scripts/kb_pipeline.py reset --confirm yes
+```
+
+Validate parity across ingestion state, Milvus, and Neo4j:
+
+```bash
+python scripts/kb_pipeline.py validate
 ```
 
 ### Processing Outputs
@@ -172,12 +185,22 @@ python scripts/kb_pipeline.py server-run --enable-ocr
 - `docs/processed/chunks/all_chunks.jsonl`: combined chunk stream
 - `docs/processed/ingestion_state.json`: state tracking for processed/imported hashes and status
 
+### Chunking Controls
+
+Processing commands (`process`, `run`, `server-run`) support:
+
+- `--chunking-strategy semantic|static` (default `semantic`)
+- `--chunk-chars` and `--overlap-chars` for static/fallback chunking shape
+- `--semantic-threshold` semantic boundary sensitivity (0..1)
+- `--semantic-min-chunk-chars` lower bound before allowing semantic split
+- `--semantic-max-unit-chars` max size for paragraph/sentence semantic units
+
 ## Test Runner
 
 Run test suite and produce machine-readable + human-readable reports:
 
 ```bash
-python scripts/run_test_suite.py --scenario test/scenario.json --output-dir test/reports --include-graph
+python scripts/run_test_suite.py --scenario test/scenario.json --output-dir test/reports --include-graph --judge-mode all
 ```
 
 Dry-run (validate dataset and report structure without model calls):
@@ -186,10 +209,18 @@ Dry-run (validate dataset and report structure without model calls):
 python scripts/run_test_suite.py --scenario test/scenario.json --output-dir test/reports --dry-run
 ```
 
+Judge only cases that fail static phrase checks (faster, lower cost):
+
+```bash
+python scripts/run_test_suite.py --scenario test/scenario.json --output-dir test/reports --include-graph --judge-mode failed
+```
+
 Reports are written to `test/reports/` as:
 
 - `test-report-<timestamp>.json`
 - `test-report-<timestamp>.md`
+
+Hybrid evaluation adds judge fields per case (`llm_judge`) and aggregate judge metrics (`llm_judge_summary`) while preserving static pass/fail baseline for regression comparability.
 
 ## Config-Driven Servers
 

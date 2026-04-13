@@ -8,4 +8,4 @@ node_modules/
 docs/processed/
 
 # Test reports
-reports/
+test/reports/
