@@ -255,9 +255,9 @@ def _detect_hcmut_topic(normalized: str) -> Optional[str]:
     return None
 
 
-def detect_hcmut_info(text: str) -> Optional[str]:
+def detect_hcmut_info(text: str, require_base_keyword: bool = True) -> Optional[str]:
     normalized = text.strip().lower()
-    if not any(k in normalized for k in HCMUT_BASE_KEYWORDS):
+    if require_base_keyword and not any(k in normalized for k in HCMUT_BASE_KEYWORDS):
         return None
 
     if any(k in normalized for k in ["chi tiết", "đầy đủ", "toàn bộ", "tất cả", "full"]):
@@ -283,7 +283,8 @@ def register_hcmut_tools(mcp) -> None:
             response = {"success": False, "message": "Bạn chưa nhập nội dung câu hỏi về Trường Đại học Bách khoa Thành phố Hồ Chí Minh."}
             logger.info(f"[Tool:hcmut_info] response={response}")
             return response
-        message = detect_hcmut_info(user_text)
+        # Called directly as an HCMUT-only tool, so do not require school-name keyword.
+        message = detect_hcmut_info(user_text, require_base_keyword=False)
         if not message:
             response = {"success": False, "message": "Mình chưa nhận diện được câu hỏi liên quan đến Trường Đại học Bách khoa Thành phố Hồ Chí Minh."}
             logger.info(f"[Tool:hcmut_info] response={response}")

@@ -45,17 +45,30 @@ mcp:
   endpoint: "wss://<your-endpoint>/mcp/?token=<your-token>"
 
 robot:
+  enabled: true
   ip: "192.168.1.10"
   port: 9000
   control_path: /control
   timeout_seconds: 12.0
 
+robot_ivs:
+  enabled: true
+  ip: "10.254.131.62"
+  port: 8000
+  base_path: /robot
+  timeout_seconds: 12.0
+
 hcmut:
+  enabled: true
+
+dhqg_hcm:
   enabled: true
 ```
 
 Ghi chú:
 - `ROBOT_IP` (env) nếu có sẽ override `robot.ip` trong YAML.
+- `ROBOT_IVS_IP` (env) nếu có sẽ override `robot_ivs.ip` trong YAML.
+- Mỗi service chỉ dùng một cờ `enabled` ở top-level, tắt là tắt toàn bộ service.
 - Nếu không có `mcp.endpoint`, hệ thống sẽ không chạy.
 
 ### 4.2 `config/mcp_config.json`
@@ -81,6 +94,11 @@ python -m app.mcp_pipe
 Windows PowerShell:
 ```powershell
 py -3.12 -m app.mcp_pipe
+```
+
+Chạy một server theo tên trong `config/mcp_config.json`:
+```bash
+python -m app.mcp_pipe robot-control
 ```
 
 ## 6. Robot API hỗ trợ
@@ -124,7 +142,24 @@ Lệnh behavior:
 {"command":"behavior","name":"Play_Ball"}
 ```
 
-## 7. MCP Tools
+## 7. RobotIVS API hỗ trợ
+
+Endpoint:
+- `POST http://<robot-ip>:8000/robot/stand`
+- `POST http://<robot-ip>:8000/robot/sit`
+- `POST http://<robot-ip>:8000/robot/stop`
+- `POST http://<robot-ip>:8000/robot/wave`
+
+Ví dụ phản hồi mong muốn:
+```json
+{
+  "success": true,
+  "action": 1,
+  "ros_response": "{\"op\":\"service_response\",\"service\":\"\\/switch_op_mode\",\"values\":{\"mode_in\":1,\"success\":true},\"result\":true}"
+}
+```
+
+## 8. MCP Tools
 
 Robot:
 - `reset_robot`
@@ -140,6 +175,11 @@ Robot:
 - `stretch`
 - `axis`
 - `robot_control(command, name?)`
+- `robotivs_stand()`
+- `robotivs_sit()`
+- `robotivs_stop()`
+- `robotivs_wave()`
+- `robotivs_control(action)`
 - `smart_control(user_text)`
 
 Thông tin trường:
@@ -148,15 +188,16 @@ Thông tin trường:
 - `hcmut_topic_detail(topic)`
 - `hcmut_majors_full()`
 
-## 8. Logging
+## 9. Logging
 
 Hệ thống có log:
 - Request/response theo từng tool (robot và HCMUT)
 - Trạng thái bridge kết nối WebSocket
 - Retry khi mất kết nối (exponential backoff)
 
-## 9. Lưu ý vận hành
+## 10. Lưu ý vận hành
 
 - Nếu robot không phản hồi, kiểm tra `robot.ip`, port, mạng nội bộ.
+- Nếu robotIVS không phản hồi, kiểm tra `robot_ivs.ip`, port `8000`, endpoint `/robot/*`.
 - Nếu endpoint không kết nối được, kiểm tra token trong `mcp.endpoint`.
 - Sau khi đổi code/config, restart process `app.mcp_pipe`.

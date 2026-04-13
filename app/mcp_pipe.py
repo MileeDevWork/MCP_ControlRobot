@@ -28,6 +28,7 @@ import os
 import signal
 import sys
 import json
+from pathlib import Path
 from dotenv import load_dotenv
 from app.app_config import load_config as load_app_config
 
@@ -172,7 +173,8 @@ def signal_handler(sig, frame):
 
 def load_servers_config():
     """Load JSON config from $MCP_CONFIG or ./config/mcp_config.json. Return dict or {}."""
-    path = os.environ.get("MCP_CONFIG") or os.path.join(os.getcwd(), "config", "mcp_config.json")
+    default_path = Path(__file__).resolve().parent.parent / "config" / "mcp_config.json"
+    path = os.environ.get("MCP_CONFIG") or str(default_path)
     if not os.path.exists(path):
         return {}
     try:
@@ -270,10 +272,14 @@ if __name__ == "__main__":
             # Run all forever; if any crashes it will auto-retry inside
             await asyncio.gather(*tasks)
         else:
-            if os.path.exists(target_arg):
+            cfg = load_servers_config()
+            servers_cfg = (cfg.get("mcpServers") or {}) if isinstance(cfg, dict) else {}
+            if target_arg in servers_cfg or os.path.exists(target_arg):
                 await connect_with_retry(endpoint_url, target_arg)
             else:
-                logger.error("Argument must be a local Python script path. To run configured servers, run without arguments.")
+                logger.error(
+                    "Argument must be a configured server name or a local Python script path."
+                )
                 sys.exit(1)
 
     try:

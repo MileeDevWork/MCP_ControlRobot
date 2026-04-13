@@ -26,6 +26,19 @@ if sys.platform == "win32":
 CONFIG = load_config()
 LOG_LEVEL = str((CONFIG.get("runtime") or {}).get("log_level", "INFO")).upper()
 
+
+def _is_service_enabled(service_key: str) -> bool:
+    key_map = {
+        "hcmut": "hcmut",
+        "dhqg_hcm": "dhqg_hcm",
+        "robot_control": "robot",
+        "robot_ivs": "robot_ivs",
+    }
+    target_key = key_map.get(service_key)
+    if not target_key:
+        return True
+    return bool((CONFIG.get(target_key) or {}).get("enabled", True))
+
 logging.basicConfig(
     level=getattr(logging, LOG_LEVEL, logging.INFO),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -90,6 +103,7 @@ async def call_robot_api(payload: dict) -> dict:
             "success": False,
             "error": f"Không thể kết nối tới robot. Vui lòng kiểm tra lại hệ thống. ({str(e)})"
         }
+
 
 # ==================== TEXT HELPERS ====================
 
@@ -446,27 +460,29 @@ def register_robot_control_tools(mcp) -> None:
             logger.info(f"[Tool:smart_control] response={response}")
             return response
 
-        hcmut_info = detect_hcmut_info(user_text)
-        if hcmut_info:
-            action_payload = _trigger_random_info_action("hcmut_info")
-            response = {
-                "success": True,
-                "message": hcmut_info,
-                "robot_action_scheduled": action_payload,
-            }
-            logger.info(f"[Tool:smart_control] response={response}")
-            return response
+        if _is_service_enabled("hcmut"):
+            hcmut_info = detect_hcmut_info(user_text)
+            if hcmut_info:
+                action_payload = _trigger_random_info_action("hcmut_info")
+                response = {
+                    "success": True,
+                    "message": hcmut_info,
+                    "robot_action_scheduled": action_payload,
+                }
+                logger.info(f"[Tool:smart_control] response={response}")
+                return response
 
-        dhqg_hcm_info = detect_dhqg_hcm_info(user_text)
-        if dhqg_hcm_info:
-            action_payload = _trigger_random_info_action("dhqg_hcm_info")
-            response = {
-                "success": True,
-                "message": dhqg_hcm_info,
-                "robot_action_scheduled": action_payload,
-            }
-            logger.info(f"[Tool:smart_control] response={response}")
-            return response
+        if _is_service_enabled("dhqg_hcm"):
+            dhqg_hcm_info = detect_dhqg_hcm_info(user_text)
+            if dhqg_hcm_info:
+                action_payload = _trigger_random_info_action("dhqg_hcm_info")
+                response = {
+                    "success": True,
+                    "message": dhqg_hcm_info,
+                    "robot_action_scheduled": action_payload,
+                }
+                logger.info(f"[Tool:smart_control] response={response}")
+                return response
 
         intent, response_text = detect_intent(user_text)
         logger.info(f"[SmartControl] intent={intent}")

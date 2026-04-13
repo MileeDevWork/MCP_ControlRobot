@@ -3,12 +3,14 @@ Application config loader for YAML-based settings.
 """
 
 import os
+import copy
 from typing import Any, Dict
+from pathlib import Path
 
 import yaml
 
 
-DEFAULT_CONFIG_PATH = os.path.join("config", "config.yaml")
+DEFAULT_CONFIG_PATH = str(Path(__file__).resolve().parent.parent / "config" / "config.yaml")
 
 
 def _as_dict(value: Any) -> Dict[str, Any]:
@@ -33,10 +35,21 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "endpoint": "",
     },
     "robot": {
+        "enabled": True,
         "ip": "",
         "port": 9000,
         "control_path": "/control",
         "timeout_seconds": 12.0,
+    },
+    "robot_ivs": {
+        "enabled": True,
+        "ip": "",
+        "port": 8000,
+        "base_path": "/robot",
+        "timeout_seconds": 12.0,
+    },
+    "dhqg_hcm": {
+        "enabled": True,
     },
     "hcmut": {
         "enabled": True,
@@ -50,12 +63,12 @@ def load_config() -> Dict[str, Any]:
     """
     path = os.getenv("CONFIG_PATH", DEFAULT_CONFIG_PATH)
     if not os.path.exists(path):
-        return dict(DEFAULT_CONFIG)
+        return copy.deepcopy(DEFAULT_CONFIG)
 
     try:
         with open(path, "r", encoding="utf-8") as f:
             loaded = yaml.safe_load(f) or {}
     except Exception:
-        return dict(DEFAULT_CONFIG)
+        return copy.deepcopy(DEFAULT_CONFIG)
 
     return _deep_merge(DEFAULT_CONFIG, _as_dict(loaded))
